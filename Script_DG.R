@@ -358,5 +358,7 @@ model_alldata_simpler_null <- lmer(R4 ~ SRS2_total_score_t + EQ + WRMT_total_rea
 
 anova(model_alldata_simpler_null, model_alldata_simpler_ranef)
 
-#Try again
-#Simplified it loads and cannot get it to converge!
+# Try again
+# Simplified it loads and cannot get it to converge!
+# Would be worth looking at a different optimiser
+# https://cran.r-project.org/web/packages/lme4/vignettes/lmerperf.html
