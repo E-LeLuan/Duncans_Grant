@@ -10,10 +10,10 @@ library(tidyverse)
 library(buildmer)
 library(performance)
 
-# Analsis of First Pass data
+# Analysis of First Pass data
 
 #import the data set batch 1
-FP_ED_batch1_corr <- read_csv("./Duncans-Grant-master/FP_ED/FP_ED_batch1_corr.csv")
+FP_ED_batch1_corr <- read_csv("Duncans-Grant-master/FP_ED/FP_ED_batch1_corr.csv")
 
 #Rename the participant numbers in the batches back to their original participant numbers.
 FP_ED_batch1_corr$subj[FP_ED_batch1_corr$subj == 20] <-"38"
