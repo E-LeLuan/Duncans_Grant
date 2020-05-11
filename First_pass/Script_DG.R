@@ -8,6 +8,9 @@ library(brms)
 library(fitdistrplus)
 library(tidyverse)
 library(buildmer)
+library(performance)
+
+# Analysis of First Pass data
 
 #import the data set batch 1
 FP_ED_batch1_corr <- read_csv("Duncans-Grant-master/FP_ED/FP_ED_batch1_corr.csv")
@@ -222,6 +225,7 @@ all_data_removed <- all_data_removed %>% filter(subj != 94)
 all_data_removed <- all_data_removed %>% filter(subj != 95)    
 all_data_removed <- all_data_removed %>% filter(subj != 96)    
 all_data_removed <- all_data_removed %>% filter(subj != 97)    
+
 all_data_removed <- all_data_removed %>% filter(subj != 98)    
 all_data_removed <- all_data_removed %>% filter(subj != 99)    
 
@@ -262,7 +266,10 @@ all_data_join %>%
 maximal <- lmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
                                    (1 + cond | subj) + (1 + cond | item) + (0 + SRS2_total_score_t|cond) + 
                                    (0 + EQ|cond) + (0 + WRMT_total_reading_score|cond) + 
-                                   (0 + WRMT_WI_raw|cond))
+                                   (0 + WRMT_WI_raw|cond), data = all_data_join)
+
+check_model(maximal)
+summary(maximal)
 
 m_gamma <- buildmer(maximal,
                     data = all_data_join,
@@ -282,6 +289,7 @@ model <- lmer(R4 ~ cond + (1 | subj) + (1 + cond | item), all_data_join)
 summary(model)
 
 anova(model, model.null)
+check_model(model)
 
 qqnorm(residuals(model))
 qqline(residuals(model))
@@ -303,6 +311,14 @@ all_data_join %>%
 all_data_join %>% 
   group_by(cond) %>%
   summarise(mean(R5), sd(R5))
+
+maximal_R5 <- lmer(R5 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                  (1 + cond | subj) + (1 + cond | item) + (0 + SRS2_total_score_t|cond) + 
+                  (0 + EQ|cond) + (0 + WRMT_total_reading_score|cond) + 
+                  (0 + WRMT_WI_raw|cond), data = all_data_join)
+
+check_model(maximal_R5)
+summary(maximal_R5)
 
 # Model assuming normality of residuals - singular fit error with more complex models
 model.null <- lmer(R5 ~ (1 | subj) + (1 + cond | item), all_data_join) 
@@ -326,9 +342,25 @@ all_data_join$WRMT_WI_raw <- scale(all_data_join$WRMT_WI_raw)
 
 # SINGULAR FIT 
 model_alldata <- lmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
-                        (1 |subj) + (0 + SRS2_total_score_t|cond) + 
+                        (1 + cond|subj) +  (1 + cond | item) + (0 + SRS2_total_score_t|cond) + 
                         (0 + EQ|cond) + (0 + WRMT_total_reading_score|cond) + 
-                        (0 + WRMT_WI_raw|cond) , all_data_join, REML = TRUE)
+                        (0 + WRMT_WI_raw|cond), data = all_data_join, REML = TRUE)
 
-#Try again
-#Simplified it loads and cannot get it to converge!
+check_model(model_alldata)
+summary(model_alldata)
+
+model_alldata_simpler_ranef <- lmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                        (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+
+check_model(model_alldata_simpler_ranef)
+summary(model_alldata_simpler_ranef)
+
+model_alldata_simpler_null <- lmer(R4 ~ SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                                      (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+
+anova(model_alldata_simpler_null, model_alldata_simpler_ranef)
+
+# Try again
+# Simplified it loads and cannot get it to converge!
+# Would be worth looking at a different optimiser
+# https://cran.r-project.org/web/packages/lme4/vignettes/lmerperf.html
