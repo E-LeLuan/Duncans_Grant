@@ -9,6 +9,7 @@ library(stats)
 library(brms)
 library(fitdistrplus)
 library(tidyverse)
+library(buildmer)
 
 #import the data set batch 1
 FP_ED_batch1_corr <- read_csv("Duncans-Grant-master/FP_ED/FP_ED_batch1_corr.csv")
@@ -259,6 +260,23 @@ all_data_join %>%
 all_data_join %>% 
   group_by(cond) %>%
   summarise(mean(R4), sd(R4))
+
+maximal <- lmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                                   (1 + cond | subj) + (1 + cond | item) + (0 + SRS2_total_score_t|cond) + 
+                                   (0 + EQ|cond) + (0 + WRMT_total_reading_score|cond) + 
+                                   (0 + WRMT_WI_raw|cond))
+
+m_gamma <- buildmer(maximal,
+                    data = all_data_join,
+                    direction = 'order',
+                    family = Gamma(link = "identity"),
+                    control = glmerControl(optimizer = 'bobyqa'))
+
+maximal_gamma <- formula(m_gamma@model)
+maximal_gamma
+model1a <- glmer(maximal_gamma, 
+                 family = Gamma(link = "identity"), 
+                 data = data1)
 
 # Model assuming normality of residuals - singular fit error with more complex models
 model.null <- lmer(R4 ~ (1 | subj) + (1 + cond | item), all_data_join) 
