@@ -1,10 +1,8 @@
 # Load packages
 library(Matrix)
-library (lme4)
-library (ggplot2)
-library (lmerTest)
-library (emmeans)
-library (readr)
+library(lme4)
+library(lmerTest)
+library(emmeans)
 library(stats)
 library(brms)
 library(fitdistrplus)
