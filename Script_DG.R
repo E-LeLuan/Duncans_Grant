@@ -8,6 +8,7 @@ library(brms)
 library(fitdistrplus)
 library(tidyverse)
 library(buildmer)
+library(performance)
 
 #import the data set batch 1
 FP_ED_batch1_corr <- read_csv("Duncans-Grant-master/FP_ED/FP_ED_batch1_corr.csv")
@@ -264,6 +265,8 @@ maximal <- lmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score +
                                    (1 + cond | subj) + (1 + cond | item) + (0 + SRS2_total_score_t|cond) + 
                                    (0 + EQ|cond) + (0 + WRMT_total_reading_score|cond) + 
                                    (0 + WRMT_WI_raw|cond), data = all_data_join)
+
+check_model(maximal)
 
 m_gamma <- buildmer(maximal,
                     data = all_data_join,
