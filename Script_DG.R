@@ -340,9 +340,23 @@ all_data_join$WRMT_WI_raw <- scale(all_data_join$WRMT_WI_raw)
 
 # SINGULAR FIT 
 model_alldata <- lmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
-                        (1 |subj) + (0 + SRS2_total_score_t|cond) + 
+                        (1 + cond|subj) +  (1 + cond | item) + (0 + SRS2_total_score_t|cond) + 
                         (0 + EQ|cond) + (0 + WRMT_total_reading_score|cond) + 
-                        (0 + WRMT_WI_raw|cond) , all_data_join, REML = TRUE)
+                        (0 + WRMT_WI_raw|cond), data = all_data_join, REML = TRUE)
+
+check_model(model_alldata)
+summary(model_alldata)
+
+model_alldata_simpler_ranef <- lmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                        (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+
+check_model(model_alldata_simpler_ranef)
+summary(model_alldata_simpler_ranef)
+
+model_alldata_simpler_null <- lmer(R4 ~ SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                                      (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+
+anova(model_alldata_simpler_null, model_alldata_simpler_ranef)
 
 #Try again
 #Simplified it loads and cannot get it to converge!
