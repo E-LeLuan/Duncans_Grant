@@ -222,6 +222,7 @@ all_data_removed <- all_data_removed %>% filter(subj != 94)
 all_data_removed <- all_data_removed %>% filter(subj != 95)    
 all_data_removed <- all_data_removed %>% filter(subj != 96)    
 all_data_removed <- all_data_removed %>% filter(subj != 97)    
+
 all_data_removed <- all_data_removed %>% filter(subj != 98)    
 all_data_removed <- all_data_removed %>% filter(subj != 99)    
 
@@ -262,7 +263,7 @@ all_data_join %>%
 maximal <- lmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
                                    (1 + cond | subj) + (1 + cond | item) + (0 + SRS2_total_score_t|cond) + 
                                    (0 + EQ|cond) + (0 + WRMT_total_reading_score|cond) + 
-                                   (0 + WRMT_WI_raw|cond))
+                                   (0 + WRMT_WI_raw|cond), data = all_data_join)
 
 m_gamma <- buildmer(maximal,
                     data = all_data_join,
