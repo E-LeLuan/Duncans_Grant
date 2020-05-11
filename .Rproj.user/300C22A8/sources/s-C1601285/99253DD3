@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1589209704298.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2311414054",
+    "id" : "99253DD3",
+    "lastKnownWriteTime" : 1589212046,
+    "last_content_update" : 1589212046624,
+    "path" : "~/Desktop/Duncans_Grant/study 1 First Pass.Rmd",
+    "project_path" : "study 1 First Pass.Rmd",
+    "properties" : {
+        "cursorPosition" : "354,51",
+        "scrollLine" : "337",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

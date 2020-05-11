@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1588156216050.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "20F3A6EE",
+    "lastKnownWriteTime" : 1589210213,
+    "last_content_update" : 1589211849576,
+    "path" : "~/Desktop/Duncans_Grant/Script_DG.R",
+    "project_path" : "Script_DG.R",
+    "properties" : {
+        "cursorPosition" : "318,0",
+        "scrollLine" : "301",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : true,
+    "source_window" : "",
+    "type" : "r_source"
+}

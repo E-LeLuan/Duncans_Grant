@@ -1,0 +1,258 @@
+require(psych)
+require(readr)
+require(lme4)
+require(ggplot2)
+require(lmerTest)
+require(emmeans)
+
+#First pass data loaded below
+library(readr)
+library(readr)
+FPs <- read_csv("Libby a/First pass/FPs.csv")
+View(FPs)
+library(lmerTest)
+
+# Run the analysis 
+FPs$Predict <- as.factor(FPs$Predict)
+modelfp4 <- lmer(R4 ~ Predict + (1 + Predict | P.s) + (1 + Predict | Item), data = FPs, REML = TRUE)
+summary (modelfp4)
+anova(modelfp4)
+emmeans(modelfp4, pairwise ~ Predict, adjust = "none")
+describeBy(FPs$R4, group = FPs$Predict)
+model.null <- lmer(R4 ~ (1 + Predict|P.s) + (1 + Predict|Item) data =FPs, REML = TRUE)
+anova(model.null, modelfp4)
+hist(R4$Predict)
+describeBy(FPs$R4, group = FPs$Predict)
+hist(FPs$R4, group = FPs$Predict)
+hist(FPs$R4, breaks = 50)
+data %>% group_by(condition) %>% summarise(n(), mean(RT), sd(RT))
+hist(FPs$R4, breaks = 50)
+
+library(tidyverse)
+# 148 participants
+# 32 items
+# Condition has 2 levels
+# 4 Covariates
+
+subject <- 1:148
+item <- 1:32
+#cond <- c("predict_fac", "predict_unfac")
+
+data <- expand.grid(subject, item)
+
+condition <- c(rep(c(rep("predict_fac", 74), rep("predict_unfac", 74)), times = 16), 
+               rep(c(rep("predict_unfac", 74), rep("predict_fac", 74)), times = 16))
+
+
+data <- cbind(data, condition)
+
+colnames(data) <- c("subject", "item", "condition")
+
+View(filter(data, subject == 1))
+View(filter(data, item == 1))
+
+data <- data %>% arrange(desc(data$condition))
+data %>% group_by(condition) %>% summarise(n(), mean(RT), sd(RT))
+
+# Normally distributed data
+
+data$RT <- c(rnorm(2368, 1200, 100), rnorm(2368, 500, 100))
+hist(data$RT, breaks = 50)
+
+data %>% group_by(condition) %>% summarise(n(), mean(RT), sd(RT))
+
+#But our data is not normally distributed
+library(gamlss.dist)
+
+# Below is incorrect as we do not get the mean we're after
+#data$RT <- c(rexGAUS(2368, mu = 1110, sigma = 95, nu = 100), (rexGAUS(2368, mu = 999, sigma = 65, nu = 100)))
+#hist(data$RT, breaks = 50)
+#summary(mean(data$RT))
+
+library(tidyverse)
+FPs$Predict <- as.factor(FPs$Predict)
+modelfp4 <- lmer(R4 ~ Predict + (1 + Predict | P.s) + (1 + Predict | Item), data = FPs, REML = TRUE)
+summary (modelfp4)
+anova(modelfp4)
+emmeans(modelfp4, pairwise ~ Predict, adjust = "none")
+describeBy(FPs$R4, group = FPs$Predict)
+hist(FPs$R4, breaks = 50)
+set.seed(1234)
+
+data$RT <- c(rexGAUS(2368, mu = 465, sigma = 266, nu = 534))
+hist(data$RT, breaks = 50)
+summary(mean(data$RT))
+
+
+# Load data 
+FPs <- read_csv("FPs.csv")
+
+FPs <- filter(FPs, R4 > 0)
+
+pred_fac <- filter(FPs, Cond == 1)
+pred_unfac <- filter(FPs, Cond == 2)
+
+hist(pred_fac$R4, breaks = 100)
+hist(pred_unfac$R4, breaks = 100)
+
+
+
+# First of all prediction facilitated ####
+mexgauss(pred_fac$R4)
+
+rt <- pred_fac$R4
+
+# Another possibility - read in real data and map to the rt variable ####
+# The mexgauss function will generate the parameter estimates
+mu <- mexgauss(rt)[1]
+sigma <- mexgauss(rt)[2]
+nu <- mexgauss(rt)[3]
+
+mu <- 471 #536 
+sigma <- 254 #308
+nu <- 536 #574
+samples <- 2368
+
+set.seed(1234)
+simulated_rt <- rexGAUS(samples, mu, sigma, nu)
+hist(simulated_rt, breaks = 2368)
+
+sim_fac <- as.tibble(simulated_rt)
+
+sim_fac[sim_fac$value < 100,]$value <- 100
+
+hist(sim_fac, breaks = 100)
+
+
+
+# Now prediction unfacilitated ####
+mexgauss(pred_unfac$R4)
+
+rt <- pred_unfac$R4
+
+# Another possibility - read in real data and map to the rt variable ####
+# The mexgauss function will generate the parameter estimates
+
+mu <- 540
+sigma <- 302
+nu <- 574
+samples <- 2368
+
+set.seed(1234)
+simulated_rt <- rexGAUS(samples, mu, sigma, nu)
+hist(simulated_rt, breaks = 2368)
+
+sim_unfac <- as.tibble(simulated_rt)
+
+sim_unfac[sim_unfac$value < 100,]$value <- 100
+
+hist(sim_unfac, breaks = 100)
+
+mean(sim_fac$value)
+mean(sim_unfac$value)
+sd(sim_fac$value)
+sd(sim_unfac$value)
+
+
+
+library(retimes)
+
+# First of all prediction facilitated ####
+mexgauss(pred_fac$R4)
+
+rt <- pred_fac$R4
+
+# Another possibility - read in real data and map to the rt variable ####
+# The mexgauss function will generate the parameter estimates
+mu <- mexgauss(rt)[1]
+sigma <- mexgauss(rt)[2]
+nu <- mexgauss(rt)[3]
+
+mu <- 471 #536 
+sigma <- 254 #308
+nu <- 536 #574
+samples <- 2368
+
+set.seed(1234)
+simulated_rt <- rexGAUS(samples, mu, sigma, nu)
+hist(simulated_rt, breaks = 2368)
+
+sim_fac <- as.tibble(simulated_rt)
+
+sim_fac[sim_fac$value < 100,]$value <- 100
+
+hist(sim_fac, breaks = 100)
+
+
+# Now prediction unfacilitated ####
+mexgauss(pred_unfac$R4)
+
+rt <- pred_unfac$R4
+
+# Another possibility - read in real data and map to the rt variable ####
+# The mexgauss function will generate the parameter estimates
+
+mu <- 540
+sigma <- 302
+nu <- 574
+samples <- 2368
+
+set.seed(1234)
+simulated_rt <- rexGAUS(samples, mu, sigma, nu)
+hist(simulated_rt, breaks = 2368)
+
+sim_unfac <- as.tibble(simulated_rt)
+
+sim_unfac[sim_unfac$value < 100,]$value <- 100
+
+hist(sim_unfac$value, breaks = 100)
+
+mean(sim_fac$value)
+mean(sim_unfac$value)
+sd(sim_fac$value)
+sd(sim_unfac$value)
+
+
+model_sim <- lmer(RT ~ condition + (1 + condition|subject) + (1 + condition|item), data, REML = TRUE)
+summary(model_sim)
+
+
+
+#add the RAN
+
+
+#add the RAN However bare in mund this is not the way to do it
+# 148 participants
+# 2 items
+#RAN_descriptives <- read_csv("RAN descriptives.csv")
+#View(RAN_descriptives)
+
+#data = RAN_descriptives
+#mean(mean)
+
+
+#data$RT <- c(rnorm(2368, 1200, 100), rnorm(2368, 500, 100))
+#mean = 335[1]
+#sd = 58[2]
+#RLNmean <- (mean = 335[1])
+#RLNsd <- sd
+#mexgauss(RLNmean)
+#RAN <- rexGAUS(4736, 500, 50, 100)
+#hist(RAN)
+#data$RAN <- RAN
+#model_sim2 <- lmer(RT ~ condition + RAN + (1 + condition|subject) + (1 + condition|item), data, REML = TRUE)
+#summary(model_sim2)
+#data$RAN <- scale(RAN)
+
+
+#RLNmean <- mean(335)[1]
+#RLNmean <- sd(58)[2]
+#mexgauss(RLNmean)
+#RAN <- rexGAUS(4736, 500, 50, 100)
+#hist(RAN)
+#data$RAN <- RAN
+#model_sim2 <- lmer(RT ~ condition + RAN + (1 + condition|subject) + (1 + condition|item), data, REML = TRUE)
+#summary(model_sim2)
+
+
+#data$RAN <- scale(RAN)

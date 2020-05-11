@@ -1,0 +1,143 @@
+# Load packages
+library(Matrix)
+library (lme4)
+library (ggplot2)
+library (lmerTest)
+library (emmeans)
+library (readr)
+library(stats)
+library(brms)
+library(fitdistrplus)
+library(tidyverse)
+
+#import the data set batch 1
+FPs <- read_csv("Duncans-Grant-master/FP_ED/FP_ED_batch1_corr.txt.csv")
+
+view (FPs)
+
+#Rename the subj numbers in the batches back to their original subj numbers.
+FPs$subj[FPs$subj == 20] <-"38"
+FPs$subj[FPs$subj == 19] <-"36"
+FPs$subj[FPs$subj == 18] <-"35"
+FPs$subj[FPs$subj == 17] <-"34"
+FPs$subj[FPs$subj == 16] <-"32"
+FPs$subj[FPs$subj == 15] <-"30"
+FPs$subj[FPs$subj == 14] <-"28"
+FPs$subj[FPs$subj == 13] <-"26"
+FPs$subj[FPs$subj == 12] <-"24"
+FPs$subj[FPs$subj == 11] <-"22"
+FPs$subj[FPs$subj == 10] <-"20"
+FPs$subj[FPs$subj == 9] <-"18"
+FPs$subj[FPs$subj == 8] <-"16"
+FPs$subj[FPs$subj == 7] <-"14"
+FPs$subj[FPs$subj == 6] <-"12"
+FPs$subj[FPs$subj == 5] <-"10"
+FPs$subj[FPs$subj == 4] <-"8"
+FPs$subj[FPs$subj == 3] <-"6"
+FPs$subj[FPs$subj == 2] <-"4"
+FPs$subj[FPs$subj == 1] <-"2"
+
+view (FPs)
+
+#set cond as factor
+FPs$cond <- as.factor (FPs$cond)
+FPs$subj <- as.factor (FPs$subj)
+FPs$item <- as.factor (FPs$item) 
+
+FPs <- filter(FPs, R3 > 0)
+sum(FPs$R3 == 0)
+
+FPs %>% group_by(cond) %>% summarise(mean(R3))
+
+# not normally distributed
+qqnorm (FPs$R3)
+qqline (FPs$R3, group = "cond")
+descdist(FPs$R3)
+
+# Doesn't confrom to any distribution
+
+#Let's try a normal analysis first.
+FPs %>% 
+  ggplot(aes(x = cond, y = R3, colour = cond)) +
+  geom_violin() +
+  geom_jitter(alpha = .2, width = .1) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
+  guides(colour = FALSE)
+
+FPs %>% 
+  group_by(cond) %>%
+  summarise(mean(R3), sd(R3))
+
+model.null <- lmer(R3 ~ (1 | subj) + (1 + cond | item), FPs) 
+model <- lmer(R3 ~ cond + (1 | subj) + (1 + cond | item), FPs) 
+summary(model)
+
+anova(model, model.null)
+
+#Log transformed linear model
+logfps <- FPs %>% mutate(logR3 = log(R3))
+View(logfps)
+
+logfps %>% group_by(cond) %>% summarise(mean(logR3))
+
+qqnorm(logfps$logR3)
+qqline(logfps$logR3, group = "cond")
+descdist(FPs$R3)
+
+model.null <- lmer(logR3 ~ (1 | cond) + (1 | item), logfps)
+model_logfps3 <- lmer(logR3 ~ cond + (1 | subj) + 
+                       (1 | item), logfps, REML = "TRUE")
+
+summary(model_logfps3)
+anova(model_logfps3, model.null)
+
+# Let's look at region 4 now
+FPs <- filter(FPs, R4 > 0)
+sum(FPs$R4 == 0)
+
+FPs %>% group_by(cond) %>% summarise(mean(R4))
+
+# not normally distributed
+qqnorm (FPs$R4) 
+qqline (FPs$R4, group = "cond")
+descdist(FPs$R4)
+
+#Let's try a normal analysis first.
+FPs %>% 
+  ggplot(aes(x = cond, y = R4, colour = cond)) +
+  geom_violin() +
+  geom_jitter(alpha = .2, width = .1) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
+  guides(colour = FALSE)
+
+FPs %>% 
+  group_by(cond) %>%
+  summarise(mean(R4), sd(R4))
+
+model.null <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), FPs) 
+model <- lmer(R4 ~ cond + (1 | subj) + (1 | item), FPs) 
+summary(model)
+
+anova(model, model.null)
+
+#Log transformed linear model
+logfps <- FPs %>% mutate(logR4 = log(R4))
+View(logfps)
+
+logfps %>% group_by(cond) %>% summarise(mean(logR4))
+
+qqnorm(logfps$logR4)
+qqline(logfps$logR4, group = "cond")
+descdist(FPs$R4)
+
+model.null <- lmer(logR4 ~ (1 | cond) + (1 | item), logfps)
+model_logfps4 <- lmer(logR4 ~ cond + (1 | subj) + 
+                        (1 | item), logfps, REML = "TRUE")
+
+summary(model_logfps4)
+anova(model_logfps4, model.null)
+
+library(readr)
+ID_Measures <- read_csv("ID Measures.csv")
+View(ID_Measures)
+                                        
