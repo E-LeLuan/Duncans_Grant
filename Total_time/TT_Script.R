@@ -167,6 +167,7 @@ ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 39)
 ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 42)
 ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 43)
 ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 44)
+ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 45)
 ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 69)
 ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 70)
 ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 71)
@@ -194,6 +195,7 @@ all_data_removed <- all_data_removed %>% filter(subj != 39)
 all_data_removed <- all_data_removed %>% filter(subj != 42)
 all_data_removed <- all_data_removed %>% filter(subj != 43)
 all_data_removed <- all_data_removed %>% filter(subj != 44)
+all_data_removed <- all_data_removed %>% filter(subj != 45)
 all_data_removed <- all_data_removed %>% filter(subj != 67)
 all_data_removed <- all_data_removed %>% filter(subj != 69)
 all_data_removed <- all_data_removed %>% filter(subj != 70)
@@ -254,18 +256,38 @@ all_data_join %>%
   group_by(cond) %>%
   summarise(mean(R4), sd(R4))
 
-# Model assuming normality of residuals - singular fit error with more complex models
-model.null <- lmer(R4 ~ (1 | subj) + (1 + cond | item), all_data_join) 
-model <- lmer(R4 ~ cond + (1 | subj) + (1 + cond | item), all_data_join) 
-summary(model)
+# Model assuming normality of residuals 
+modelR4.null <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
+modelR4 <- lmer(R4 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
 
-anova(model, model.null)
-check_model(model)
+summary(modelR4)
+anova(modelR4, modelR4.null)
 
-qqnorm(residuals(model))
-qqline(residuals(model))
-
+qqnorm(residuals(modelR4))
+qqline(residuals(modelR4))
 descdist(all_data_join$R4)
+
+#Let's include some covariates! Region 4
+
+#Step 1: Scale the ID measures...
+all_data_join$SRS2_total_score_t <- scale(all_data_join$SRS2_total_score_t)
+all_data_join$EQ <- scale(all_data_join$EQ)
+all_data_join$WRMT_total_reading_score <- scale(all_data_join$WRMT_total_reading_score)
+all_data_join$WRMT_WI_raw <- scale(all_data_join$WRMT_WI_raw)
+
+# Maximal model 
+model_alldata_ranefR4 <- lmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                                (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+
+#same structure as model fails to converge so settle with singular fit
+model_alldataR4_null <- lmer(R4 ~ SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                                (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+
+summary(model_alldata_ranefR4)
+anova(model_alldataR4_null, model_alldata_ranefR4)
+check_model(model_alldata_ranefR4)
+# Which model is best? with controlling factors or just eye tracking data
+anova(modelR4, model_alldata_ranefR4)
 
 #What does region 5 "the reply" look like?
 
@@ -283,69 +305,27 @@ all_data_join %>%
   group_by(cond) %>%
   summarise(mean(R5), sd(R5))
 
-# Model assuming normality of residuals - singular fit error with more complex models
-model.null <- lmer(R5 ~ (1 | subj) + (1 + cond | item), all_data_join) 
-model <- lmer(R5 ~ cond + (1 + cond | subj) + (1 | item), all_data_join) 
-summary(model)
+modelR5.null <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
+modelR5 <- lmer(R5 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
+summary(modelR5)
+anova(modelR5, modelR5.null)
 
-check_model(model)
-
-anova(model, model.null)
-
-qqnorm(residuals(model))
-qqline(residuals(model))
-
+check_model(modelR5)
+qqnorm(residuals(modelR5))
+qqline(residuals(modelR5))
 descdist(all_data_join$R5)
-
-#Let's include some covariates! Region 4
-
-#Step 1: Scale the ID measures...
-all_data_join$SRS2_total_score_t <- scale(all_data_join$SRS2_total_score_t)
-all_data_join$EQ <- scale(all_data_join$EQ)
-all_data_join$WRMT_total_reading_score <- scale(all_data_join$WRMT_total_reading_score)
-all_data_join$WRMT_WI_raw <- scale(all_data_join$WRMT_WI_raw)
-
-# SINGULAR FIT 
-model_alldata_simpler_ranef <- lmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
-                                      (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
-
-# Try again with a simpler model
-model_alldata_simpler_ranef <- lmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
-                                      (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
-
-check_model(model_alldata_simpler_ranef)
-summary(model_alldata_simpler_ranef)
-
-#Singular fit
-model_alldata_simpler_null <- lmer(R4 ~ SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
-                                     (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
-
-# Try again with a simpler model
-model_alldata_simpler_null <- lmer(R4 ~ SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
-                                     (1 + cond | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
-
-anova(model_alldata_simpler_null, model_alldata_simpler_ranef)
 
 #Let's include some covariates! Region 5
 
-# SINGULAR FIT 
-model_alldata_simpler_ranef <- lmer(R5 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
-                                      (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+# IGNORING SINGULAR FIT 
+model_alldata_ranefR5 <- lmer(R5 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                                      (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 
-# Try again with a simpler model
-model_alldata_simpler_ranef <- lmer(R5 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
-                                      (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
-
-check_model(model_alldata_simpler_ranef)
-summary(model_alldata_simpler_ranef)
-
-#Singular fit
-model_alldata_simpler_null <- lmer(R5 ~ SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+model_alldata_R5_null <- lmer(R5 ~ SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
                                      (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 
-# Try again with a simpler model
-model_alldata_simpler_null <- lmer(R5 ~ SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
-                                     (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+anova(model_alldata_R5_null, model_alldata_ranefR5)
+summary(model_alldata_ranefR5)
+check_model(model_alldata_ranefR5)
 
-anova(model_alldata_simpler_null, model_alldata_simpler_ranef)
-
+anova(modelR5, model_alldata_ranefR5)
