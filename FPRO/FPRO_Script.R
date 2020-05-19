@@ -167,6 +167,7 @@ ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 39)
 ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 42)
 ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 43)
 ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 44)
+ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 45)
 ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 69)
 ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 70)
 ID_Measures_removed <- ID_Measures_removed %>% filter(subj != 71)
@@ -194,6 +195,7 @@ all_data_removed <- all_data_removed %>% filter(subj != 39)
 all_data_removed <- all_data_removed %>% filter(subj != 42)
 all_data_removed <- all_data_removed %>% filter(subj != 43)
 all_data_removed <- all_data_removed %>% filter(subj != 44)
+all_data_removed <- all_data_removed %>% filter(subj != 45)
 all_data_removed <- all_data_removed %>% filter(subj != 67)
 all_data_removed <- all_data_removed %>% filter(subj != 69)
 all_data_removed <- all_data_removed %>% filter(subj != 70)
@@ -256,13 +258,34 @@ all_data_join %>%
 
 all_data_join$R4 <- as.factor(all_data_join$R4)
 
-model <- glmer(R4 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
-summary(model)
+#Maximal structure to converge
+modelR4 <- glmer(R4 ~ cond + (1 | subj) + (1 + cond | item), all_data_join, family = "binomial") 
+summary(modelR4)
 
-model.null <- glmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
+modelR4.null <- glmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
 
-anova(model, model.null)
-check_model(model)
+anova(modelR4, modelR4.null)
+check_model(modelR4)
+
+#Let's include some covariates! Region 4
+
+#Step 1: Scale the ID measures...
+all_data_join$SRS2_total_score_t <- scale(all_data_join$SRS2_total_score_t)
+all_data_join$EQ <- scale(all_data_join$EQ)
+all_data_join$WRMT_total_reading_score <- scale(all_data_join$WRMT_total_reading_score)
+all_data_join$WRMT_WI_raw <- scale(all_data_join$WRMT_WI_raw)
+
+#Simplest model able to converge
+model_alldata_ranefR4 <- glmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                                       (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+
+model_alldataR4_null <- glmer(R4 ~ SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                                      (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+
+summary(model_alldata_ranefR4)
+anova(model_alldataR4_null, model_alldata_ranefR4)
+check_model(model_alldata_ranefR4)
+anova(modelR4, model_alldata_ranefR4)
 
 #What does region 5 "the reply" look like?
 
@@ -282,44 +305,37 @@ all_data_join %>%
 
 all_data_join$R5 <- as.factor(all_data_join$R5)
 
-model <- glmer(R5 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
-summary(model)
+#Just eye tracking data
+modelR5 <- glmer(R5 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
+summary(modelR5)
 
-model.null <- glmer(R5 ~ (1 + cond | subj) + (1 | item), all_data_join, family = "binomial") 
+modelR5.null <- glmer(R5 ~ (1 + cond | subj) + (1 | item), all_data_join, family = "binomial") 
 
-anova(model, model.null)
-check_model(model)
+anova(modelR5, modelR5.null)
+check_model(modelR5)
 
-qqnorm(residuals(model))
-qqline(residuals(model))
-
-#Let's include some covariates! Region 4
-
-#Step 1: Scale the ID measures...
-all_data_join$SRS2_total_score_t <- scale(all_data_join$SRS2_total_score_t)
-all_data_join$EQ <- scale(all_data_join$EQ)
-all_data_join$WRMT_total_reading_score <- scale(all_data_join$WRMT_total_reading_score)
-all_data_join$WRMT_WI_raw <- scale(all_data_join$WRMT_WI_raw)
-
-
-model_alldata_simpler_ranef <- glmer(R4 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
-                                      (1 + cond | subj) +  (1 | item) , data = all_data_join, family = "binomial")
-check_model(model_alldata_simpler_ranef)
-summary(model_alldata_simpler_ranef)
-
-model_alldata_simpler_null <- glmer(R4 ~ SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
-                                     (1 + cond | subj) +  (1 | item) , data = all_data_join, family = "binomial")
-
-anova(model_alldata_simpler_null, model_alldata_simpler_ranef)
+qqnorm(residuals(modelR5))
+qqline(residuals(modelR5))
 
 #Let's include some covariates! Region 5
-model_alldata_simpler_ranef <- glmer(R5 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+
+#Simplest model
+model_alldataR5_null <- glmer(R5 ~ SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
                                       (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
-check_model(model_alldata_simpler_ranef)
-summary(model_alldata_simpler_ranef)
 
-model_alldata_simpler_null <- glmer(R5 ~ SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
-                                     (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
 
-anova(model_alldata_simpler_null, model_alldata_simpler_ranef)
+#By subject
+model_alldataR5_subj <- glmer(R5 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                                      (1 + cond | subj) , data = all_data_join, family = "binomial")
+summary(model_alldataR5_subj)
+anova(model_alldataR5_null, model_alldataR5_subj)
+check_model(model_alldataR5_subj)
+
+#By Item
+model_alldataR5_item <- glmer(R5 ~ cond + SRS2_total_score_t + EQ + WRMT_total_reading_score + WRMT_WI_raw +
+                                (1 + cond | item) , data = all_data_join, family = "binomial")
+summary(model_alldataR5_item)
+anova(model_alldataR5_null, model_alldataR5_item)
+
+check_model(model_alldataR5_item)
 
