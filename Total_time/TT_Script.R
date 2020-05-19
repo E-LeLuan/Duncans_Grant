@@ -289,6 +289,16 @@ check_model(model_alldata_ranefR4)
 # Which model is best? with controlling factors or just eye tracking data
 anova(modelR4, model_alldata_ranefR4)
 
+#Just one correlate
+model_alldata_ranefR4 <- lmer(R4 ~ cond * SRS2_total_score_t +
+                                (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+summary(model_alldata_ranefR4)
+
+model_alldata_ranefR42 <- lmer(R4 ~ cond +
+                                 (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+summary(model_alldata_ranefR42)
+anova(model_alldata_ranefR4, model_alldata_ranefR42)
+
 #What does region 5 "the reply" look like?
 
 all_data_join <- all_data_join %>% filter(R5 != 0)

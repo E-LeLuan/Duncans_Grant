@@ -6,6 +6,7 @@ library(emmeans)
 library(stats)
 library(brms)
 library(fitdistrplus)
+library(Hmisc)
 library(tidyverse)
 library(buildmer)
 library(performance)
@@ -330,5 +331,11 @@ anova(model_alldata_ranefR5, model_alldataR5_null)
 anova(modelR5, model_alldata_ranefR5)
 check_model(model_alldata_ranefR5)
 
+#Measuring Correlations
+EQscore <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(EQ)) %>% pull(mean)
+SRS2 <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(SRS2_total_score_t)) %>% pull(mean)
+rcorr(EQscore, SRS2)
 
+
+#rcorr(all_data_join$SRS2_total_score_t, all_data_join$EQ)
 
