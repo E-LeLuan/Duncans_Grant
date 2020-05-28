@@ -253,8 +253,9 @@ all_data_join %>%
   guides(colour = FALSE)
 
 all_data_join %>% 
-  ggplot(aes(x = cond, y = R4, colour = cond)) + ggtitle("Total Time for Critical Region: Question") +
-  labs(y = "Reading time in ms.", x = "Prediction") +
+  ggplot(aes(x = cond, y = R4, colour = cond)) + ggtitle("Total Time for Critical Region: Question")+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(y = "Time in Milliseconds", x = "Prediction") +
   geom_violin() +
   geom_jitter(alpha = .2, width = .1) +
   stat_summary(fun.data = "mean_cl_boot", colour = "black") +
@@ -313,15 +314,9 @@ all_data_join <- all_data_join %>% filter(R5 != 0)
 
 # Visualise
 all_data_join %>% 
-  ggplot(aes(x = cond, y = R5, colour = cond)) +
-  geom_violin() +
-  geom_jitter(alpha = .2, width = .1) +
-  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
-  guides(colour = FALSE)
-
-all_data_join %>% 
-  ggplot(aes(x = cond, y = R5, colour = cond)) + ggtitle("Total Time for Post-Critical Region: Reply") +
-  labs(y = "Reading time in ms.", x = "Prediction") +
+  ggplot(aes(x = cond, y = R5, colour = cond)) + ggtitle("Total Time for Post-Critical Region: Reply")+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(y = "Time in Milliseconds", x = "Prediction") +
   geom_violin() +
   geom_jitter(alpha = .2, width = .1) +
   stat_summary(fun.data = "mean_cl_boot", colour = "black") +

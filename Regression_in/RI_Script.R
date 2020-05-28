@@ -252,16 +252,19 @@ all_data_join %>%
   geom_jitter(alpha = .2, width = .1) +
   stat_summary(fun.data = "mean_cl_boot", colour = "black") +
   guides(colour = FALSE)
-  
-  #labs(title= "Petal and Sepal Length \nof Iris",
-                          #     y="Petal Length (cm)", x = "Sepal Length (cm)"))
+
+all_data_join %>% 
+  ggplot(aes(x = cond, y = R4, colour = cond)) + ggtitle("Regression In for Critical Region: Question") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(y = "Regression", x = "Prediction") +
+  geom_jitter(alpha = .2, width = .1) +
+  guides(colour = FALSE)
 
 all_data_join %>% 
   group_by(cond) %>%
   summarise(mean(R4), sd(R4))
 
-library(psych)
-describeBy(all_data_join$R4, group=all_data_join$cond)
+all_data_join$R4 <- as.factor(all_data_join$R4)
 
 # Just eye tracking
 modelR4 <- glmer(R4 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
@@ -344,4 +347,5 @@ rcorr(EQscore, SRS2)
 
 
 #rcorr(all_data_join$SRS2_total_score_t, all_data_join$EQ)
-
+library(psych)
+describeBy(all_data_join$R4, group=all_data_join$cond)

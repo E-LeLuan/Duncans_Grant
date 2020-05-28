@@ -297,7 +297,9 @@ all_data_join <- all_data_join %>% filter(R5 != 0)
 
 # Visualise
 all_data_join %>% 
-  ggplot(aes(x = cond, y = R5, colour = cond)) +
+  ggplot(aes(x = cond, y = R5, colour = cond)) + ggtitle("First Pass for Post-Critical Region: Reply") +
+  labs(y = "Time in Milliseconds", x = "Prediction") +
+  theme(plot.title = element_text(hjust = 0.5))+
   geom_violin() +
   geom_jitter(alpha = .2, width = .1) +
   stat_summary(fun.data = "mean_cl_boot", colour = "black") +

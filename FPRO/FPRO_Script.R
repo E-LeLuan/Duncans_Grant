@@ -2,7 +2,7 @@
 library(Matrix)
 library(lme4)
 library(lmerTest)
-library(emmeans)
+library(psych)
 library(stats)
 library(brms)
 library(fitdistrplus)
@@ -288,15 +288,17 @@ check_model(model_alldata_ranefR4)
 anova(modelR4, model_alldata_ranefR4)
 
 #What does region 5 "the reply" look like?
+describeBy(all_data_join$R5, group=all_data_join$cond)
 
 all_data_join$R5[all_data_join$R5 == 1] <-"100"
-
+all_data_join <- all_data_join %>% filter(R4 != 'NA')
+  
 # Visualise
 all_data_join %>% 
-  ggplot(aes(x = cond, y = R5, colour = cond)) +
-  geom_violin() +
+  ggplot(aes(x = cond, y = R5, colour = cond)) + ggtitle("FPRO for Post-Critical Region: Reply")+
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(y = "Regression", x = "Prediction") +
   geom_jitter(alpha = .2, width = .1) +
-  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
   guides(colour = FALSE)
 
 all_data_join %>% 
