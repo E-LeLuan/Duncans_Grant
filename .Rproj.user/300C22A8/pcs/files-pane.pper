@@ -1,9 +1,9 @@
 {
-    "path": "~/Desktop/Duncans_Grant/Duncans-Grant-master/FP_ED",
+    "path": "~/Desktop/Duncans_Grant/First_pass/FP_ED",
     "sortOrder": [
         {
-            "ascending": true,
-            "columnIndex": 2
+            "columnIndex": 2,
+            "ascending": true
         }
     ]
 }
