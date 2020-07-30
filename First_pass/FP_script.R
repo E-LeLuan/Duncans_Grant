@@ -11,7 +11,7 @@ library(buildmer)
 library(performance)
 library(see)
 
-# Analysis of First Pass data
+# Analysis of First P ass data
 
 #import the data set batch 1
 FP_ED_batch1_corr <- read_csv("Duncans-Grant-master/FP_ED/FP_ED_batch1_corr.csv")
