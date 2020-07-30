@@ -151,7 +151,6 @@ all_data <- rbind(RI_ED_batch1_corr, RI_ED_batch2B_corr, RI_ED_batch3_corr, RI_E
 
 all_data$subj <- as.factor(all_data$subj)
 
-
 #Import Individual difference measures
 ID_Measures <- read_csv("ID Measures.csv")
 #View(ID_Measures)
@@ -339,6 +338,8 @@ summary(model_alldata_ranefR5)
 anova(model_alldata_ranefR5, model_alldataR5_null)
 anova(modelR5, model_alldata_ranefR5)
 check_model(model_alldata_ranefR5)
+
+
 
 #Measuring Correlations
 EQscore <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(EQ)) %>% pull(mean)
