@@ -13,14 +13,11 @@ library(lme4)
 library(lmerTest)
 library(emmeans)
 library(stats)
-library(brms)
 library(fitdistrplus)
 library(tidyverse)
 library(buildmer)
 library(performance)
 library(see)
-library(rmarkdown)
-library(papaja)
 ```
 
 
@@ -38,10 +35,10 @@ If prediction is not utilized do we rely on more on basic integration to underst
 
 Do individual differences contribute to our ability to predict and/or integrate upcoming information? How do these contribute? 
 
-```{r import-and-merge-data}
+```{r import-and-merge-data, echo=FALSE, message=FALSE}
 library(readr)
-FP_ED_batch_corr <- read_csv("~/Desktop/Duncans_Grant/First_pass/FP_ED/FP_ED_batch_corr.csv")
-FP_ED_batch_error <- read_csv("~/Desktop/Duncans_Grant/First_pass/FP_ED/FP_ED_batch_error.csv")
+FP_ED_batch_corr <- read_csv("FP_ED_batch_corr.csv")
+FP_ED_batch_error <- read_csv("FP_ED_batch_error.csv")
 #Rename the participant numbers in the batches back to their original participant numbers.
 FP_ED_batch_corr$subj[FP_ED_batch_corr$subj == 54] <-"84"
 FP_ED_batch_corr$subj[FP_ED_batch_corr$subj == 53] <-"83"
@@ -139,7 +136,7 @@ all_data <- rbind(FP_ED_batch_corr, FP_ED_batch_error)
 all_data$subj <- as.factor(all_data$subj)
 
 #Import Individual difference measures
-All_IDs <- read_csv("~/Desktop/Duncans_Grant/All_IDs.csv")
+All_IDs <- read_csv("../../All_IDs.csv")
 #View(All_IDs)
 
 # Rename Participabt in ID_measures to subj to be the same as current data set
@@ -181,19 +178,21 @@ all_data_join %>%
 all_data_join %>% 
   group_by(cond) %>%
   summarise(mean(R4), sd(R4))
+```
 
+```{r}
 # Model assuming normality of residuals maximal structure
-model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
+#model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
 modelR4 <- lmer(R4 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
 summary(modelR4)
 
-anova(modelR4, model.nullR4)
+#anova(modelR4, model.nullR4)
 
 #All the data for this model looks pretty normal.
 check_model(modelR4)
-qqnorm(residuals(modelR4))
-qqline(residuals(modelR4))
-descdist(all_data_join$R4)
+#qqnorm(residuals(modelR4))
+#qqline(residuals(modelR4))
+#descdist(all_data_join$R4)
 ```
 
 ## Individual differences as controlling factors
@@ -207,23 +206,47 @@ all_data_join$EQ <- scale(all_data_join$EQ)
 all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
 all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+```
 
+
+```{r}
 # Model including covariates
-model_alldatacov_R4 <- lmer(R4 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                                (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 
-model_alldatacov_R4_null <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                               (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+#model_alldatacov_R4_null <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
+#                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
 
 summary(model_alldatacov_R4)
-anova(model_alldatacov_R4_null, model_alldatacov_R4)
+```
+
+So Total_RAN and our condition are significant.
+
+If we drop the Total_RAN the effect of condition is still there (see below) - suggesting to me that the effect of Total_RAN is separate from the effect of condition.
+
+```{r}
+model_alldatacov_R4_noRAN <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R4_noRAN)
+```
+
+Does Total_RAN interact with our condition? No (see below.)
+
+```{r}
+model_alldatacov_R4_RAN_int <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R4_RAN_int)
+```
+
+
+```{r}
+#anova(model_alldatacov_R4_null, model_alldatacov_R4)
 check_model(model_alldatacov_R4)
 
 ranef(model_alldatacov_R4)
 ```
 
 # summary of Results for region 4, the question.
-After controlling for individual differences participants are significantly faster at reading facilitated conditions compared to un-facilitated conditions where they take an extra 73 milliseconds to complete their first pass read through of the text. There is a 136 millisecond increase in reading times with each millisecond increase of the RAN. In other words, the slower your rapid naming times (indicative of poorer verbal fluency) the longer it takes you to integrate contextual information into a mental representation of the scenario encountered.  HAVE I INTERPRETED THIS RIGHT?????? (The ran interpretation confused me a bit).
+After controlling for individual differences participants are significantly faster at reading facilitated conditions compared to un-facilitated conditions where they take an extra 73 milliseconds to complete their first pass read through of the text. There is a 136 millisecond increase in reading times with each millisecond increase of the RAN. In other words, the slower your rapid naming times (indicative of poorer verbal fluency) the longer it takes you to integrate contextual information into a mental representation of the scenario encountered.  HAVE I INTERPRETED THIS RIGHT?????? (The ran interpretation confused me a bit). 
+
+Regardless of whether the individual predictors are present/absent, the effect of our condition is pretty much the same - suggesting to be that that variance explained by our experimental manipulation doesn't overlap with the variance explained by our individual difference measures. I suspect that Total_RAN explains overall reading time differences, but not anything to do with the difference between our experimental conditons - otherwise we'd have seen an interaction effect.
 
 # Correlations 
 
