@@ -1,11 +1,3 @@
----
-title: "First Pass Markdown"
-author: "Lib"
-date: "30/07/2020"
-output: html_document
----
-
-```{r setup, include=FALSE}
 #.libPaths("C:Program Files/R/R-3.5/library")
 #devtools::install_github("crsh/papaja")
 library(Matrix)
@@ -18,27 +10,16 @@ library(tidyverse)
 library(buildmer)
 library(performance)
 library(see)
-```
 
-
-```{r analysis preferences}
 #Set seed for random number generation
 set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
-```
 
-# Research Questions
-
-As readers do we predict upcoming information before it is encountered in order to better understand the unfolding discourse? 
-
-If prediction is not utilized do we rely on more on basic integration to understand an unfolding discourse context?
-
-Do individual differences contribute to our ability to predict and/or integrate upcoming information? How do these contribute? 
-
-```{r import-and-merge-data, echo=FALSE, message=FALSE}
+#As readers do we predict upcoming information before it is encountered in order to better understand the unfolding discourse? If prediction is not utilized do we rely on more on basic integration to understand an unfolding discourse context? Do individual differences contribute to our ability to predict and/or integrate upcoming information? How do these contribute? 
 library(readr)
 FP_ED_batch_corr <- read_csv("FP_ED_batch_corr.csv")
 FP_ED_batch_error <- read_csv("FP_ED_batch_error.csv")
+
 #Rename the participant numbers in the batches back to their original participant numbers.
 FP_ED_batch_corr$subj[FP_ED_batch_corr$subj == 54] <-"84"
 FP_ED_batch_corr$subj[FP_ED_batch_corr$subj == 53] <-"83"
@@ -151,22 +132,17 @@ all_data_join <- inner_join(all_data, All_IDs, by = "subj")
 #(this will make it easier to interpret)
 all_data_join$cond <- recode(all_data_join$cond, "1" = "facilitated", "2" = "unfacilitated")
 
-```
-
 # Region 4: The question
-Let's have a look at various models for our critical region of interest, the question.
+#Let's have a look at various models for our critical region of interest, the question.
 
-```{r Setup-R4}
 #Let's have a look at region 4
 
 #set condition as a factor
 all_data_join$cond <- as.factor(all_data_join$cond)
 # Throw away zeroes
 all_data_join <- all_data_join %>% filter(R4 != 0)
-```
 
 ## Eye-tracking only model
-```{r summary-visuals-eyetrackingonly-R4}
 #Let's have a look at region 4
 
 #set condition as a factor
@@ -187,9 +163,7 @@ all_data_join %>%
 all_data_join %>% 
   group_by(cond) %>%
   summarise(mean(R4), sd(R4))
-```
 
-```{r summary-stats-eyetrackingonly-R4}
 # Model assuming normality of residuals maximal structure
 #model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
 modelR4 <- lmer(R4 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
@@ -205,8 +179,6 @@ check_model(modelR4)
 ```
 
 ## Individual differences as controlling factors
-
-```{r Setup-IDs-included-R4}
 #Let's include some co-variates! Region 4
 
 #Step 1: Scale the ID measures...
@@ -215,10 +187,7 @@ all_data_join$EQ <- scale(all_data_join$EQ)
 all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
 all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
-```
 
-
-```{r summary-Full-Model-IDs-included-R4}
 # Model including covariates
 model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 
@@ -226,40 +195,29 @@ model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster 
 #                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
 
 summary(model_alldatacov_R4)
-```
 
-So Total_RAN and our condition are significant.
+#So Total_RAN and our condition are significant. If we drop the Total_RAN the effect of condition is still there (see below) - suggesting to me that the effect of Total_RAN is separate from the effect of condition.
 
-If we drop the Total_RAN the effect of condition is still there (see below) - suggesting to me that the effect of Total_RAN is separate from the effect of condition.
-
-```{r summary-No_RAN-IDs-included-R4}
 model_alldatacov_R4_noRAN <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4_noRAN)
-```
 
-Does Total_RAN interact with our condition? No (see below.)
 
-```{r summary-Interaction-IDs-included-R4}
+#Does Total_RAN interact with our condition? No (see below.)
+
 model_alldatacov_R4_RAN_int <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4_RAN_int)
-```
 
-
-```{r summary-model-check-R4}
 #anova(model_alldatacov_R4_null, model_alldatacov_R4)
 check_model(model_alldatacov_R4)
 
 ranef(model_alldatacov_R4)
-```
+
 
 # summary of Results for region 4, the question.
-After controlling for individual differences participants are significantly faster at reading facilitated conditions compared to un-facilitated conditions where they take an extra 73 milliseconds to complete their first pass read through of the text. There is a 136 millisecond increase in reading times with each millisecond increase of the RAN. In other words, the slower your rapid naming times (indicative of poorer verbal fluency) the longer it takes you to integrate contextual information into a mental representation of the scenario encountered.  However, it is likely Total_RAN explains overall reading time differences, but not anything to do with the difference between our experimental conditions - otherwise we'd have seen an interaction effect.
-
-Regardless of whether the individual predictors are present/absent, the effect of our condition is pretty much the same - suggesting to me that the variance explained by our experimental manipulation doesn't overlap with the variance explained by our individual difference measures. 
+#After controlling for individual differences participants are significantly faster at reading facilitated conditions compared to un-facilitated conditions where they take an extra 73 milliseconds to complete their first pass read through of the text. There is a 136 millisecond increase in reading times with each millisecond increase of the RAN. In other words, the slower your rapid naming times (indicative of poorer verbal fluency) the longer it takes you to integrate contextual information into a mental representation of the scenario encountered.  However, it is likely Total_RAN explains overall reading time differences, but not anything to do with the difference between our experimental conditions - otherwise we'd have seen an interaction effect. Regardless of whether the individual predictors are present/absent, the effect of our condition is pretty much the same - suggesting to me that the variance explained by our experimental manipulation doesn't overlap with the variance explained by our individual difference measures. 
 
 # Correlations 
 
-```{r summary-correlations}
 library(Hmisc)
 #Measuring Correlations
 EQscore <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(EQ)) %>% pull(mean)
@@ -275,20 +233,17 @@ rcorr(WRMT, RAN)
 ```
 
 # Region 5: The reply
-Let's have a look at various models for our post-critical region of interest, the reply.
+#Let's have a look at various models for our post-critical region of interest, the reply.
 
 ## Eye-tracking only model
-```{r setup-R5}
 #set condition as a factor
 all_data_join$cond <- as.factor(all_data_join$cond)
 # Throw away zeroes
 all_data_join <- all_data_join %>% filter(R5 != 0)
-```
+
 
 ## Eye-tracking only model
-```{r summary-visuals-eyetrackingonly-R5}
 #Let's have a look at region 4
-
 #set condition as a factor
 all_data_join$cond <- as.factor(all_data_join$cond)
 # Throw away zeroes
@@ -307,12 +262,10 @@ all_data_join %>%
 all_data_join %>% 
   group_by(cond) %>%
   summarise(mean(R5), sd(R5))
-```
 
-```{r summary-stats-eyetrackingonly-R5}
 # Model assuming normality of residuals maximal structure
-#model.nullR5 <- lmer(R5 ~ (1 | subj) + (1 | item), all_data_join) 
-modelR5 <- lmer(R5 ~ cond + (1 | subj) + (1 | item), all_data_join) 
+#model.nullR5 <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
+modelR5 <- lmer(R5 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
 summary(modelR5)
 
 #anova(modelR5, model.nullR5)
@@ -322,11 +275,10 @@ check_model(modelR5)
 #qqnorm(residuals(modelR5))
 #qqline(residuals(modelR5))
 #descdist(all_data_join$R5)
-```
+
 
 ## Individual differences as controlling factors
 
-```{r Setup-IDs-included-R5}
 #Let's include some co-variates! Region 4
 
 #Step 1: Scale the ID measures...
@@ -335,10 +287,7 @@ all_data_join$EQ <- scale(all_data_join$EQ)
 all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
 all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
-```
 
-
-```{r summary-Full-Model-IDs-included-R5}
 # Model including covariates
 model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 
@@ -346,31 +295,25 @@ model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster 
 #                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
 
 summary(model_alldatacov_R5)
-```
 
-So Total_RAN and our condition are significant.
 
-If we drop the Total_RAN the effect of condition is still there (see below) - suggesting to me that the effect of Total_RAN is separate from the effect of condition.
+#So Total_RAN and our condition are significant. If we drop the Total_RAN the effect of condition is still there (see below) - suggesting to me that the effect of Total_RAN is separate from the effect of condition.
 
-```{r summary-No_RAN-IDs-included-R5}
 model_alldatacov_R5_noRAN <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R5_noRAN)
-```
 
-Does Total_RAN interact with our condition? No (see below.)
 
-```{r summary-Interaction-IDs-included-R5}
+#Does Total_RAN interact with our condition? No (see below.)
+
 model_alldatacov_R5_RAN_int <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R5_RAN_int)
-```
 
-
-```{r summary-model-check-R5}
 #anova(model_alldatacov_R5_null, model_alldatacov_R5)
 check_model(model_alldatacov_R5)
 
 ranef(model_alldatacov_R5)
-```
-After controlling for individual differences participants are significantly faster at reading facilitated conditions compared to un-facilitated conditions where they take an extra 51 milliseconds to complete their first pass read through of the text. There is a 102 millisecond increase in reading times with each millisecond increase of the RAN. In other words, the slower your rapid naming times (indicative of poorer verbal fluency) the longer it takes you to integrate contextual information into a mental representation of the scenario encountered. However, it is likely Total_RAN explains overall reading time differences, but not anything to do with the difference between our experimental conditions - otherwise we'd have seen an interaction effect.
 
-Regardless of whether the individual predictors are present/absent, the effect of our condition is pretty much the same - suggesting the variance explained by our experimental manipulation doesn't overlap with the variance explained by our individual difference measures. 
+# summary of Results for region 5, the reply
+#After controlling for individual differences participants are significantly faster at reading facilitated conditions compared to un-facilitated conditions where they take an extra 73 milliseconds to complete their first pass read through of the text. There is a 136 millisecond increase in reading times with each millisecond increase of the RAN. In other words, the slower your rapid naming times (indicative of poorer verbal fluency) the longer it takes you to integrate contextual information into a mental representation of the scenario encountered.  However, it is likely Total_RAN explains overall reading time differences, but not anything to do with the difference between our experimental conditions - otherwise we'd have seen an interaction effect. Regardless of whether the individual predictors are present/absent, the effect of our condition is pretty much the same - suggesting to me that the variance explained by our experimental manipulation doesn't overlap with the variance explained by our individual difference measures. 
+
+#After controlling for individual differences participants are significantly faster at reading facilitated conditions compared to un-facilitated conditions where they take an extra 51 milliseconds to complete their first pass read through of the text. There is a 102 millisecond increase in reading times with each millisecond increase of the RAN. In other words, the slower your rapid naming times (indicative of poorer verbal fluency) the longer it takes you to integrate contextual information into a mental representation of the scenario encountered.  HAVE I INTERPRETED THIS RIGHT?????? (The ran interpretation confused me a bit).
