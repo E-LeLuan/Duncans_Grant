@@ -227,7 +227,7 @@ all_data_join <- all_data_join %>% filter(R5 != 0)
 
 #Visualisation
 all_data_join %>% 
-  ggplot(aes(x = cond, y = R5, colour = cond)) + ggtitle("First Pass for Critical Region: Question") +
+  ggplot(aes(x = cond, y = R5, colour = cond)) + ggtitle("First Pass for Post-Critical Region: Reply") +
   labs(y = "Reading time in ms.", x = "Prediction") +
   geom_violin() +
   geom_jitter(alpha = .2, width = .1) +
