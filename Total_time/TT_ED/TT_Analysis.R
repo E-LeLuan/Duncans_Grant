@@ -4,20 +4,17 @@ library(lme4)
 library(lmerTest)
 library(emmeans)
 library(stats)
-library(brms)
 library(fitdistrplus)
 library(tidyverse)
 library(buildmer)
 library(performance)
 library(see)
-
-# Analysis of First Pass data
-
-#import the data set batch 1
-#Load in the data sets
+#Set seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 library(readr)
-TT_ED_batch_corr <- read_csv("EyeDry Analysis/Total_Time/TT_ED/TT_ED_batch_corr.csv")
-TT_ED_batch_error <- read_csv("EyeDry Analysis/Total_Time/TT_ED/TT_ED_batch_error.csv")
+TT_ED_batch_corr <- read_csv("TT_ED_batch_corr.csv")
+TT_ED_batch_error <- read_csv("TT_ED_batch_error.csv")
 
 #Rename the participant numbers in the batches back to their original participant numbers.
 TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 54] <-"84"
@@ -116,7 +113,7 @@ all_data <- rbind(TT_ED_batch_corr, TT_ED_batch_error)
 all_data$subj <- as.factor(all_data$subj)
 
 #Import Individual difference measures
-All_IDs <- read_csv("All_IDs.csv")
+All_IDs <- read_csv("../../All_IDs.csv")
 #View(All_IDs)
 
 # Rename Participabt in ID_measures to subj to be the same as current data set
@@ -125,17 +122,18 @@ All_IDs$subj <- as.factor(All_IDs$subj)
 
 # Add the ID's to the data frame
 all_data_join <- inner_join(all_data, All_IDs, by = "subj")
-view(all_data_join)
+#view(all_data_join)
 
 # Assign condition labels, 1 = prediction facilitated, 2 = prediction unfacilitated
 #(this will make it easier to interpret)
 all_data_join$cond <- recode(all_data_join$cond, "1" = "facilitated", "2" = "unfacilitated")
 
-#Create a new CSV file with all the combined variables for future analysis
-#write.csv(all_data_join,"C:\\Users\\elizabethle-luan\\Desktop\\Prediction Study 1\\all_data_join.csv", row.names = TRUE)
-#view(all_data_join)
-#C_Users_elizabethle_luan_Desktop_Prediction_Study_1_all_data_join <- read_csv("C:\\Users\\elizabethle-luan\\Desktop\\Prediction Study 1\\all_data_join.csv")
-#View(C_Users_elizabethle_luan_Desktop_Prediction_Study_1_all_data_join)
+#Let's have a look at region 4
+
+#set condition as a factor
+all_data_join$cond <- as.factor(all_data_join$cond)
+# Throw away zeroes
+all_data_join <- all_data_join %>% filter(R4 != 0)
 
 #Let's have a look at region 4
 
@@ -157,20 +155,18 @@ all_data_join %>%
 all_data_join %>% 
   group_by(cond) %>%
   summarise(mean(R4), sd(R4))
-
 # Model assuming normality of residuals maximal structure
-model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 | item), all_data_join) 
-modelR4 <- lmer(R4 ~ cond + (1 + cond | subj) + (1 | item), all_data_join) 
+#model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
+modelR4 <- lmer(R4 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
 summary(modelR4)
 
-anova(modelR4, model.nullR4)
+#anova(modelR4, model.nullR4)
 
 #All the data for this model looks pretty normal.
 check_model(modelR4)
-qqnorm(residuals(modelR4))
-qqline(residuals(modelR4))
-descdist(all_data_join$R4)
-
+#qqnorm(residuals(modelR4))
+#qqline(residuals(modelR4))
+#descdist(all_data_join$R4)
 #Let's include some co-variates! Region 4
 
 #Step 1: Scale the ID measures...
@@ -179,84 +175,27 @@ all_data_join$EQ <- scale(all_data_join$EQ)
 all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
 all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
-
 # Model including covariates
-model_alldatacov_R4 <- lmer(R4 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                              (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 
-model_alldatacov_R4_null <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                                   (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+#model_alldatacov_R4_null <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
+#                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
 
 summary(model_alldatacov_R4)
-anova(model_alldatacov_R4_null, model_alldatacov_R4)
-check_model(model_alldatacov_R4)
+model_alldatacov_R4_noRAN <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R4_noRAN)
 
-# Error in anova.merMod(modelR4, model_alldatacov_R4): models were not all fitted to the same size of dataset
-#How to get around this?
-anova(modelR4, model_alldatacov_R4)
+model_alldatacov_R4_RAN_int <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R4_RAN_int)
+
+#anova(model_alldatacov_R4_null, model_alldatacov_R4)
+check_model(model_alldatacov_R4)
 
 ranef(model_alldatacov_R4)
 
-#Let's have a look at region 5
-
-#set condition as a factor
-all_data_join$cond <- as.factor(all_data_join$cond)
-# Throw away zeroes
-all_data_join <- all_data_join %>% filter(R5 != 0)
-
-#Visualisation
-all_data_join %>% 
-  ggplot(aes(x = cond, y = R5, colour = cond)) + ggtitle("Total Time for Post-Critical Region: Reply") +
-  labs(y = "Reading time in ms.", x = "Prediction") +
-  geom_violin() +
-  geom_jitter(alpha = .2, width = .1) +
-  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
-  guides(colour = FALSE)
-
-#Descriptives
-all_data_join %>% 
-  group_by(cond) %>%
-  summarise(mean(R5), sd(R5))
-
-# Model assuming normality of residuals maximal structure
-model.nullR5 <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
-modelR5 <- lmer(R5 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
-summary(modelR5)
-
-anova(modelR5, model.nullR5)
-
-#All the data for this model looks pretty normal.
-check_model(modelR5)
-qqnorm(residuals(modelR5))
-qqline(residuals(modelR5))
-descdist(all_data_join$R5)
-
-#Let's include some co-variates! Region 5
-
-#Step 1: Scale the ID measures...
-all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
-all_data_join$EQ <- scale(all_data_join$EQ)
-all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
-all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
-all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
-
-# Model including covariates
-model_alldatacov_R5 <- lmer(R5 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                              (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
-
-model_alldatacov_R5_null <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                                   (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
-
-summary(model_alldatacov_R5)
-anova(model_alldatacov_R5_null, model_alldatacov_R5)
-check_model(model_alldatacov_R5)
-
-# Error in anova.merMod(modelR5, model_alldatacov_R5): models were not all fitted to the same size of dataset
-#How to get around this?
-anova(modelR5, model_alldatacov_R5)
-
-ranef(model_alldatacov_R5)
-
+# summary of Results for region 4, the question.
+#After controlling for individual differences participants are significantly faster at reading facilitated conditions compared to un-facilitated conditions where they take an extra 73 milliseconds to complete their Total Time read through of the text. There is a 136 millisecond increase in reading times with each millisecond increase of the RAN. In other words, the slower your rapid naming times (indicative of poorer verbal fluency) the longer it takes you to integrate contextual information into a mental representation of the scenario encountered.  However, it is likely Total_RAN explains overall reading time differences, but not anything to do with the difference between our experimental conditions - otherwise we'd have seen an interaction effect.
+#Regardless of whether the individual predictors are present/absent, the effect of our condition is pretty much the same - suggesting to me that the variance explained by our experimental manipulation doesn't overlap with the variance explained by our individual difference measures. 
 
 library(Hmisc)
 #Measuring Correlations
@@ -270,4 +209,70 @@ rcorr(EQscore, RAN)
 rcorr(SRS2, WRMT)
 rcorr(SRS2, RAN)
 rcorr(WRMT, RAN)
+
+
+#Let's have a look at region 5
+
+#set condition as a factor
+all_data_join$cond <- as.factor(all_data_join$cond)
+# Throw away zeroes
+all_data_join <- all_data_join %>% filter(R5 != 0)
+
+#Let's have a look at region 5
+
+#set condition as a factor
+all_data_join$cond <- as.factor(all_data_join$cond)
+# Throw away zeroes
+all_data_join <- all_data_join %>% filter(R5 != 0)
+
+#Visualisation
+all_data_join %>% 
+  ggplot(aes(x = cond, y = R5, colour = cond)) + ggtitle("Total Time for Critical Region: Question") +
+  labs(y = "Reading time in ms.", x = "Prediction") +
+  geom_violin() +
+  geom_jitter(alpha = .2, width = .1) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
+  guides(colour = FALSE)
+
+#Descriptives
+all_data_join %>% 
+  group_by(cond) %>%
+  summarise(mean(R5), sd(R5))
+# Model assuming normality of residuals maximal structure
+#model.nullR5 <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
+modelR5 <- lmer(R5 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
+summary(modelR5)
+
+#anova(modelR5, model.nullR5)
+
+#All the data for this model looks pretty normal.
+check_model(modelR5)
+#qqnorm(residuals(modelR5))
+#qqline(residuals(modelR5))
+#descdist(all_data_join$R5)
+#Let's include some co-variates! region 5
+
+#Step 1: Scale the ID measures...
+all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
+all_data_join$EQ <- scale(all_data_join$EQ)
+all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
+all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
+all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+# Model including covariates
+model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+
+#model_alldatacov_R5_null <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
+#                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
+
+summary(model_alldatacov_R5)
+model_alldatacov_R5_noRAN <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R5_noRAN)
+
+model_alldatacov_R5_RAN_int <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R5_RAN_int)
+
+#anova(model_alldatacov_R5_null, model_alldatacov_R5)
+check_model(model_alldatacov_R5)
+
+ranef(model_alldatacov_R5)
 
