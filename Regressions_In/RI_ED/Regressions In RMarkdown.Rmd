@@ -1,4 +1,13 @@
-# Load packages
+---
+title: "Regressions In Markdown"
+author: "Lib"
+date: "04/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+#.libPaths("C:Program Files/R/R-3.5/library")
+#devtools::install_github("crsh/papaja")
 library(Matrix)
 library(lme4)
 library(lmerTest)
@@ -9,12 +18,27 @@ library(tidyverse)
 library(buildmer)
 library(performance)
 library(see)
+```
+
+
+```{r analysis preferences}
 #Set seed for random number generation
 set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+# Research Questions
+
+As readers do we predict upcoming information before it is encountered in order to better understand the unfolding discourse? 
+
+If prediction is not utilized do we rely on more on basic integration to understand an unfolding discourse context?
+
+Do individual differences contribute to our ability to predict and/or integrate upcoming information? How do these contribute? 
+
+```{r import-and-merge-data, echo=FALSE, message=FALSE}
 library(readr)
-RI_ED_batch_corr <- read_csv("Regressions_In/RI_ED/RI_ED_batch_corr.csv")
-RI_ED_batch_error <- read_csv("Regressions_In/RI_ED/RI_ED_batch_error.csv")
+RI_ED_batch_corr <- read_csv("RI_ED_batch_corr.csv")
+RI_ED_batch_error <- read_csv("RI_ED_batch_error.csv")
 #Rename the participant numbers in the batches back to their original participant numbers.
 RI_ED_batch_corr$subj[RI_ED_batch_corr$subj == 54] <-"84"
 RI_ED_batch_corr$subj[RI_ED_batch_corr$subj == 53] <-"83"
@@ -112,7 +136,7 @@ all_data <- rbind(RI_ED_batch_corr, RI_ED_batch_error)
 all_data$subj <- as.factor(all_data$subj)
 
 #Import Individual difference measures
-All_IDs <- read_csv("All_IDs.csv")
+All_IDs <- read_csv("../../All_IDs.csv")
 #View(All_IDs)
 
 # Rename Participabt in ID_measures to subj to be the same as current data set
@@ -121,50 +145,61 @@ All_IDs$subj <- as.factor(All_IDs$subj)
 
 # Add the ID's to the data frame
 all_data_join <- inner_join(all_data, All_IDs, by = "subj")
-view(all_data_join)
+#view(all_data_join)
 
 # Assign condition labels, 1 = prediction facilitated, 2 = prediction unfacilitated
 #(this will make it easier to interpret)
 all_data_join$cond <- recode(all_data_join$cond, "1" = "facilitated", "2" = "unfacilitated")
 
-#Create a new CSV file with all the combined variables for future analysis
-#write.csv(all_data_join,"C:\\Users\\elizabethle-luan\\Desktop\\Prediction Study 1\\all_data_join.csv", row.names = TRUE)
-#view(all_data_join)
-#C_Users_elizabethle_luan_Desktop_Prediction_Study_1_all_data_join <- read_csv("C:\\Users\\elizabethle-luan\\Desktop\\Prediction Study 1\\all_data_join.csv")
-#View(C_Users_elizabethle_luan_Desktop_Prediction_Study_1_all_data_join)
+```
 
+# Region 4: The question
+Let's have a look at various models for our critical region of interest, the question.
+
+```{r Setup-R4}
 #Let's have a look at region 4
-#Let's start with Region 4 "the question"
-#REGION 4 model using glmer
+
+#set condition as a factor
+all_data_join$cond <- as.factor(all_data_join$cond)
+```
+
+## Eye-tracking only model
+```{r summary-visuals-eyetrackingonly-R4}
+#Let's have a look at region 4
 
 all_data_join$R4[all_data_join$R4 == 1] <-"100"
+all_data_join$R4 <- as.factor(all_data_join$R4)
 
+#Visualisation
 all_data_join %>% 
-  ggplot(aes(x = cond, y = R4, colour = cond)) + ggtitle("Regression In for Critical Region: Question") +
+  ggplot(aes(x = cond, y = R4, colour = cond)) + ggtitle("Regressions In for Critical Region: Question") +
   labs(y = "Regression", x = "Prediction") +
+  geom_violin() +
   geom_jitter(alpha = .2, width = .1) +
   stat_summary(fun.data = "mean_cl_boot", colour = "black") +
   guides(colour = FALSE)
 
-all_data_join %>% 
-  ggplot(aes(x = cond, y = R4, colour = cond)) + ggtitle("Regression In for Critical Region: Question") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  labs(y = "Regression", x = "Prediction") +
-  geom_jitter(alpha = .2, width = .1) +
-  guides(colour = FALSE)
+```
 
-all_data_join$R4 <- as.factor(all_data_join$R4)
-
-# Just eye tracking
+```{r summary-stats-eyetrackingonly-R4}
+# Model assuming normality of residuals maximal structure
+#model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
 modelR4 <- glmer(R4 ~ cond + (1 | subj) + (1 | item), all_data_join, family = "binomial") 
 summary(modelR4)
 
-#modelR4.null <- glmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
+#anova(modelR4, model.nullR4)
 
-#anova(modelR4, modelR4.null)
+#All the data for this model looks pretty normal.
 check_model(modelR4)
+#qqnorm(residuals(modelR4))
+#qqline(residuals(modelR4))
+#descdist(all_data_join$R4)
+```
 
-#Let's include some covariates! Region 4
+## Individual differences as controlling factors
+
+```{r Setup-IDs-included-R4}
+#Let's include some co-variates! Region 4
 
 #Step 1: Scale the ID measures...
 all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
@@ -172,72 +207,53 @@ all_data_join$EQ <- scale(all_data_join$EQ)
 all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
 all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+```
 
-model_alldatacov_R4 <- glmer(R4 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                               (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
 
-#model_alldatacov_R4_null <- glmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-#(1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+```{r summary-Full-Model-IDs-included-R4}
+# Model including covariates
+model_alldatacov_R4 <- glmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+
+#model_alldatacov_R4_null <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
+#                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, , family = "binomial")
 
 summary(model_alldatacov_R4)
+
+```
+
+So Total_reading_cluster and our condition are significant.
+
+If we drop the Total_reading_cluster the effect of condition is still there (see below) - suggesting to me that the effect of Total_reading_cluster is separate from the effect of condition.
+
+```{r summary-No_RAN-IDs-included-R4}
+model_alldatacov_R4_noWRMT <- glmer(R4 ~ SRS_total_score_t + EQ + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+summary(model_alldatacov_R4_noWRMT)
+```
+
+Does Total_reading cluster interact with our condition? No (see below.)
+
+```{r summary-Interaction-IDs-included-R4}
+
+model_alldatacov_R4_WRMT_int <- glmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_reading_cluster+ (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+summary(model_alldatacov_R4_WRMT_int)
+```
+
+
+```{r summary-model-check-R4}
 #anova(model_alldatacov_R4_null, model_alldatacov_R4)
 check_model(model_alldatacov_R4)
+
 ranef(model_alldatacov_R4)
+```
 
-#What does region 5 "the reply" look like?
+# summary of Results for region 4, the question.
+After controlling for individual differences participants make significantly fewer regressions in when reading facilitated conditions (%) compared to un-facilitated conditions (%). There is a .308 increase in regressions with each increase in total reading scores. In other words, the higher your reading score (indicative of higher reading ability) the easier it is to integrate contextual information into a mental representation of the scenario encountered, indicated by fewer regressions.  However, it is likely WRMT explains overall reading time differences, but not anything to do with the difference between our experimental conditions - otherwise we'd have seen an interaction effect.
 
-all_data_join$R5[all_data_join$R5 == 1] <-"100"
+Regardless of whether the individual predictors are present/absent, the effect of our condition is pretty much the same - suggesting to me that the variance explained by our experimental manipulation doesn't overlap with the variance explained by our individual difference measures. 
 
-# Visualise
-all_data_join %>% 
-  ggplot(aes(x = cond, y = R5, colour = cond)) + ggtitle("Regression In for Post-Critical Region: Reply") +
-  labs(y = "Regression", x = "Prediction") +
-  geom_jitter(alpha = .2, width = .1) +
-  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
-  guides(colour = FALSE)
+# Correlations 
 
-#library(psych)
-#describeBy(all_data_join$R5, group=all_data_join$cond)
-
-all_data_join$R5 <- as.factor(all_data_join$R5)
-
-modelR5 <- glmer(R5 ~ cond + (1 | subj) + (1 | item), all_data_join, family = "binomial") 
-summary(modelR5)
-
-#modelR5.null <- glmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
-
-#anova(modelR5, modelR5.null)
-
-check_model(modelR5)
-qqnorm(residuals(model))
-qqline(residuals(model))
-
-#Let's include some covariates! Region 5
-
-#Step 1: Scale the ID measures...
-all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
-all_data_join$EQ <- scale(all_data_join$EQ)
-all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
-all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
-all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
-
-model_alldatacov_R5 <- glmer(R5 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                               (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
-
-model_alldatacov_R5_null <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                                    (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
-
-summary(model_alldatacov_R5)
-anova(model_alldatacov_R5_null, model_alldatacov_R5)
-check_model(model_alldatacov_R5)
-
-# Error in anova.merMod(modelR5, model_alldatacov_R5): models were not all fitted to the same size of dataset
-#How to get around this?
-anova(modelR5, model_alldatacov_R5)
-
-ranef(model_alldatacov_R5)
-
-
+```{r summary-correlations}
 library(Hmisc)
 #Measuring Correlations
 EQscore <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(EQ)) %>% pull(mean)
@@ -250,8 +266,81 @@ rcorr(EQscore, RAN)
 rcorr(SRS2, WRMT)
 rcorr(SRS2, RAN)
 rcorr(WRMT, RAN)
+```
+
+# Region 5: The reply
+Let's have a look at various models for our post-critical region of interest, the reply.
+
+## Eye-tracking only model
+```{r setup-R5}
+#set condition as a factor, convert 1 to 100 and remove NAs
+all_data_join$cond <- as.factor(all_data_join$cond)
+all_data_join$R5[all_data_join$R5 == 1] <-"100"
+all_data_join$R5 <- as.factor(all_data_join$R5)
+```
+
+## Eye-tracking only model
+```{r summary-visuals-eyetrackingonly-R5}
+#Let's have a look at region 4
+
+#Visualisation
+all_data_join %>% 
+  ggplot(aes(x = cond, y = R5, colour = cond)) + ggtitle("Regressions In for Critical Region: Question") +
+  labs(y = "Regression", x = "Prediction") +
+  geom_violin() +
+  geom_jitter(alpha = .2, width = .1) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
+  guides(colour = FALSE)
+
+```
+
+```{r summary-stats-eyetrackingonly-R5}
+# Model assuming normality of residuals maximal structure
+#model.nullR5 <- lmer(R5 ~ (1 | subj) + (1 | item), all_data_join) 
+modelR5 <- glmer(R5 ~ cond + (1 | subj) + (1 | item), data = all_data_join, family = "binomial") 
+summary(modelR5)
+
+#anova(modelR5, model.nullR5)
+
+#All the data for this model looks pretty normal.
+check_model(modelR5)
+#qqnorm(residuals(modelR5))
+#qqline(residuals(modelR5))
+#descdist(all_data_join$R5)
+```
+
+## Individual differences as controlling factors
+
+```{r Setup-IDs-included-R5}
+#Let's include some co-variates! Region 4
+
+#Step 1: Scale the ID measures...
+all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
+all_data_join$EQ <- scale(all_data_join$EQ)
+all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
+all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
+all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+```
 
 
-#rcorr(all_data_join$SRS2_total_score_t, all_data_join$EQ)
-#library(psych)
-#describeBy(all_data_join$R4, group=all_data_join$cond)
+```{r summary-Full-Model-IDs-included-R5}
+# Model including covariates
+model_alldatacov_R5 <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+
+#model_alldatacov_R5_null <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
+#                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
+
+summary(model_alldatacov_R5)
+```
+
+So only WRMT is significant.
+
+
+```{r summary-model-check-R5}
+#anova(model_alldatacov_R5_null, model_alldatacov_R5)
+check_model(model_alldatacov_R5)
+
+ranef(model_alldatacov_R5)
+```
+Better reading scores lead to fewer regressions regardless of condition.
+
