@@ -29,6 +29,9 @@ FA_detect_script_error %>%
 
 
 #### CREATING BATCHES - FixAlign
+#This was done in previous versions as there was problems with certain files that would stop
+#the fixalign process. However, these files were not relevant to this study and have simply been removed.
+#As such batching participant data out is not needed.
 
 # files with no error in script (correct)
 # read in data
