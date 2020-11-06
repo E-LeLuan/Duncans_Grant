@@ -13,8 +13,6 @@ source_python("make_cnt.py")
 # lowest condition number is 1
 # highest condition number is 2
 
-read_csv()
-
 source_python("question_acc.py")
 
 # type parameters.txt when prompted
