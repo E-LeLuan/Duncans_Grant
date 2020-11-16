@@ -1,12 +1,12 @@
-# Prediction-Integration
+# Prediction-Integration-Forward Inferences
 
-Studying message-level prediction and integration during reading
+Studying message-level processing during reading
 
 A pipeline for taking raw .asc files, tidying and extracting reading time data.
 
 ## Exploring Files
 
-Follow the instructions in the first part of `filenames_script.R` to generate `filenames.csv`, which is a list of .asc files, with information on the original filepath for each of these files. 
+Follow the instructions in the first part of `filenames_script.R` to generate `filenames.csv`, which is a list of .asc files, with information on the original filepath for each of these files. This can be found in the Terminal_and_R_scripts file. 
 
 The R script in the second part of `filenames_script.R` re-writes `filenames.csv` with multiple columns.
 
@@ -41,12 +41,16 @@ These characters are both character 74 of the whole vignette.
 Part of the following code counts the number of instances where 'a' appears in this exact position.
 There are no instances where this character appears in this position in any other trials.
 
+For the purpose of clarity and work flow I have created a new sub folder within the FixAlign folder labeled 'Detecting_script_error_and_lst'. Move your 'wider_aois' data into this folder.
+
 To differentiate between trials run using corrected and uncorrected versions of the script:
 1. Make sure all .asc files are in one folder
-2. Open terminal and navigate to the folder that contains the .asc files using `cd` (change directory)
+2. Open terminal and navigate to the folder that contains the .asc files using `cd` (change directory) 
 3. Type `grep -c "CHAR 74 1 a 248 365 264 427" *.asc > detect_script_error.csv`
 4. Run `detect_error_script.R` to write two separate .csv files 
 5. In terminal, type `cat filenames_corr.csv > filenames_corr.lst` and then `cat filenames_error.csv > filenames_error.lst` to generate the two .lst files.
+
+These files will write to wherever your R project file is stored in my case Duncans_Grant. I have copy and pasted these into Detecting_script_error_and_lst. 
 
 ## Dealing with a split participant file
 

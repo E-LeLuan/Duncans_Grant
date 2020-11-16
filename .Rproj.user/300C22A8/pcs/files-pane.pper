@@ -2,8 +2,8 @@
     "sortOrder": [
         {
             "columnIndex": 2,
-            "ascending": true
+            "ascending": false
         }
     ],
-    "path": "~/Desktop/Duncans_Grant/FixAlign/EyeDryFA/EyeDryOld"
+    "path": "~/Desktop/Duncans_Grant/FixAlign/Detecting_script_error_and_lst"
 }
