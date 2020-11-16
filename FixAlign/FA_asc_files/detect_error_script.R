@@ -67,11 +67,11 @@ write_csv(path = 'FA_batch3_corr.csv', col_names = FALSE)
 # files with error in script 
 #read in data
 FA_filenames_error <- read_csv('FA_filenames_error.csv', col_names = FALSE) 
-#36 obs. 20 16
+#25 obs. 15, 10
 
 # assign batch numbers
-batch_numbers_FA_error <- c(rep("batch4", 20),
-                      rep("batch5", 11))
+batch_numbers_FA_error <- c(rep("batch4", 15),
+                      rep("batch5", 10))
 
 # add batch numbers as a column
 FA_filenames_error <- FA_filenames_error %>%

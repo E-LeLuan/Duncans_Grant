@@ -3,9 +3,10 @@ library(tidyverse)
 
 # FA Processing
   # read in the data
-  # separate the columns into file and count
-FA_detect_script_error <- read_csv('detect_script_error.csv', col_names = FALSE) %>%
-  separate(col = X1, sep = ":", into = c("file", "count")) 
+
+# separate the columns into file and count
+FA_detect_script_error <- read_csv("FixAlign/FA_asc_files/detect_script_error_asc.csv", col_names = FALSE) %>%
+  separate(col = X1, sep = ":", into = c("file", "count"))
 
 
 # replace asc with DA1 - this is what .lst needs
@@ -36,12 +37,12 @@ FA_detect_script_error %>%
 # files with no error in script (correct)
 # read in data
 FA_filenames_corr <- read_csv('FA_filenames_corr.csv', col_names = FALSE) 
-#54 obs. 20 20 14
+#41 obs. 15, 15, 11  
 
 # assign batch numbers
-batch_numbers_FA_corr <- c(rep("batch1", 20),
-rep("batch2", 20),
-rep("batch3", 14))
+batch_numbers_FA_corr <- c(rep("batch1", 15),
+rep("batch2", 15),
+rep("batch3", 11))
 
 # add batch numbers as a column
 FA_filenames_corr <- FA_filenames_corr %>%
@@ -66,11 +67,11 @@ write_csv(path = 'FA_batch3_corr.csv', col_names = FALSE)
 # files with error in script 
 #read in data
 FA_filenames_error <- read_csv('FA_filenames_error.csv', col_names = FALSE) 
-#36 obs. 20 16
+#25 obs. 15, 10
 
 # assign batch numbers
-batch_numbers_FA_error <- c(rep("batch4", 20),
-                      rep("batch5", 11))
+batch_numbers_FA_error <- c(rep("batch4", 15),
+                      rep("batch5", 10))
 
 # add batch numbers as a column
 FA_filenames_error <- FA_filenames_error %>%
