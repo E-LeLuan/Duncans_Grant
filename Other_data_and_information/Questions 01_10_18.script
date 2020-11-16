@@ -1,0 +1,887 @@
+%BeginHeader
+Questions script 2x1
+%EndHeader
+
+set conditions =  2
+set experiments = 1
+set expConditions = 0
+set background =  16777215
+set foreground =  0
+set filterMode = 2
+set windowThreshold = 5
+set calibration_type = 1
+set calibration_height = 226
+set display_type = LCD
+
+trial_type Question
+  text_format =    'Consolas' 22 22 220 220 nonantialiased
+  text_weight =    normal non-italic
+  button =         leftTrigger
+  button =         rightTrigger
+  output =         stream
+  trigger =        nogaze
+  cursor_size =    0
+  dc_delay =       0
+  stimulus_delay = 10
+  revert =         0
+  highlight_color =12846540
+end Question
+
+trial_type Sentence
+  text_format =    'Consolas' 22 22 150 220 nonantialiased
+  text_weight =    normal non-italic
+  button =         X
+  output =         stream
+  trigger =        gaze
+  cursor_size =    0
+  dc_delay =       0
+  stimulus_delay = 0
+  revert =         0
+  highlight_color =12846540
+end Sentence
+
+trial P1I1D0
+  gc_rect =          (0 0 0 0)
+  inline =           |John had been caught stealing and was being detained by the shop's security \nguard. John had found himself in situations like this in the past. \nJohn said, "Wow, this sucks a lot." \nThe guard couldn't help but feel sorry for him. \nJohn vowed never to return to that store. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end P1I1D0
+
+trial P1I1D1
+  button =           leftTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Had John been caught stealing?\nYes                         No
+  max_display_time = 60000
+  trial_type =       Question
+end P1I1D1
+
+trial P1I2D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Carol was being escorted by a secretary for the position she'd applied \nfor with the FBI. She was worried about the outcome of the interview. \nCarol said, "I hope I get the job."  The escort smiled at Carol. \nThe FBI building had metal detectors at the door.
+  max_display_time = 60000
+  trial_type =       Sentence
+end P1I2D0
+
+trial P1I2D1
+  button =           rightTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Was Carol applying to work for the local council?\nYes                                            No\n
+  max_display_time = 60000
+  trial_type =       Question
+end P1I2D1
+
+trial E1I1D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Tom had an upcoming performance singing in the school talent show. \nA teacher was checking he had everything he needed the day before \nthe show. He had been practicing with his band for many weeks. \nThe teacher asked, "Will there be any other musicians performing with you?" \nTom replied, "I've got a guitarist, a bassist and a drummer." \nHe was both excited and nervous for the performance. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I1D0
+
+trial E1I1D1
+  button =           leftTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Was Tom performing in a talent show?\nYes                               No\n
+  max_display_time = 60000
+  trial_type =       Question
+end E1I1D1
+
+trial E2I1D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Tom had an upcoming performance singing in the school talent show. \nA teacher was checking he had everything he needed the day before \nthe show. He had been practicing the song for many weeks. \nThe teacher asked, "Will there be any other musicians performing with you?" \nTom replied, "I've got a guitarist, a bassist and a drummer." \nHe was both excited and nervous for the performance. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I1D0
+
+trial E1I2D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Brian was riding the bus on his commute into work for a meeting. \nHis boss often checked up on his team before morning meetings. \nBrian had decided to get an early bus to ensure he was prepared. \nHis boss phoned and asked, "Will you be in the office on time today?" \nBrian replied, "I will be early today, my bus is almost there." \nThe bus stopped right outside Brian's office. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I2D0
+
+trial E1I2D1
+  button =           leftTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Did Brian's boss phone him?\nYes                      No\n
+  max_display_time = 60000
+  trial_type =       Question
+end E1I2D1
+
+trial E2I2D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Brian was riding the bus on his commute into work for a meeting. \nHis boss often checked up on his team before morning meetings. \nBrian was due to present some work, so kept an eye on his watch. \nHis boss phoned and asked, "Will you be in the office on time today?" \nBrian replied, "I will be early today, my bus is almost there." \nThe bus stopped right outside Brian's office. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I2D0
+
+trial E1I3D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Aidan had been studying abroad in a French-speaking part of Canada. \nHe had recently started introductory French lessons. \nThe teacher was unfriendly and his classes were very difficult. \nAidan's brother was visiting and asked, "How is learning the language going?" \nAidan replied, "It's not going as well as I'd hoped." \nThey went ice skating to give Aiden a break from learning French. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I3D0
+
+trial E1I3D1
+  button =           leftTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Did Aiden and his brother go ice skating?\nYes                                   No\n
+  max_display_time = 60000
+  trial_type =       Question
+end E1I3D1
+
+trial E2I3D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Aidan had been studying abroad in a French-speaking part of Canada. \nHe had recently started introductory French lessons. \nHis classes were on Mondays and the teacher was from France. \nAidan's brother was visiting and asked, "How is learning the language going?" \nAidan replied, "It's not going as well as I'd hoped." \nThey went ice skating to give Aiden a break from learning French. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I3D0
+
+trial E1I4D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Maria lived in an apartment building on the outskirts of London. Her \nlandlord had told her she should decide whether to renew her lease or move. \nShe decided she was going to stay because it would be less hassle. \nHer landlord rang and asked, "Will you be signing the contract for another year?" \nMaria replied, "Yes, I'd like to live here for a while longer." \nThe apartment building was close to where Maria worked. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I4D0
+
+trial E1I4D1
+  button =           leftTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Was Maria living in London?\nYes                      No\n
+  max_display_time = 60000
+  trial_type =       Question
+end E1I4D1
+
+trial E2I4D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Maria lived in an apartment building on the outskirts of London. Her \nlandlord had told her she should decide whether to renew her lease or move. \nShe eventually came to a decision, based on a number of factors. \nHer landlord rang and asked, "Will you be signing the contract for another year?" \nMaria replied, "Yes, I'd like to live here for a while longer." \nThe apartment building was close to where Maria worked. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I4D0
+
+trial E1I5D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Sharon had just directed a film for her digital media course. \nShe had finished editing and it was ready for the screening. \nShe was really worried about how it might be received. \nHer boyfriend asked, "Are you feeling good about the film?" \nShe replied, "Not really, I guess I'm quite nervous." \nHe hugged her and reassured her that it would be fine. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I5D0
+
+trial E1I5D1
+  button =           leftTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Had Sharon been directing a film?\nYes                            No\n
+  max_display_time = 60000
+  trial_type =       Question
+end E1I5D1
+
+trial E2I5D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Sharon had just directed a film for her digital media course. \nShe had finished editing and it was ready for the screening. \nShe planned on specialising in stop-motion animation. \nHer boyfriend asked, "Are you feeling good about the film?" \nShe replied, "Not really, I guess I'm quite nervous." \nHe hugged her and reassured her that it would be fine.
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I5D0
+
+trial E1I6D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Charlie had been interested in dating a girl called Jen. \nHe had told his brother after it came up in conversation. \nJen had recently asked Charlie if he wanted to go for coffee. \nHis brother dropped by and asked, "Is it going well with Jen?" \nCharlie replied, "It's going great, she's just asked me on a date." \nHis brother congratulated him and gave him some advice. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I6D0
+
+trial E1I6D1
+  button =           rightTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Was Charlie speaking with his mother?\nYes                                No\n
+  max_display_time = 60000
+  trial_type =       Question
+end E1I6D1
+
+trial E2I6D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Charlie had been interested in dating a girl called Jen. \nHe had told his brother after it came up in conversation. \nCharlie thought that Jen was kind, generous, and beautiful. \nHis brother dropped by and asked, "Is it going well with Jen?" \nCharlie replied, "It's going great, she's just asked me on a date." \nHis brother congratulated him and gave him some advice. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I6D0
+
+trial E1I7D0
+  gc_rect =          (0 0 0 0)
+  inline =           |PC Chambers was investigating a burglary that had recently \noccurred. The police would have to start calling in suspects soon. \nAll her evidence clearly pointed towards one particular suspect. \nHer sergeant pulled up and asked, "Do you have any idea who did it?" \nShe replied, "I'm pretty sure I know who it was." \nThey both jumped in their cars to head down to the station. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I7D0
+
+trial E1I7D1
+  button =           rightTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Was PC Chambers investigating a car accident?\nYes                                        No\n
+  max_display_time = 60000
+  trial_type =       Question
+end E1I7D1
+
+trial E2I7D0
+  gc_rect =          (0 0 0 0)
+  inline =           |PC Chambers was investigating a burglary that had recently \noccurred. The police would have to start calling in suspects soon. \nQuestioning suspects often took a considerable amount of time. \nHer sergeant pulled up and asked, "Do you have any idea who did it?" \nShe replied, "I'm pretty sure I know who it was." \nThey both jumped in their cars to head down to the station. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I7D0
+
+trial E1I8D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Ben was chatting about politics with his colleagues. \nThe topic had just changed to the EU referendum result. \nBen thought that leaving the European Union was foolish. \nA colleague asked, "Do you think Brexit is a good idea?" \nBen replied, "Not at all, it's a travesty of epic proportions." \nHis colleague fielded the question to the rest of the group. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I8D0
+
+trial E1I8D1
+  button =           rightTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Was Ben talking to his family?\nYes                         No\n
+  max_display_time = 60000
+  trial_type =       Question
+end E1I8D1
+
+trial E2I8D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Ben was chatting about politics with his colleagues. \nThe topic had just changed to the EU referendum result. \nBen had quite strong opinions on the European Union. \nA colleague asked, "Do you think Brexit is a good idea?" \nBen replied, "Not at all, it's a travesty of epic proportions." \nHis colleague fielded the question to the rest of the group. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I8D0
+
+trial E1I9D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Dan worked for a large marketing firm in Birmingham. \nThe company awarded bonuses for hitting key targets. \nDan's performance had been poor for the last few months. \nDan's colleague asked, "Do you think you'll get your bonus this year?" \nDan replied, "At this rate, I very much doubt it." \nThey both grabbed a coffee and went back to their desks. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I9D0
+
+trial E1I9D1
+  button =           rightTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Were Dan and his colleagues out having dinner?\nYes                                         No\n
+  max_display_time = 60000
+  trial_type =       Question
+end E1I9D1
+
+trial E2I9D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Dan worked for a large marketing firm in Birmingham. \nThe company awarded bonuses for hitting key targets. \nDan's performance had been logged on the computer system. \nDan's colleague asked, "Do you think you'll get your bonus this year?" \nDan replied, "At this rate, I very much doubt it." \nThey both grabbed a coffee and went back to their desks. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I9D0
+
+trial E1I10D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Chloe was a university student enrolled on a statistics \nmodule. She often discussed her progress with her classmates. \nChloe was really struggling to understand correlations. \nHer classmate asked, "Are you coping with the module so far?" \nChloe replied, "It's quite hard, so I'm not enjoying it." \nThey both decided a study group would be useful. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I10D0
+
+trial E1I10D1
+  button =           rightTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Were Chloe and her classmate discussing politics?\nYes                                            No\n
+  max_display_time = 60000
+  trial_type =       Question
+end E1I10D1
+
+trial E2I10D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Chloe was a university student enrolled on a statistics \nmodule. She often discussed her progress with her classmates. \nChloe was working on a task involving correlations. \nHer classmate asked, "Are you coping with the module so far?" \nChloe replied, "It's quite hard, so I'm not enjoying it." \nThey both decided a study group would be useful. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I10D0
+
+trial E1I11D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Luke was driving in his car on his way to a wedding. \nHe was stopped by a police officer who exited her patrol car. \nLuke was concerned because he knew that he had been speeding. \nThe officer walked over and asked, "Do you know why you've been pulled over?" \nLuke replied, "Yeah, because I was going too fast." \nThe officer wrote him a ticket and they both drove off. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I11D0
+
+trial E2I11D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Luke was driving in his car on his way to a wedding. \nHe was stopped by a police officer who exited her patrol car. \nLuke could see the police officer in his rearview mirror. \nThe officer walked over and asked, "Do you know why you've been pulled over?" \nLuke replied, "Yeah, because I was going too fast." \nThe officer wrote him a ticket and they both drove off. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I11D0
+
+trial E1I12D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Jessica was an English teacher at the local primary school. Each year, \nthe headmaster held an award ceremony recognising teaching achievements. \nJessica always felt like the head of school really liked her. \nAnother teacher walked by and asked, "Do you think you'll win Teacher of the Year?" \nJessica replied, "I think I could be in with a good chance." \nThey both went back to their classrooms. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I12D0
+
+trial E2I12D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Jessica was an English teacher at the local primary school. Each year, \nthe headmaster held an award ceremony recognising teaching achievements. \nThe head of school always took the awards very seriously. \nAnother teacher walked by and asked, "Do you think you'll win Teacher of the Year?" \nJessica replied, "I think I could be in with a good chance." \nThey both went back to their classrooms. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I12D0
+
+trial E1I13D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Lewis was in his afternoon chemistry class at St. Catherine's Academy. \nHis teacher was checking up on each pupil's progress. \nLewis was always very bad at combining chemicals in the lab. \nHis teacher strolled over and asked, "Is the reaction going well this morning?" \nLewis replied, "I've not got the reaction I was hoping for." \nHis teacher shook his head and walked away. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I13D0
+
+trial E2I13D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Lewis was in his afternoon chemistry class at St. Catherine's Academy.\nHis teacher was checking up on each pupil's progress.\nLewis was using a pipette to combine two chemicals in a beaker.\nHis teacher strolled over and asked, "Is the reaction going well this morning?"\nLewis replied, "I've not got the reaction I was hoping for."\nHis teacher shook his head and walked away. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I13D0
+
+trial E1I14D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Rosa was in town buying some new clothes for summer. \nShe was due to meet her sister for lunch. \nRosa had a huge breakfast and wasn't hungry at all. \nHer sister arrived and asked, "Shall we go and get lunch now?" \nRosa replied, "I'd rather wait a bit if that's alright." \nThey headed off towards a café instead. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I14D0
+
+trial E2I14D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Rosa was in town buying some new clothes for summer. \nShe was due to meet her sister for lunch. \nRosa was in a shopping centre with lots of restaurants. \nHer sister arrived and asked, "Shall we go and get lunch now?" \nRosa replied, "I'd rather wait a bit if that's alright." \nThey headed off towards a café instead. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I14D0
+
+trial E1I15D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Mohammed had recently bought some new glasses. \nThe optician had just given him the new pair to try on. \nHe tried them on and realised they weren't the right prescription. \nThe optician walked by and asked, "So, are your new glasses OK?" \nMohammed replied, "I'm not sure they're the right prescription." \nThe optician took them off and started working on them. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I15D0
+
+trial E2I15D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Mohammed had recently bought some new glasses. \nThe optician had just given him the new pair to try on. \nHe tried them on and took a look at himself in the mirror. \nThe optician walked by and asked, "So, are your new glasses OK?" \nMohammed replied, "I'm not sure they're the right prescription." \nThe optician took them off and started working on them. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I15D0
+
+trial E1I16D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Johnny had just arrived in Dorset where he was staying with a friend. \nHe had recently been considering giving up alcohol for health reasons. \nHe had made up his mind and decided he would quit drinking for a month. \nHis friend opened the door and asked, "Would you like a beer?" \nJohnny replied, "No thanks, I'd prefer a soft drink." \nHis friend got him a lemonade from the fridge. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I16D0
+
+trial E2I16D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Johnny had just arrived in Dorset where he was staying with a friend. \nHe always enjoyed visiting rural Dorset at this time of the year. \nHe was thinking of becoming teetotal but was still weighing up the pros and cons. \nHis friend opened the door and asked, "Would you like a beer?" \nJohnny replied, "No thanks, I'd prefer a soft drink." \nHis friend got him a lemonade from the fridge. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I16D0
+
+trial E1I17D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Helen worked for a large insurance company with 200 employees. \nHer manager had recently asked her to meet in his office. \nShe was concerned because she had taken seven sick days this month. \nHer manager asked, "Do you know why this meeting has been arranged?" \nHelen replied, "I know I've missed quite a few work days." \nThey talked for half an hour before she went for her lunch break. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I17D0
+
+trial E2I17D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Helen worked for a large insurance company with 200 employees. \nHer manager had recently asked her to meet in his office. \nShe stepped inside and sat down in the leather chair opposite him. \nHer manager asked, "Do you know why this meeting has been arranged?" \nHelen replied, "I know I've missed quite a few work days." \nThey talked for half an hour before she went for her lunch break. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I17D0
+
+trial E1I18D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Beth worked for a company which manufactured mobile phones. \nHer job involved buying the glass used for phone screens. \nFluctuations in the market meant the price of glass had decreased. \nA colleague asked, "Has the cost of screens risen or fallen?" \nBeth replied, "It's actually dropped quite significantly." \nBeth knew that this would be good news for the business. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I18D0
+
+trial E2I18D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Beth worked for a company which manufactured mobile phones. \nHer job involved buying the glass used for phone screens. \nFluctuations in the market meant the price of glass had changed. \nA colleague asked, "Has the cost of screens risen or fallen?" \nBeth replied, "It's actually dropped quite significantly." \nBeth knew that this would be good news for the business. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I18D0
+
+trial E1I19D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Hillary and her husband were in the process of adopting a dog from the pound. \nThey were waiting to hear from the manager whether they had been successful. \nHe had previously explained he was concerned the dog would be alone too much. \nHer husband asked, "Do you think we've been successful?" \nShe replied, "It's unlikely, we probably work too much." \nThey decided to wait until after dinner to open up the decision letter. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I19D0
+
+trial E2I19D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Hillary and her husband were in the process of adopting a dog from the pound. \nThey were waiting to hear from the manager whether they had been successful. \nHe had previously explained that most dogs need walking at least twice a day. \nHer husband asked, "Do you think we've been successful?" \nShe replied, "It's unlikely, we probably work too much." \nThey decided to wait until after dinner to open up the decision letter. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I19D0
+
+trial E1I20D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Kerry received an invite earlier in the week to go to the cinema tonight. \nHer friends were checking who was coming so they could book seats. \nKerry had told them that she would definitely make it and was very excited. \nA friend phoned up and asked, "Are you still on for watching the film tonight?" \nShe replied, "Absolutely, my mum said it's fine." \nThey agreed that they would all get popcorn to share. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I20D0
+
+trial E2I20D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Kerry received an invite earlier in the week to go to the cinema tonight. \nHer friends were checking who was coming so they could book seats. \nKerry had promised them she would check with her mum as soon as she could. \nA friend phoned up and asked, "Are you still on for watching the film tonight?" \nShe replied, "Absolutely, my mum said it's fine." \nThey agreed that they would all get popcorn to share. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I20D0
+
+trial E1I21D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Anna had recently been for a scan to find out the sex of her baby. \nShe had not yet revealed her baby's sex to her family. \nShe decided she was going to name her new son "Mark". \nHer brother rang and asked, "So, is the newborn baby a boy or a girl?" \nShe replied, "Give me a drumroll please, it's a boy." \nThey talked about how exciting and exhausting it would be. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I21D0
+
+trial E2I21D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Anna had recently been for a scan to find out the sex of her baby. \nShe had not yet revealed her baby's sex to her family. \nShe had been thinking of baby names for a few weeks. \nHer brother rang and asked, "So, is the newborn baby a boy or a girl?" \nShe replied, "Give me a drumroll please, it's a boy." \nThey talked about how exciting and exhausting it would be. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I21D0
+
+trial E1I22D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Alexander was 18 and had recently joined the army. \nThe commander had asked to meet with him to discuss army life. \nAlexander was looking forward to the experience and felt prepared. \nThe commander asked, "Do you think you're ready for this lifestyle?" \nAlexander replied, "I am, I think it will be a great opportunity." \nThey chatted some more about being in the military. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I22D0
+
+trial E2I22D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Alexander was 18 and had recently joined the army. \nThe commander had asked to meet with him to discuss army life. \nAlexander had read about the daily routines and the physical training. \nThe commander asked, "Do you think you're ready for this lifestyle?" \nAlexander replied, "I am, I think it will be a great opportunity." \nThey chatted some more about being in the military. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I22D0
+
+trial E1I23D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Kirsty worked as a customer assistant at a supermarket. \nShe was always willing to answer queries from customers. \nShe had just signed for a delivery from the bakery. \nA customer asked, "Do you have any fresh bread I can buy?" \nShe replied, "Yes, we've got a wide selection available." \nKirsty went to fetch a loaf, which was still warm. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I23D0
+
+trial E2I23D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Kirsty worked as a customer assistant at a supermarket. \nShe was always willing to answer queries from customers. \nShe had just carried out today's daily stock-take. \nA customer asked, "Do you have any fresh bread I can buy?" \nShe replied, "Yes, we've got a wide selection available." \nKirsty went to fetch a loaf, which was still warm. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I23D0
+
+trial E1I24D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Liz was applying for a job at a newly built five-star hotel. \nThe interviewer was asking her questions about her CV. \nShe was 17 and had never been employed before. \nThe interviewer stopped and asked, "Do we have a reference from your last boss?" \nLiz replied, "I'm afraid I don't have one." \nWhen the interview had finished, she headed home. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I24D0
+
+trial E2I24D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Liz was applying for a job at a newly built five-star hotel. \nThe interviewer was asking her questions about her CV. \nThe first section was about her education and relevant skills. \nThe interviewer stopped and asked, "Do we have a reference from your last boss?" \nLiz replied, "I'm afraid I don't have one." \nWhen the interview had finished, she headed home. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I24D0
+
+trial E1I25D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Colin was a fashion designer working on his new summer collection. \nHe had presented his latest line to a number of stores. \nHis designs had been accepted by the retail chain, Zara. \nHis Dad stopped by and asked, "Will I see your new clothes in the shops?" \nHe replied, "Within the next few weeks, I believe." \nThey arranged to meet up for lunch tomorrow to discuss it more. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I25D0
+
+trial E2I25D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Colin was a fashion designer working on his new summer collection. \nHe had presented his latest line to a number of stores. \nHis designs were aimed at retail chains, like Zara. \nHis Dad stopped by and asked, "Will I see your new clothes in the shops?" \nHe replied, "Within the next few weeks, I believe." \nThey arranged to meet up for lunch tomorrow to discuss it more. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I25D0
+
+trial E1I26D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Becky was a circus performer employed by Cirque du Soleil. \nShe was discussing her career on the phone with a friend. \nBecky thought that she might be replaced by a younger performer. \nHer friend asked, "Do you think you have a future with them?" \nShe replied, "No, they probably think I'm getting too old." \nThe pair then started to discuss alternative careers. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I26D0
+
+trial E2I26D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Becky was a circus performer employed by Cirque du Soleil. \nShe was discussing her career on the phone with a friend. \nBecky performed in several routines as part of the acrobatics team. \nHer friend asked, "Do you think you have a future with them?" \nShe replied, "No, they probably think I'm getting too old." \nThe pair then started to discuss alternative careers. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I26D0
+
+trial E1I27D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Nate was a DJ and had just finished writing a new track. \nHe was waiting to hear back from some important people in the business. \nHe was very confident that they would give him a good review. \nHis manager walked in and asked, "Do you think the music executives will like it?" \nNate replied, "I'm pretty sure they will enjoy it." \nThe manager listened to the track and told Nate it was good. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I27D0
+
+trial E2I27D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Nate was a DJ and had just finished writing a new track. \nHe was waiting to hear back from some important people in the business. \nHe hoped that they would listen using high quality headphones. \nHis manager walked in and asked, "Do you think the music executives will like it?" \nNate replied, "I'm pretty sure they will enjoy it." \nThe manager listened to the track and told Nate it was good. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I27D0
+
+trial E1I28D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Nick worked for NASA in the experimental propulsion department. \nHis brother always showed an interest in his work. \nNick had been struggling with his plans for a sustainable fuel system. \nHis brother stopped by and asked, "How are you getting on with the new design?" \nHe replied, "I have a mental block, it's not happening." \nNick's grandson crawled in the room and the topic soon changed. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I28D0
+
+trial E2I28D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Nick worked for NASA in the experimental propulsion department. \nHis brother always showed an interest in his work. \nNick had recently been asked to come up with a sustainable fuel system. \nHis brother stopped by and asked, "How are you getting on with the new design?" \nHe replied, "I have a mental block, it's not happening." \nNick's grandson crawled in the room and the topic soon changed. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I28D0
+
+trial E1I29D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Suzie was a business consultant who was being bad-mouthed around town. \nAlong with her colleagues, she was trying to work out who was spreading rumours. \nShe had recently accepted that she would never find out who was responsible. \nHer colleague came over and asked, "Do you have any idea who is trashing your name?" \nShe replied, "No, I don't think we'll ever be able to work it out." \nHe gave her a hug because she looked like she needed one. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I29D0
+
+trial E2I29D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Suzie was a business consultant who was being bad-mouthed around town. \nAlong with her colleagues, she was trying to work out who was spreading rumours. \nShe said that she would press charges if she found out who was responsible. \nHer colleague came over and asked, "Do you have any idea who is trashing your name?" \nShe replied, "No, I don't think we'll ever be able to work it out." \nHe gave her a hug because she looked like she needed one. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I29D0
+
+trial E1I30D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Peter was self-employed which meant he had to file a tax return each year. \nHis wife knew he was dealing with the paperwork and wanted to check up. \nHe wasn't on time with his payment and knew he'd get fined. \nHis wife phoned him and asked, "Do you think you'll get a late penalty?" \nPeter replied, "Definitely, I just hope it's not a lot." \nHe made a note of next year's due date in his calendar. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I30D0
+
+trial E2I30D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Peter was self-employed which meant he had to file a tax return each year. \nHis wife knew he was dealing with the paperwork and wanted to check up. \nIf he wasn't on time with his payment, he could get fined. \nHis wife phoned him and asked, "Do you think you'll get a late penalty?" \nPeter replied, "Definitely, I just hope it's not a lot." \nHe made a note of next year's due date in his calendar. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I30D0
+
+trial E1I31D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Raymond was chatting to his housemates at his birthday party. \nHis housemates had bought him a new book from a popular author. \nHe had not bought it himself because he knew they had ordered it. \nOne housemate asked, "Did you have any idea we were buying it?" \nRaymond replied, "I did suspect something was going on." \nThe book was the final part of a crime trilogy. \n
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I31D0
+
+trial E2I31D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Raymond was chatting to his housemates at his birthday party. \nHis housemates had bought him a new book from a popular author. \nHe thanked them and they discussed where they ordered it from. \nOne housemate asked, "Did you have any idea we were buying it?" \nRaymond replied, "I did suspect something was going on." \nThe book was the final part of a crime trilogy. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I31D0
+
+trial E1I32D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Suzanne and her friend had been planning on meeting up. \nHer friend had recently been recommending a local karaoke night. \nSuzanne was incredibly self-conscious about her singing voice. \nHer mate asked, "Shall we go to the karaoke night this evening?" \nShe replied, "Oh my gosh no, my voice is terrible." \nThey went to see a film instead. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end E1I32D0
+
+trial E2I32D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Suzanne and her friend had been planning on meeting up. \nHer friend had recently been recommending a local karaoke night. \nSuzanne often enjoyed listening to music in her car. \nHer mate asked, "Shall we go to the karaoke night this evening?" \nShe replied, "Oh my gosh no, my voice is terrible." \nThey went to see a film instead. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end E2I32D0
+
+trial F1I1D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Jack and Miranda are colleagues at work. They had \njust come out of a meeting with their manager.  \nJack said, "That was a long meeting."  \nShe replied, "You're not kidding, it sure was." \nMiranda and Jack were ready for home time. \nLuckily, they only had an hour left to work.    
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I1D0
+
+trial F1I1D1
+  button =           leftTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Were Jack and Miranda colleagues?\nYes                            No\n
+  max_display_time = 60000
+  trial_type =       Question
+end F1I1D1
+
+trial F1I2D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Tim and Laura are university students. They had just \nfinished their last exam of the year earlier that afternoon. \nTim said, "Jeepers, I'm so glad to be done with exams." \nShe replied, "Let's go to the pub to celebrate." \nTim was knackered so the pub sounded like an excellent idea. \nAfter two beers he felt better so they decided to make an evening of it. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I2D0
+
+trial F1I2D1
+  button =           rightTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Did Tim and Laura go to the pub?\nYes                           No\n
+  max_display_time = 60000
+  trial_type =       Question
+end F1I2D1
+
+trial F1I3D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Mark and Andrea are siblings. Andrea had just jumped \nin Mark's car as he was picking her up from school. \nAndrea said, "Thanks for collecting me but you didn't have to." \nHe replied, "It's no problem; I was only around the corner." \nMark had only owned the car six weeks. It was red. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I3D0
+
+trial F1I3D1
+  button =           rightTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Was Mark picking Andrea up from the mall?\nYes                                    No\n
+  max_display_time = 60000
+  trial_type =       Question
+end F1I3D1
+
+trial F1I4D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Megan and Richard are flatmates. Megan was in a \nnew relationship that was her first in two years. \nRichard said, "I'm really happy you've finally found someone." \nShe replied, "That's really sweet of you, thanks." \nThe relationship had been going on for two months. \nMegan hoped it would continue to go well. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I4D0
+
+trial F1I4D1
+  button =           leftTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Was Megan in an old relationship?\nYes                            No\n
+  max_display_time = 60000
+  trial_type =       Question
+end F1I4D1
+
+trial F1I5D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Sarah ran into Bill who worked at her old company. \nThey had been based at Kellogg's in the accounting department. \nSarah said, "Holy cow, long time no see." \nHe replied, "Oh my gosh, Sarah, how nice to see you." \nThey decided to go for a coffee to catch up. \nSarah was hungry and decided to order food as well. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I5D0
+
+trial F1I5D1
+  button =           leftTrigger
+  gc_rect =          (0 0 0 0)
+  inline =           |Did Sarah and Bill go for a coffee?\nYes                              No\n
+  max_display_time = 60000
+  trial_type =       Question
+end F1I5D1
+
+trial F1I6D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Dale ran into his friend Martha. He'd heard through a \nmutual friend she had just started working at Tesco. \nDale said, "I hear that you've got a new job." \nShe replied, "Yeah I've been at Tesco three weeks now, it's good." \nDale had been looking for a new job himself as he was getting \nsick of his current employer. Martha encouraged him to apply \nfor a position with Tesco. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I6D0
+
+trial F1I7D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Hannah and Marcus are friends and were meeting for lunch. Hannah had been \npreparing for a marathon and she was looking forward to competing. \nMarcus said, "I hope you're ready for that running malarkey." \nShe replied, "Of course, 6-day-a-week training regimes have got me ready to go." \nThe big race was a month away. She would be driving to London for it. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I7D0
+
+trial F1I8D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Brian and Rita had an LCD TV. After it broke Brian spent \nan hour trying to fix it and was about to give up. \nRita said, "We can't afford a new TV." \nHe replied, "I'll keep trying to repair this one." \nRita's favourite programme was about to start. \nThe television was made by Samsung. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I8D0
+
+trial F1I9D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Alan and Laura had recently taken up fishing. Alan had just \narrived home after fishing alone and had not caught anything. \nLaura said, "I don't see any fish in that basket." \nHe replied, "They just weren't biting today." \nNormally Laura went with him. However, she had been \nworking so could not make it this time. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I9D0
+
+trial F1I10D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Neil and Rose both swam in competitions. Rose was meeting \nNeil the day after he had raced against elite swimmers. \nRose said, "I bet the competition was difficult." \nHe replied, "I actually did better than I thought I would." \nHe had placed 5th out of 20 swimmers. Rose decided to take him \nout for dinner to congratulate him on his stellar performance. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I10D0
+
+trial F1I11D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Claire had been moaning for weeks to her friend Iain.\nShe had been struggling to finish her novel. \nThey were meeting for a coffee to catch up in person. \nClaire said, "I've finally finished it." \nIain replied, "It's about bloody time, well done." \nClaire's last novel had been a bestseller. \nIt was a romantic comedy set in France. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I11D0
+
+trial F1I12D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Jim's friend Pauline played for a football team. She had played \nin an important game yesterday where her team had been defeated. \nJim said, "I'm sorry you didn't do so well yesterday." \nShe replied, "You win some, you lose some." \nPauline had always been quite a competitive person. \nHowever, she never let a loss ruin the rest of her week. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I12D0
+
+trial F1I13D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Emma's flatmate Jason had been learning Mandarin all year. \nJason had just come back from a holiday in China. \nEmma said, "I bet taking those lessons helped." \nHe replied, "Oh my God, they were a life saver." \nHe told Emma all about his holiday. They decided it \nwould be fun to go together next year. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I13D0
+
+trial F1I14D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Jonathan and Kim were telesales operators. Jonathan had just \nworked out his sales figures and wondered if Kim had done the same. \nHe said, "I wish I'd sold a bit more this quarter." \nShe replied, "I'm sure you'll do better next time." \nThey had started at the company around the same time. \nAs a result, they tended to stick together. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I14D0
+
+trial F1I15D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Linda was talking to her father about her school trip. \nShe had been on an orienteering challenge in Wales \nwhich she had been looking forward to for months. \nHer father said, "You sound like you had a great time." \nShe replied, "I did and next year will be even better." \nNext year's trip was going to be in Italy. \nLinda had never been to Italy before. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I15D0
+
+trial F1I16D0
+  gc_rect =          (0 0 0 0)
+  inline =           |Carl got home from school, and his mother met him at the door. \nSchool report cards had been given out earlier that day. \nMum said, "Let me see that report card." \nHe replied, "It's here, I think you'll be proud." \nHe had got all straight A's for this semester. \nHis mum took him out for ice cream to celebrate his \nexcellent academic achievement. 
+  max_display_time = 60000
+  trial_type =       Sentence
+end F1I16D0
+
+sequence SP1I1
+  P1I1D0
+  P1I1D1
+end SP1I1
+
+sequence SP1I2
+  P1I2D0
+  P1I2D1
+end SP1I2
+
+sequence SE1I1
+  E1I1D0
+  E1I1D1
+end SE1I1
+
+sequence SE2I1
+  E2I1D0
+  E1I1D1
+end SE2I1
+
+sequence SE1I2
+  E1I2D0
+  E1I2D1
+end SE1I2
+
+sequence SE2I2
+  E2I2D0
+  E1I2D1
+end SE2I2
+
+sequence SE1I3
+  E1I3D0
+  E1I3D1
+end SE1I3
+
+sequence SE2I3
+  E2I3D0
+  E1I3D1
+end SE2I3
+
+sequence SE1I4
+  E1I4D0
+  E1I4D1
+end SE1I4
+
+sequence SE2I4
+  E2I4D0
+  E1I4D1
+end SE2I4
+
+sequence SE1I5
+  E1I5D0
+  E1I5D1
+end SE1I5
+
+sequence SE2I5
+  E2I5D0
+  E1I5D1
+end SE2I5
+
+sequence SE1I6
+  E1I6D0
+  E1I6D1
+end SE1I6
+
+sequence SE2I6
+  E2I6D0
+  E1I6D1
+end SE2I6
+
+sequence SE1I7
+  E1I7D0
+  E1I7D1
+end SE1I7
+
+sequence SE2I7
+  E2I7D0
+  E1I7D1
+end SE2I7
+
+sequence SE1I8
+  E1I8D0
+  E1I8D1
+end SE1I8
+
+sequence SE2I8
+  E2I8D0
+  E1I8D1
+end SE2I8
+
+sequence SE1I9
+  E1I9D0
+  E1I9D1
+end SE1I9
+
+sequence SE2I9
+  E2I9D0
+  E1I9D1
+end SE2I9
+
+sequence SE1I10
+  E1I10D0
+  E1I10D1
+end SE1I10
+
+sequence SE2I10
+  E2I10D0
+  E1I10D1
+end SE2I10
+
+sequence SF1I1
+  F1I1D0
+  F1I1D1
+end SF1I1
+
+sequence SF1I2
+  F1I2D0
+  F1I2D1
+end SF1I2
+
+sequence SF1I3
+  F1I3D0
+  F1I3D1
+end SF1I3
+
+sequence SF1I4
+  F1I4D0
+  F1I4D1
+end SF1I4
+
+sequence SF1I5
+  F1I5D0
+  F1I5D1
+end SF1I5
+
