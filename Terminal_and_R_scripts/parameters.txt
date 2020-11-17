@@ -1,0 +1,147 @@
+#These are the parameters that are called by RoboDoc.py.
+
+#This is also used by question_acc.py, though that script uses only the list of .asc files.
+
+
+##############################
+#First, and most important:  your list of .asc files.
+#Each one needs to be in quotes, as below.
+
+file_list = ['w_DBP02_fa.asc']
+#,
+#			'60TL3f.asc',
+#			'61TL3F.asc',
+#			'62TL2M.asc',
+#			'65TL3F.asc',
+#			'66TL2M.asc',
+#			'69TL1M.asc',
+#			'70TL4M.asc']
+
+
+# You may also leave the file_list empty. In this case, the program will make a list of using all the .asc files in the current directory. 
+
+file_list = []
+
+
+##############################
+
+# do you have display changes? Set to 1 if you do
+DC = 0
+
+# how many ms before the end of the saccade must the display change take place?
+# note, can be negative, if you will allow the change to occur a few ms after the end
+# of the saccade
+#e.g., if you put -10, you'll be allowing a change that takes place up to 10 ms into 
+#the fixation
+min_change_time = -7
+
+
+# what is the name of the script file - it has the display change coordinates in pixels
+# this is needed only when DC = 1
+# have it in your working directory or use a full path
+script_file_name = 'TLScript_FINAL.script'
+
+
+	
+##############################
+# set auto_exclude to 1 if you want to drop subjects who lost too many trials to blinks.
+# exclude_threshold is the max number of rejected trials in any one condition due to exclusion by a blink.
+# abs_exclude_threshold is the max number of rejected trials overall for blinks.
+
+auto_exclude = 0
+exclude_threshold = 4
+abs_exclude_threshold = 9
+
+
+# There is a similar option for display change experiments. Set auto_exclude_DC to 1 to automatically drop subjects who had too many display change errors. The trials for exclusion are tallied along with exclude_threshold and abs_exclude_threshold above.
+
+auto_exclude_DC = 0
+
+
+##############################
+#do you have multiline data?
+multi_line = "y"
+
+# If you do have multi_line data, you must specify the y position of the first
+# line and the line separation, in pixels.
+# You should specify the y position of the middle of the characters in the first line
+# together with the line separation.
+# The former should be the same as the value that you fed to the fix_align.R script,
+# which you should use for fixation alignment. You can find it in the way
+# described in fix_align.R (check one of your asc files to see the character positions
+# at the start of a trial; these are in the form X-Y for top left and bottom right of
+# each character. Set the y position to be halfway between these two values (e.g.,
+# halfway between 300 and 380 pixels, 340 pixels).
+
+# You can get line separation from your asc file too. It's jus the difference
+# between the top left of the characters on one line and the top left of the
+# characters on the next line. E.g., in one file, the top left of the first line
+# is 300 and the top left of the next line is 383; call it 80.
+
+
+
+first_line_y = 324			# MIDDLE OF FIRST LINE Y 
+
+#How far apart are the lines, in pixels? Again, this should be consistent with 
+#the values that you used for fix_align.R.
+
+line_sep_y = 72
+
+
+
+##############################
+# specify the cond numbers to analyze
+lowest_cond = 1
+highest_cond = 2
+
+##############################
+#do you want to exclude trials based on number of blinks/track losses?
+#default is to exclude only if > 1000 blinks, change as needed
+#will exclude trials with greater than n blinks
+
+blink_num_crit = 1000
+	
+#do you want to exclude trials based on blinks/track losses above a certain duration?
+#default is 10000, change to real value as needed
+
+blink_dur_crit = 10000
+	
+#do you want to exclude if there was a blink/track loss on critical region?
+#default is "n"
+
+blink_reg_exclude = "n"
+
+#if the answer to that is yes, you'll need to give a region file (i.e., a .cnt file)
+#and identify the critical region
+
+region_file = "fpp.cnt"
+
+blink_region = 2
+
+#do you want to exclude a trial when the blink was during first-pass on your region
+#or during go-past?  Default for this is 0, which is first pass.  Change to 1 for
+#go-past
+
+blink_gopast = 0
+
+#############################
+#do you also want to exclude the trial if there was a long saccade coming into, in, or going out of
+#this critical region? If so, change the value below.  By default,
+#this is 1000, which won't exclude anything
+
+saccade_dur_crit = 1000
+
+##############################
+#do you want to combine short fixations that are within one character of preceding or
+#following fixation?  If so, put a criterion for a short fixation in ms. Default is 1,
+#resulting in no combination.
+
+short_crit = 80
+
+
+##############################
+# If you are using IDLE or another interpreter that doesn't allow specification of command line arguments, you may specify the following optional verbose argument here instead: 
+
+# Display print out of excluded trials during runtime:
+#args.verbose = 1
+

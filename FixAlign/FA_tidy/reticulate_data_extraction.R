@@ -1,6 +1,6 @@
 library(reticulate)
 
-setwd("FixAlign")
+setwd("/Users/elizabethle-luan/Desktop/Duncans_Grant/FixAlign")
 
 source_python("Robodoc.py")
 
