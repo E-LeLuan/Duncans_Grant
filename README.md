@@ -48,7 +48,8 @@ To differentiate between trials run using corrected and uncorrected versions of 
 2. Open terminal and navigate to the folder that contains the .asc files using `cd` (change directory) 
 3. Type `grep -c "CHAR 74 1 a 248 365 264 427" *.asc > detect_script_error.csv`
 4. Run `detect_error_script.R` to write two separate .csv files 
-5. In terminal, type `cat filenames_corr.csv > filenames_corr.lst` and then `cat filenames_error.csv > filenames_error.lst` to generate the two .lst files.
+5. In terminal, type `cat filenames_corr.csv > filenames_corr.lst` and then `cat filenames_error.csv > filenames_error.lst` to generate the two .lst files if you have two lists.
+Alternatively, if you've had to as I have batch out the lst files. You simply modify the text to read `cat FA_batch1_corr.csv > FA_batch1_corr.csv` then `cat FA_batch2_corr.csv > FA_batch2_corr.csv` then `cat FA_batch3_corr.csv > FA_batch3_corr.csv` then `cat FA_batch4_error.csv > FA_batch4_error.csv` then `cat FA_batch4_error.csv > FA_batch4_error.csv`
 
 These files will write to wherever your R project file is stored in my case Duncans_Grant. I have copy and pasted these into Detecting_script_error_and_lst. 
 
@@ -64,6 +65,10 @@ Andrew Cohen's programme consists of a function which aligns fixations using reg
 The .asc files are taken from the `wider_aois` folder. The processed files are written to `FixAlign` with the suffix `_fa`.
 
 The `Parameters_info` document contains an explanation of the relevant parameters.
+
+You may get some data loss as the fixalign script seems to encounter some unknown problems on the same participant numbers, in our case 5 participants (24, 27, 35, 52, 84).
+
+With the files you have created you can complete eyedry analysis on them once you've completed the remaining steps below in data extraction. For clarity of workflow I have moved the fixalign tidied asc files into a folder named FA_tidy.
 
 ## Data Extraction
 

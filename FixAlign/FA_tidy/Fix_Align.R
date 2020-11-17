@@ -1018,18 +1018,16 @@ write_asc_file <- function(line_ret, orig_asc_file_name, n_trials, fa_dir, start
 numbers <- c(1:23,
              # 24 - replacement has 63 rows, data has 62 
              25:26,
-             # 27 - replacement has 56 rows, data has 55
+              #27 - replacement has 56 rows, data has 55
              28:34,
-             # 35 - Error in trial_id_start[t]:trial_end[t] : NA/NaN argument
+              #35 - Error in trial_id_start[t]:trial_end[t] : NA/NaN argument
              36:51,
-             # 52 - Error in trial_id_start[t]:trial_end[t] : NA/NaN argument
+              #52 - Error in trial_id_start[t]:trial_end[t] : NA/NaN argument
              # ((72 x trialid, 67 x trial_result/trial ok, 5 x trial aborted))
-             53:66,
-             # 67 - replacement has 12 rows, data has 11
+             53:67,
              # ((68 x trialid, 67 x trial_result/trial ok, 1 x trial aborted))
-             68:83,
-             # 84 - replacement has 101 rows, data has 100
-             85:99)
+             68:83)
+              # 84 - replacement has 101 rows, data has 100
 
 file <- rep("DBP", length(numbers))
 
@@ -1053,7 +1051,7 @@ start_pts <- rbind(c(200, 324), c(200, 396), c(200, 468), c(200, 540), c(200, 61
 fix_align(start_pts = start_pts,
           asc_files = asc_files,
           xy_bounds = xy_bounds,
-          fa_dir="/Users/duncan/Documents/R analyses/Prediction_Integration/Prediction_Integration/FixAlign")
+          fa_dir="FixAlign/Detecting_script_error_and_lst/")
 
 
 # a participant with original file name 'DBP5' is not present here - re-import.
