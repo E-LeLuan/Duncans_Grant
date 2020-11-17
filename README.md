@@ -72,7 +72,7 @@ With the files you have created you can complete eyedry analysis on them once yo
 
 ## Data Extraction
 
-The relevant files here are in the `FixAlign` folder. The `Instruction_Files` folder contains explanations of how `Robodoc`, `question_acc` and `make_cnt` work. These are all Python programmes. The `Parameters_info` document in this folder contains an explanation of the relevant parameters in the `parameters.txt` file.
+The relevant files here are in the `FA_tidy` folder. The `Instruction_Files` folder contains explanations of how `Robodoc`, `question_acc` and `make_cnt` work. These are all Python programmes. The `Parameters_info` document in this folder contains an explanation of the relevant parameters in the `parameters.txt` file.
 
 Each programme can be run with the `reticulate_data_extraction.R` script, which uses the `reticulate` package in R.
 
