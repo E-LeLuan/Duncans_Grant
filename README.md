@@ -134,7 +134,7 @@ When using eyedry for the purpose of this study...
 
 ####4.5.2 Creating the control file steps in eyetracking handbook (responses for our study)
 (a) Debug level... 0
-(b) This is asking if the question is the same. For our study the answer is no because our question is labelled 0 and sentence 1.
+(b) This is asking if the question is the same. For our study the answer is no because our question is labeled 0 and sentence 1.
 (c) No.
 (d) The smallest numbered experimental item is 1. 
 - The largest is 32. 
@@ -162,7 +162,75 @@ When using eyedry for the purpose of this study...
 8. enter the .cnt file appropriate to the .da1 files you are investigating here (corr_ROIs2.cnt for the corrected lists and error_ROIs2.cnt for the error lists)
 
 ####4.6 Which Analysis?
+For our study you will be selecting in any order 
+2 = first pass time
+- string
+- throw away zero fixations: yes
+- cumulative 
+- raw
+- conditionalize on regression in: no 
+- conditionalize on fixation in critical region: no 
+- Upper summed cutoff should be something high like 20000 so we don't loose any data
+- conditionalize on fixation before each region: no
+- file of item X subject combinations: This is the analysis file you want for R. You should try and stick with a naming system like FP_FA_corr standing for first pass, fixalign, corrected list. So FP_FA_corr and then FP_FA_error for the error list.
+- all trials
+- wide format
+- we are not interested in the next 4 file types. If you wish to analyse the data in SPSS as separate subject by subject and item by items file than name these.Other wise just hit enter for the next 4 lines.
+- Long and short times: Although we do not care about this information selecting yes will let us know if the system is going to write the data to excel or crash.
+- Type out of data: Although we do not care about this information selecting yes will let us re-select a new analysis without having to go through loads of excess questions.
 
+3 = total time
+- string
+- throw away zero fixations: yes
+- cumulative 
+- raw
+- conditionalize on regression in: no 
+- conditionalize on fixation in critical region: no 
+- Upper summed cutoff should be something high like 40000 so we don't loose any data. This needs to be higher for TT then FP or RP as it encompasses re-reading.
+- conditionalize on fixation before each region: no 
+- file of item X subject combinations: This is the analysis file you want for R. You should try and stick with a naming system like TT_FA_corr standing for first pass, fixalign, corrected list. So TT_FA_corr and then TT_FA_error for the error list.
+- all trials
+- wide format
+- we are not interested in the next 4 file types. If you wish to analyse the data in SPSS as separate subject by subject and item by items file than name these.Other wise just hit enter for the next 4 lines.
+- Long and short times: Although we do not care about this information selecting yes will let us know if the system is going to write the data to excel or crash.
+- Type out of data: Although we do not care about this information selecting yes will let us re-select a new analysis without having to go through loads of excess questions.
+
+13 = time from first entering a region to first going past it (aka regression path)
+- string
+- throw away zero fixations: yes
+- cumulative 
+- raw
+- 1 = all from first entering a region to first going past it. This measures regression path including re-reading.
+- conditionalize on regression in: no 
+- conditionalize on fixation in critical region: no 
+- Upper summed cutoff should be something high like 20000 so we don't loose any data
+- conditionalize on fixation before each region: no 
+- file of item X subject combinations: This is the analysis file you want for R. You should try and stick with a naming system like RP_FA_corr standing for first pass, fixalign, corrected list. So RP_FA_corr and then RP_FA_error for the error list.
+- all trials
+- wide format
+- we are not interested in the next 4 file types. If you wish to analyse the data in SPSS as separate subject by subject and item by items file than name these.Other wise just hit enter for the next 4 lines.
+- Long and short times: Although we do not care about this information selecting yes will let us know if the system is going to write the data to excel or crash.
+- Type out of data: Although we do not care about this information selecting yes will let us re-select a new analysis without having to go through loads of excess questions.
+
+4 = first pass regressions out (FPRO)
+- string
+- throw away zero fixations will not be asked on these measures as they mean something here.
+- file of item X subject combinations: This is the analysis file you want for R. You should try and stick with a naming system like FPRO_FA_corr standing for first pass, fixalign, corrected list. So FPRO_FA_corr and then FPRO_FA_error for the error list.
+- all trials
+- wide format
+- we are not interested in the next 4 file types. If you wish to analyse the data in SPSS as separate subject by subject and item by items file than name these.Other wise just hit enter for the next 4 lines.
+- Long and short times: Although we do not care about this information selecting yes will let us know if the system is going to write the data to excel or crash.
+- Type out of data: Although we do not care about this information selecting yes will let us re-select a new analysis without having to go through loads of excess questions.
+
+5 = regressions in
+- string
+- throw away zero fixations will not be asked on these measures as they mean something here.
+- file of item X subject combinations: This is the analysis file you want for R. You should try and stick with a naming system like RI_FA_corr standing for first pass, fixalign, corrected list. So RI_FA_corr and then RI_FA_error for the error list.
+- all trials
+- wide format
+- we are not interested in the next 4 file types. If you wish to analyse the data in SPSS as separate subject by subject and item by items file than name these.Other wise just hit enter for the next 4 lines.
+- Long and short times: Although we do not care about this information selecting yes will let us know if the system is going to write the data to excel or crash.
+- Type out of data: Although we do not care about this information selecting yes will let us re-select a new analysis without having to go through loads of excess questions.
 
 ### Excel manipulation
 Once you have created your excel files following the eyetracking handbook you must do some tidying in excel. Remove any extra conditions and regions. (hint: In the subconditons parameter add the number of conditions you have + 1 when creating your .ctl file). Select sort file by condiiton and remove all the conditions labelled 0. For me I delete region 8. Region 8 will be empty. Region 7 will have data in it this will be left in but we are unsure what it realtes to as we do not have a region 7. This is likely due to a problem with FixAlign and while it may reflect data of our participants it is impossible to know from what region. Therefore it must not be analysed until we can asertain where it belongs.I tend to save this as a workbook and a .csv. You will need the .csv to import the dataset into R.
