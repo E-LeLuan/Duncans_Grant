@@ -1,6 +1,6 @@
 library(reticulate)
 
-setwd("/Users/elizabethle-luan/Desktop/Duncans_Grant/FixAlign")
+setwd("/Users/elizabethle-luan/Desktop/Duncans_Grant/FixAlign/FA_tidy")
 
 source_python("Robodoc.py")
 
@@ -12,8 +12,6 @@ source_python("make_cnt.py")
 # region delimiter is ^
 # lowest condition number is 1
 # highest condition number is 2
-
-read_csv()
 
 source_python("question_acc.py")
 

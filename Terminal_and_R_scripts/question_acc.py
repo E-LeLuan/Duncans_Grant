@@ -64,11 +64,12 @@ for file in file_list:
 			trialid = fields[3]
 			first_split = trialid.split('I')#split into the condition, and then item and dependent
 			condition = first_split[0]
+			trial_type = condition[0] # added by DB
 			cond_num = condition[1:] #strip off the letter from the beginning of condition
 			second_split = first_split[1].split('D')#split into item and dependent
 			item_num = second_split[0]
 		
-		elif search_strings[1] in line:
+		elif search_strings[1] in line and trial_type == 'E': # added by DB
 			fields = line.split()
 			correct = fields[3]
 			
@@ -81,7 +82,8 @@ for file in file_list:
 			if correct != 'none':
 				#print("foo")
 				#print(file, cond_num, item_num, correct, answer, str(end_time - start_time))
-				output_line = [file[:-4], cond_num, item_num, correct, answer, str(end_time - start_time)]
+				output_line = [file[:-4], cond_num, trial_type, item_num, correct, answer, str(end_time - start_time)]
+				print("output_line = ", output_line) # added by DB, with trial_type added
 				subj_quest_file.write(' '.join(output_line))
 				subj_quest_file.write('\n')
 				qcount = qcount + 1

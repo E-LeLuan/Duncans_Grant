@@ -87,6 +87,8 @@ Each programme can be run with the `reticulate_data_extraction.R` script, which 
 - `QuestSum.txt` provides the total number and percentage correct for each participant
 - `subj_quest.txt` provides the breakdown for each question for each participant
 
+It is important to note that the script is set up to give you accuracy information on experimental items only. As we are not interested in the filler items.
+
 ### Making a .cnt file
 
 A .cnt file specifies analysis regions with character positions. 
@@ -95,3 +97,5 @@ Becuase of the script error dicussed above, two .del files are needed (character
 
 With this script, there is a UnicodeDecode error on the 'é' character  in item 14. For the purposes of creating the .cnt file, this can be replaced with a regular 'e'.
 
+In order to run this portion of the script you must have created a .del file deliminating your regions of interest. To do this use text edit to create a file from your orignal Questions_01_10_18.script that includes ^ before ech line break as a deliminater for each region. 
+e.g. Aidan had been studying abroad in a French-speaking part of Canada. ^\nHe had recently started introductory French lessons. ^\nThe teacher was unfriendly and his classes were very difficult. ^\nAidan's brother was visiting and asked, "How is learning the language going?" ^\nAidan replied, "It's not going as well as I'd hoped." ^\nThey went ice skating to give Aiden a break from learning French. ^\n
