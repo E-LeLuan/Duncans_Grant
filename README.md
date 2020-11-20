@@ -115,6 +115,7 @@ You will also need to either copy or move the following files into the FA_eyedry
 - Any .lst files
 - All .da1 files
 - Your original questions script Questions_01_10_18.script
+- You also need to make a .dry file. You can do this by renaming your .del files as a .dry file.
 
 
 
