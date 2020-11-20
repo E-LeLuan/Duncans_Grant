@@ -5,7 +5,7 @@ library(tidyverse)
   # read in the data
 
 # separate the columns into file and count
-FA_detect_script_error <- read_csv("FixAlign/Detecting_script_error_and_lst/detect_script_error.csv", col_names = FALSE) %>%
+FA_detect_script_error <- read_csv("FixAlign/FA_tidy/detect_script_error.csv", col_names = FALSE) %>%
   separate(col = X1, sep = ":", into = c("file", "count"))
 
 
@@ -37,12 +37,16 @@ FA_detect_script_error %>%
 # files with no error in script (correct)
 # read in data
 FA_filenames_corr <- read_csv('FA_filenames_corr.csv', col_names = FALSE) 
-#54 obs. 20, 20, 14  
+# The observations will not be the same now as they were previously as you might recall,
+# we have lost 5 participant's data to a failure of FixAlign extraction. Therefore, we must
+# modify the rep of each observation.
+#50 obs. 20, 20, 14  
+
 
 # assign batch numbers
 batch_numbers_FA_corr <- c(rep("batch1", 20),
 rep("batch2", 20),
-rep("batch3", 14))
+rep("batch3", 10))
 
 # add batch numbers as a column
 FA_filenames_corr <- FA_filenames_corr %>%
@@ -67,11 +71,14 @@ write_csv(path = 'FA_batch3_corr.csv', col_names = FALSE)
 # files with error in script 
 #read in data
 FA_filenames_error <- read_csv('FA_filenames_error.csv', col_names = FALSE) 
-#31 obs. 20, 11
+# The observations will not be the same now as they were previously as you might recall,
+# we have lost 5 participant's data to a failure of FixAlign extraction. Therefore, we must
+# modify the rep of each observation.
+#29 obs. 20, 11
 
 # assign batch numbers
 batch_numbers_FA_error <- c(rep("batch4", 20),
-                      rep("batch5", 11))
+                      rep("batch5", 9))
 
 # add batch numbers as a column
 FA_filenames_error <- FA_filenames_error %>%

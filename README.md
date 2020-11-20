@@ -117,7 +117,7 @@ You will also need to either copy or move the following files into the FA_eyedry
 - Your original questions script Questions_01_10_18.script
 - You also need to make a .dry file. You can do this by renaming your .del files as a .dry file.
 
-You will also need to recreate your .lst files in terminal using the new .asc files created in FixAlign. These now have the suffix _fa your list files do not. Move or copy the detect_error_script.R to the FA_eyedry folder. Re-run the #### Detecting a script error and making .lst files.
+You will also need to recreate your .lst files in terminal using the new .asc files created in FixAlign. These now have the suffix _fa your list files do not. Move or copy the detect_error_script.R to the FA_tidy folder. Re-run the #### Detecting a script error and making .lst files. Make sure to change the pathway of your .script to the FA_tidy file directory. This is where your .asc files with the suffix _fa are located, provided you have organised your data in the same way. Like before these will write to the folder where your R project is stored. In our case Duncans_Grant. You will need to move them back into FA_tidy.
 
 
 
