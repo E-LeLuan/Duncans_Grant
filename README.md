@@ -59,6 +59,7 @@ An error occured whilst during `DBP35`. The experiment was aborted and then resu
 So, both of these files contain data from the same participant.
 
 ## Fix_Align
+FixAlign.R (v 0.92) – R code for the correction of vertical locations and the removal of outliers and ambiguous fixations in reading experiments. Cohen (2013), Behavior Research Methods.
 
 Andrew Cohen's programme consists of a function which aligns fixations using regression lines calculated for each line of text.
 
@@ -93,9 +94,28 @@ It is important to note that the script is set up to give you accuracy informati
 
 A .cnt file specifies analysis regions with character positions. 
 It uses .del files: script files with region delimiters, which includes characters that split up regions.
-Becuase of the script error dicussed above, two .del files are needed (characters positions are different for line 2 in item 16).
+Becuase of the script error discussed above, two .del files are needed (characters positions are different for line 2 in item 16).
 
 With this script, there is a UnicodeDecode error on the 'é' character  in item 14. For the purposes of creating the .cnt file, this can be replaced with a regular 'e'.
 
-In order to run this portion of the script you must have created a .del file deliminating your regions of interest. To do this use text edit to create a file from your orignal Questions_01_10_18.script that includes ^ before ech line break as a deliminater for each region. 
+In order to run this portion of the script you must have created a .del file deliminating your regions of interest. To do this use text edit to create a file from your original Questions_01_10_18.script that includes ^ before ech line break as a deliminater for each region. 
 e.g. Aidan had been studying abroad in a French-speaking part of Canada. ^\nHe had recently started introductory French lessons. ^\nThe teacher was unfriendly and his classes were very difficult. ^\nAidan's brother was visiting and asked, "How is learning the language going?" ^\nAidan replied, "It's not going as well as I'd hoped." ^\nThey went ice skating to give Aiden a break from learning French. ^\n
+
+### FixAlign Extraction complete time to move onto Eyedry set up and data extraction.
+
+In the interest of work flow I have created a folder within the FixAlign folder called FA_eyedry.
+
+In this file you must have all the eyedry program files. This can be found of the UMASS "EyeTrack" website. These can be found and at https://blogs.umass.edu/eyelab/software/
+
+In addition, The UMASS eye-tracking handbook (A Guide to Reading Experiments Using the UMass Eyetracking Lab Software Suite) can be found here...
+https://people.umass.edu/eyelab/eyelab%20manual.pdf
+
+You will also need to either copy or move the following files into the FA_eyedry folder...
+- Any .CNT files
+- Any .lst files
+- All .da1 files
+- Your original questions script Questions_01_10_18.script
+
+
+
+
