@@ -1,0 +1,50 @@
+
+Version EYEDRY VERSION OF 1/25/2013 (compiled with mingw-GCC)
+
+string
+
+300 fixations max on one item
+Starting .CRN file = FA_cont.ctl
+0: debug level   =       0		1  qskip   =       1
+   (iff qskip = 1, interpret lookahead as corr. resp. to question
+   and if lookahead is nonzero, make the following 2 values nonzero)
+2:   lookahead        =       0
+3:   minimum question =       0
+4:   maximum question =       0
+5: smallest item      =       1
+6: largest item       =       32
+7: maximum regions    =       8
+8: smallest condition =       1
+9: largest condition  =       2
+10: number of subconds=       3
+11:position of cond # =       2
+12:position of item # =       3
+13:position of #fix   =       6
+14:data start position=       7
+15:longcutoff         =       1200
+16:shorttime          =       80
+  (next 2 zero unless rejecting on basis of questions)
+17:  pos. of ques #   =       0
+18:  pos. of ques resp=       0
+19:screen width (char)=       160
+20:max lines of text  =       30
+21: region wrap around end? 0 = no, 1 = yes:   1
+
+22: doublespace? 0 = no, 1 = yes:   1
+
+23: first_seq         =       0
+24: last_seq         =        0
+25: max_in_cond   =           0datalst = data.lst
+Control (.CNT) file corr_ROIs2.cnt
+control file length 74
+***********************************************************
+
+type of analysis 2
+
+*****
+string
+*****
+cumulating multiple phrases in a region
+Subj X Items file test
+
+S# 1, ****w_DBP02.DA1****
