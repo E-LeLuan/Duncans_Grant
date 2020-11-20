@@ -101,7 +101,8 @@ With this script, there is a UnicodeDecode error on the 'é' character  in item 
 In order to run this portion of the script you must have created a .del file deliminating your regions of interest. To do this use text edit to create a file from your original Questions_01_10_18.script that includes ^ before ech line break as a deliminater for each region. 
 e.g. Aidan had been studying abroad in a French-speaking part of Canada. ^\nHe had recently started introductory French lessons. ^\nThe teacher was unfriendly and his classes were very difficult. ^\nAidan's brother was visiting and asked, "How is learning the language going?" ^\nAidan replied, "It's not going as well as I'd hoped." ^\nThey went ice skating to give Aiden a break from learning French. ^\n
 
-### FixAlign Extraction complete time to move onto Eyedry set up and data extraction.
+### FixAlign Extraction complete! Time to move onto Eyedry set up, data extraction, and R set up.
+It is important to note that up to this point the scripting has been written for MAC users. Therefore, some features may need slight modifications to run on a windows PC. Importnantly, eyedry must be used with Windows or some sort of interface as it is not compatible with MAC.
 
 In the interest of work flow I have created a folder within the FixAlign folder called FA_eyedry.
 
@@ -117,8 +118,10 @@ You will also need to either copy or move the following files into the FA_eyedry
 - Your original questions script Questions_01_10_18.script
 - You also need to make a .dry file. You can do this by renaming your .del files as a .dry file.
 
-You will also need to recreate your .lst files in terminal using the new .asc files created in FixAlign. These now have the suffix _fa your list files do not. Move or copy the detect_error_script.R to the FA_tidy folder. Re-run the #### Detecting a script error and making .lst files. Make sure to change the pathway of your .script to the FA_tidy file directory. This is where your .asc files with the suffix _fa are located, provided you have organised your data in the same way. Like before these will write to the folder where your R project is stored. In our case Duncans_Grant. You will need to move them back into FA_tidy.
+You will also need to recreate your .lst files in terminal using the new .asc files created in FixAlign. These now have the suffix _fa your list files do not. Move or copy the detect_error_script.R to the FA_tidy folder. Re-run the #### Detecting a script error and making .lst files. Make sure to change the pathway of your .script to the FA_tidy file directory. This is where your .asc files with the suffix _fa are located, provided you have organized your data in the same way. Like before these will write to the folder where your R project is stored. In our case Duncans_Grant. You will need to move them back into FA_tidy.
 
+Once you have created your excel files following the eyetracking handbook you must do some tidying in excel. Remove any extra conditions and regions. (hint: In the subconditons parameter add the number of conditions you have + 1 when creating your .ctl file / Add the number of regions you have + 2 when you are creating your .ctl document for eyedry. This is because eyedry is buggy and crashes otherwise when dealing with this type of data). Select sort file by condiiton and remove all the conditions labelled 0. For me I delete region 8. Region 8 will be empty. Region 7 will have data in it this will be left in but we are unsure what it realtes to as we do not have a region 7. This is likely due to a problem with FixAlign and while it may reflect data of our participants it is impossible to know from what region. Therefore it must not be analysed until we can asertain where it belongs.I tend to save this as a workbook and a .csv. You will need the .csv to import the dataset into R.
 
+Repeat this process with any and all analysis you wish to undertake (e.g. first pass, total time, regression path, FPRO, and regressions in) as well as with both data sets (e.g. corr and error .lst).
 
 
