@@ -232,12 +232,18 @@ For our study you will be selecting in any order
 - Long and short times: Although we do not care about this information selecting yes will let us know if the system is going to write the data to excel or crash.
 - Type out of data: Although we do not care about this information selecting yes will let us re-select a new analysis without having to go through loads of excess questions.
 
-### Excel manipulation
-Once you have created your excel files following the eyetracking handbook you must do some tidying in excel. Remove any extra conditions and regions. (hint: In the subconditons parameter add the number of conditions you have + 1 when creating your .ctl file). Select sort file by condiiton and remove all the conditions labelled 0. For me I delete region 8. Region 8 will be empty. Region 7 will have data in it this will be left in but we are unsure what it realtes to as we do not have a region 7. This is likely due to a problem with FixAlign and while it may reflect data of our participants it is impossible to know from what region. Therefore it must not be analysed until we can asertain where it belongs.I tend to save this as a workbook and a .csv. You will need the .csv to import the dataset into R.
+### Excel manipulation and organisation
+Once you have created your excel files following the eyetracking handbook and helpful hints you must do some tidying in excel. Remove any extra conditions and regions. For me I delete region 8. Region 8 will be empty. Region 7 will have data in it this will be left in but we are unsure what it relates to as we do not have a region 7. This is likely due to a problem with FixAlign and while it may reflect data of our participants it is impossible to know from what region. Therefore it must not be analyzed until we can ascertain where it belongs.I tend to save this as a workbook and a .csv. You will need the .csv to import the data set into R.
 
 Repeat this process with any and all analysis you wish to undertake (e.g. first pass, total time, regression path, FPRO, and regressions in) as well as with both data sets (e.g. corr and error .lst).
 
+I have created separate files for each analysis measure and moved the excel files into these folders. Then moved them to a new folder named FA_analysis ready for analysis. Follow the R scripts within each file to run the linear mixed models analysis on the data.
 
+
+
+
+
+*This README file was created by Duncan Bradley and Elizabeth Le-luan from the University of Manchester.
 
 
 
