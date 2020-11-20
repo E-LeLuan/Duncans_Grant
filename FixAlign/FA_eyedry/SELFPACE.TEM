@@ -1,0 +1,390 @@
+/*
+SELFPACE.TEM, VERSION 6/20/92
+REVISED 8/95
+REVISED 3/2000
+
+TEMPLATE OF PROGRAM TO OUTPUT A FILE OF POSITIONS OF THE
+_START_ OF EACH ANALYSIS REGION FOR EACH CONDITION-ITEM COMBINATION
+IN A SELF-PACED READING EXPERIMENT FROM REGION 2 ON, AS WELL AS THE LENGTHS
+OF EACH PRESENTATION REGION.
+
+ANALYSIS REGION POSITIONS:
+
+PRODUCES A SINGLE NUMBER FOR THE START OF EACH REGION EXCEPT FOR THE VERY FIRST.
+THE NUMBER IS THE START, IN PRESENTATION SEGMENTS, OF EACH ANALYSIS REGION
+STARTING WITH ANALYSIS REGION 2 AND GOING TO THE LAST ANALYSIS REGION. 
+
+IF YOU INDICATE THAT THERE WAS PREVIEW OF UNDERLINES, THE PROGRAM AUTOMATICALLY
+COUNTS THE PREVIEW AS A SINGLE ANALYSIS REGION, ANALYSIS REGION 1, BEGINNING
+WITH PRESENTATION REGION 1 AND CONTINUING TO PRESENTATION REGION 2 -- WHERE 
+PRESENTATION REGION 2 IS THE START OF THE TEXT.
+
+THE ARRAY FOR A GIVEN CONDITION-ITEM COMBINATION STARTS WITH THE # OF REGIONS:
+
+    ITEM#   COND#  #ANALYSIS SEGMENTS START OF 2ND SEGMENT ... START OF NTH SEGMENT #PRESENTATION SEGMENTS	#CHARS IN PS1	#CHARS IN PS2...#CHARS IN PSN
+
+PRESENTATION REGION LENGTHS:
+
+THIS ARRAY CONTINUES WITH THE NUMBER OF PRESENTATION REGIONS (INCLUDING THE
+PREVIEW OF UNDERLINES) AND THE LENGTH IN CHARACTERS OF EACH PRESENTATION REGION
+(0 FOR THE UNDERLINES REGION). WHITESPACE (SPACE, NEWLINE, ETC.) IS NOT
+COUNTED IN THE NUMBER OF CHARACTERS. THIS IS FOR THE MS/CHAR AND REGRESSION
+(TIME AS A FUNCTION OF LENGTH) ANALYSES.
+	
+HOW TO USE:
+
+COPY, COMBINE WITH YOUR CONDADJUSTMENT ROUTINES FROM
+YOUR EXPERIMENT, RENAME AS A .C FILE, AND COMPILE. 
+
+TO USE, MAKE A COPY OF YOUR SENTENCE FILE WITH AN ANALYSIS DELIMITER
+CHARACTER INSERTED AT THE _START_ OF EACH REGION FROM REGION 2 ON. OR, SAID
+DIFFERENTLY, THE ANALYSIS DELIMITER CHARACTER MUST BE _AFTER_ THE
+PRESENTATION DELIMITER AT THE _END_ OF EACH REGION OF INTEREST (EXCEPT THE
+VERY LAST REGION). IF YOU WANT AN ANALYSIS DELIMITER AFTER A NEWLINE,
+PUT IT AT THE _START_ OF THE NEXT LINE.
+
+*/
+
+/* 6/5/88 wordpos program */
+/* 2/20/89 */
+/* 11/15/89 */
+/* 5/13/91 */
+/* 6/19/92 ms/char stuff added */
+/* 8/6/95 checked for handling CRs in counting region lengths */
+/* 3/17/2000 moved allocating analysis space to before initialize */
+/* to permit space for large files to be alloc'd first */
+
+#include "pcexpt.h"
+#define con_adjust cond_adjust
+#define ca cond_adjust
+int count_presentation_regions(int sl,char pdelim,char adelim,int nl,int NCON,int bSCON, int hc);
+int measure_presentation_regions(int sl,char pdelim,char adelim,int nl,int NCON,int bSCON);
+void allocate_matrix_space(int absmaxcond);
+void write_it_out(int mincond, int maxcond, int hc);
+int *mat_tCCOND,*mat_CITEM,*mat_anal_regions_count,*mat_anal_regions;
+int *mat_pres_regions_count, *mat_pres_regions;
+char *matp, *mat_sen;
+FILE *countout,*printer;
+char tempitem[4000];
+
+
+void main(argc,argv)		/* OBLIGATORY STUFF */
+int argc;
+char *argv[];
+{
+int cond_adjust,qconadj;
+char string[80];
+char temp[20];
+int last_few_conds[48];
+char *xyp;
+char pdelim,adelim;
+int xyv,regions_count,pres_count,xval,yval;
+int i,j,k;
+int linelength;
+int bSCON,eSCON,NCON;
+int tCCOND;
+int hc,nl,sl;
+int maxcond,mincond,absmaxcond,absmaxsen,maxcondno;
+printf("\nVERSION OF 6/92, AUTOMATICALLY GENERATES CHARACTER COUNTS FOR MS/CHAR\n");
+bSCON = input("\nWhat is lowest subject-counterbalancing condition? ");
+eSCON = input("What is highest subject-counterbalancing condition? ");
+absmaxcond = eSCON - bSCON + 1;
+maxcondno = input("What is the largest experimental condition number? ");
+absmaxsen = input("What is the largest experimental sentence number? ");
+printf("\n\nWhat is presentation delimiter? (space includes end of line): ");
+gets(string);
+pdelim=string[0];
+printf("What is analysis delimiter? ");
+gets(string);
+adelim=string[0];
+printf("Do you want hard copy output of sentences? y or n");
+gets(string);
+hc = tolower(string[0]) == 'y' ? 1 : 0;
+if(hc)
+	printer = fopen("prn","w");
+printf("\nType name of position count output file: ");
+do
+	{
+	countout = fopen(gets(temp),"w");
+	if(countout == NULL)
+		printf("\nNOPE, try again: ");
+}
+while(countout == NULL);
+if(pdelim != ' ')
+	{
+	printf("\nDo you want to count NEWLINE as a presentation delimiter? y or n ");
+	gets(string);
+	nl = tolower(string[0]) == 'y' ? 1 : 0;
+	if(nl == 1)
+		printf("  NOTE: If you want to have an analysis delimiter after the NEWLINE\n  put it at the start of the next line in the .DEL file.\n");
+	}
+else
+	nl = 0;				/* program will count all whitespace as presentation segment */
+printf("\nWas there a preview of underlines before the sentence? y or n ");
+gets(string);
+sl = tolower(string[0]) == 'y' ? 1 : 0;
+printf("\n\n                     ***NOTE:***\nINDICATE '1' WHEN ASKED FOR GROUP (counterbalancing condition) VALUE;");
+printf("\nINDICATE THAT YOU WANT NO DATA OUTPUT FILE.\n                     ***********\n\n");
+argc = initialize(argc,argv,VIDEO_CARD);	/* OBLIGATORY STUFF */
+allocate_matrix_space(absmaxcond);
+
+while(CTRIAL < NITEMS)
+	{
+	for(i=0;i<48;i++)
+		last_few_conds[i] = 6789;		/* silly number */
+	maxcond = 0;
+	mincond = 6789;
+/*printf("\n%s",trials[0][order[CTRIAL]].dptr);*/
+strcpy(tempitem,trials[0][order[CTRIAL]].dptr);	/* save current sentence */
+/*printf("\n%s",tempitem);*/
+/*getch();*/
+
+	for(SCON=bSCON,NCON=bSCON;SCON <= eSCON;SCON++)	
+		{				
+		strcpy(trials[0][order[CTRIAL]].dptr,tempitem);	/* restore it */
+
+		if (CCOND <= maxcondno && CITEM <= absmaxsen)		/* an experimental item */
+			{
+			/* YOUR PROGRAM STARTS HERE */
+
+			/* NOTE: DO _NOT_ INCLUDE STATEMENT THAT INCREMENTS CCOND */
+			/* NOR ANY STATEMENTS THAT DISPLAY TEXT TO THE SUBJECT */
+
+
+
+			/* END OF YOUR PROGRAM HERE */
+			}
+		if(CCOND <= maxcondno && CITEM <= absmaxsen)			/* not for questions */
+			{
+			tCCOND = CCOND+cond_adjust;
+			if(tCCOND < mincond)
+				mincond = tCCOND;
+			if(tCCOND > maxcond)
+				maxcond = tCCOND;
+			if(SCON != bSCON)			/* not the first trial for an item */
+				for(i=0;i<=eSCON-bSCON;i++)
+					if(tCCOND == last_few_conds[i])
+						{
+						goto done_already;
+						}
+			matp = mat_sen + ((NCON-bSCON) * 1000);		/* pointer to sentence */
+			for(i=eSCON-bSCON+1;i>0;i--)
+				last_few_conds[i] = last_few_conds[i-1];
+			last_few_conds[0] = tCCOND;
+			if(hc)
+				{
+				sprintf(matp,"\nCITEM %5d tCCOND %5d\n",CITEM,tCCOND);
+				matp+=26;
+				}
+			*(mat_CITEM + (NCON-bSCON)) = CITEM;
+			*(mat_tCCOND + (NCON-bSCON)) = tCCOND;
+			regions_count = count_presentation_regions(sl,pdelim,adelim,nl,NCON,bSCON, hc);
+			pres_count = measure_presentation_regions(sl,pdelim,adelim,nl,NCON,bSCON);
+			if(hc)
+				*matp = '\0';
+			*(mat_anal_regions_count + (NCON-bSCON)) = regions_count;
+			*(mat_pres_regions_count + (NCON-bSCON)) = pres_count;
+			NCON++;			/* next real and different condition */
+			}
+		done_already:;
+		}
+							/* now write it all in order */
+	write_it_out(mincond,maxcond,hc);
+	CTRIAL++;				/* GO ON TO NEXT ITEM */
+	printf("\nTrial %d",CTRIAL);
+	}
+fclose(countout);
+if(hc)
+	fclose(printer);
+free(mat_sen);
+free(mat_anal_regions);
+free(mat_anal_regions_count);
+free(mat_CITEM);
+free(mat_tCCOND);
+return(1);
+}
+
+
+int count_presentation_regions(int sl,char pdelim,char adelim,int nl,int NCON,int bSCON, int hc)
+{
+int xyc,xval;
+char *xyp;
+int skip_space_flag = 0;
+for(xyp=trials[0][order[CTRIAL]].dptr,xyc=0,xval=1;*xyp != '\0';xyp++)
+	{
+	if(xval == 1 && sl)	/* count preview */
+		{
+		xval++;
+		*(mat_anal_regions + ((NCON-bSCON) * 500) + xyc++) = xval;
+		if(hc)
+			{
+			sprintf(matp,"%3d ",xyc+1);
+			matp+=4;
+			}
+		}					
+	if(hc)
+		{
+		*matp++ = *xyp;
+		}
+	if((pdelim != ' ' && *xyp == pdelim) || (pdelim == ' ' && isspace(*xyp) && !skip_space_flag) || (((pdelim == ' ' || nl == 1) && (*xyp == '\n' || *xyp == LF)) && !skip_space_flag))
+		{
+		xval++;	/* found presentation segment end */
+		skip_space_flag = 1;
+		}
+	else if(*xyp == adelim)
+		{
+/*		skip_space_flag = 0;*/
+		*(mat_anal_regions + ((NCON-bSCON) * 500) + xyc++) = xval;
+		if(hc)
+			{
+			sprintf(matp,"%3d ",xyc+1);
+			matp+=4;
+			}
+		}
+	else
+		skip_space_flag = 0;
+	}
+return(xyc+1);	
+}
+
+
+int measure_presentation_regions(int sl,char pdelim,char adelim,int nl,int NCON,int bSCON)
+{
+int letctr;
+int xval;
+char *xyp,LastXyp;
+int skip_space_flag = 0;
+for(xyp=trials[0][order[CTRIAL]].dptr,letctr=0,xval=0;*xyp != '\0';xyp++)
+	{
+	if(xval == 0 && sl)	/* count preview */
+		{
+		*(mat_pres_regions + ((NCON-bSCON) * 500) + xval++) = 0;
+		}					
+	if(*xyp == LF || *xyp == NEWLINE)			/* ignore LF, NEWLINE */
+		;
+	else if((pdelim != ' ' && *xyp == pdelim) || (pdelim == ' ' && isspace(*xyp) && !skip_space_flag) || (nl == 1 && *xyp == CR))
+		{
+		/* found another presentation segment end */
+		*(mat_pres_regions + ((NCON-bSCON) * 500) + xval++) = letctr;
+		letctr = 0;
+		skip_space_flag = 1;
+		}
+	else if(*xyp == adelim)
+		{
+/*		skip_space_flag = 0;*/
+		;
+		}
+	else if(!isspace(*xyp))
+		{
+		letctr++;
+		skip_space_flag = 0;
+		}
+	LastXyp = *xyp;
+	}
+return(xval);
+}
+
+
+
+void write_it_out(int mincond, int maxcond, int hc)
+{
+int i,j,k;
+for(i=mincond;i<=maxcond;i++)
+	{
+	for(j=0;j<=maxcond-mincond;j++)
+		{
+		if(*(mat_tCCOND + j) == i)		/* found the pointer to the next cond */
+			{
+			if(hc)
+				{
+				matp = mat_sen + j*1000;
+				fprintf(printer,"%s",matp);
+				}
+/*printf("\n%5d%5d",*(mat_CITEM + j), *(mat_tCCOND + j));*/
+			fprintf(countout,"%5d%5d",*(mat_CITEM + j), *(mat_tCCOND + j));
+			fprintf(countout,"%5d",*(mat_anal_regions_count + j));
+			for(k=0;k< (*(mat_anal_regions_count + j) -1);k++)
+				fprintf(countout,"%5d",*(mat_anal_regions + j*500 + k));
+			fprintf(countout,"%5d",*(mat_pres_regions_count + j));
+/*printf(" #regions: %5d",*(mat_pres_regions_count + j));*/
+			for(k=0;k< *(mat_pres_regions_count + j);k++)
+				fprintf(countout,"%5d",*(mat_pres_regions + j*500 + k));
+			fprintf(countout,"\n");
+			}
+		}
+	}
+}	
+
+
+void allocate_matrix_space(int absmaxcond)
+{
+if((mat_tCCOND = (int *) calloc(absmaxcond,sizeof(int))) == NULL)
+	{
+	printf("\nCan't calloc memory for mat_tCCOND");
+	exit(1);
+	}
+else
+   printf("\nmat_tCCOND %p",mat_tCCOND);
+if((mat_CITEM = (int *)calloc(absmaxcond,sizeof(int))) == NULL)
+	{
+	printf("\nCan't calloc memory for mat_CITEM");
+	exit(1);
+	}
+else
+   printf("\nmat_CITEM %p",mat_CITEM);
+if((mat_anal_regions_count = (int *)calloc(absmaxcond,sizeof(int))) == NULL)
+	{
+	printf("\nCan't calloc memory for mat_anal_regions_count");
+	exit(1);
+	}
+else
+   printf("\nanal_regions %p",mat_anal_regions_count);
+if((mat_pres_regions_count = (int *)calloc(absmaxcond,sizeof(int))) == NULL)
+	{
+	printf("\nCan't calloc memory for mat_pres_regions_count");
+	exit(1);
+	}
+else
+   printf("\nmat_pres_regions %p",mat_pres_regions_count);
+
+if((mat_anal_regions = (int *)calloc(absmaxcond,500 * sizeof(int))) == NULL)
+	{
+	printf("\nCan't calloc memory for mat_anal_regions");
+	exit(1);
+	}
+else
+   printf("\nmat_anal_regions %p",mat_anal_regions);
+
+if((mat_pres_regions = (int *)calloc(absmaxcond,500 * sizeof(int))) == NULL)
+	{
+	printf("\nCan't calloc memory for mat_pres_regions");
+	exit(1);
+	}
+else
+   printf("\nmat_pres_regions %p",mat_pres_regions);
+
+if((mat_sen = calloc(absmaxcond,1000)) == NULL)
+	{
+	printf("\nCan't calloc memory for mat_sen");
+	exit(1);
+	}
+else
+   printf("\nmat_sen %p",mat_sen);
+
+printf("\nSuccessfully calloc'd space.");
+}
+
+
+
+/* replace these with your own function if you need one */
+
+long specialevent(unsigned dur)
+{
+return((long)(dur));		/* clear nonsense */
+}
+
+long extra_specialevent(unsigned dur,int y,int x,int t_s,int position)
+{
+return((long)(dur*y*x*t_s*position));
+}
+

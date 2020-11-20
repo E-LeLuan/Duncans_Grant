@@ -1,0 +1,44 @@
+HOW TO USE NURSE.C (November 3, 2004)
+
+This program is designed to convert DPI stimulus files (.stm, .sen) into 
+.sen files that can be used in EyeDoctor (David Stracuzzi's program).
+
+You need one .sen file for each counterbalancing condition of your experiment.
+Here's how you get your .sen files:
+
+1. Copy copy nurse.c from c:\data into your directory.
+
+2. Insert your "pickone" code from your experiment running program
+between the "your code starts here" and the "your code ends here" lines.
+Do NOT include any code that displays text on the screen, accepts responses,
+or changes CCOND or CTRIAL. (E.g., do not include eye_disp_sample_store(),
+question_any_sentence(), waitt(), next_trial(), etc.)
+
+3. Still in your directory, compile the program with etcc.bat (etcc nurse.c).
+You may want to change the value of MAXLINEN if you have really really long
+passages.
+
+4. Run the program one time for each counterbalancing condition. Answer the
+questions (largest condition, Y offset, etc.; say 'n' when it asks you for 
+data file name). Each time you run it, save the output .sen file with a
+distinctive name (e.g. mycond1.sen).
+
+5. If you have a display change, the program will ask you for the character 
+you used to delimit the display change material. It will delete this material
+when it reads material from your .stm file. (OK FOR DISPLAY CHANGE; NOT YET
+COMPLETE FOR FAST PRIMING.)
+
+
+6. Check the output. Each line should start with something like
+{cc ii}
+where cc is cond number, ii is item number, and then continue with the
+material for that condition anditem combination. 
+
+7. EyeDoctor will ask you for the name of the .sen file after you have 
+told it to import a .dat format file.
+
+All this is still in the process of being debugged. Please let Chuck know
+of any problems you encounter.
+
+
+

@@ -1,0 +1,289 @@
+{\rtf1\ansi \deflang1033\deff0{\fonttbl
+{\f0\froman \fcharset0 \fprq2 Times New Roman;}}{\colortbl;\red0\green0\blue0;}
+{\stylesheet{\fs20 \snext0 Normal;}
+}\notabind\margl1440\margr1440\hyphhotz936\ftnbj\fet2\ftnrstpg\aftnnar\viewkind1\lytprtmet\subfontbysize \sectd \sbknone\headery1440\footery1440\endnhere\endnhere 
+{\*\pnseclvl1\pndec\pnstart1{\pntxta .}}
+{\*\pnseclvl2\pnlcltr\pnstart1{\pntxta .}}
+{\*\pnseclvl3\pnlcrm\pnstart1{\pntxta .}}
+{\*\pnseclvl4\pndec\pnstart1{\pntxtb (}{\pntxta )}}
+{\*\pnseclvl5\pnlcltr\pnstart1{\pntxtb (}{\pntxta )}}
+{\*\pnseclvl6\pnlcrm\pnstart1{\pntxtb (}{\pntxta )}}
+{\*\pnseclvl7\pndec\pnstart1{\pntxta .}}
+{\*\pnseclvl8\pnlcltr\pnstart1{\pntxta .}}
+{\*\pnseclvl9\pnlcrm\pnstart1}
+
+{\field{\*\fldinst {\lang4105  SEQ CHAPTER \\h \\r 1}}{\fldrslt }}\pard \fs24
+Suggestions for WinEyeDry\par
+\par
+1. {\u8220\'93}Load parameter file{\u8221\'94} - not clear what to do when there is none, but you want to save one. \softline
+(Don{\u8217\'92}t worry about this one - it gets clear later.)\par
+\par
+2. Set default position of condition number etc to 2, 3, 8, 9 (or whatever is right for EyeDoctor \softline
+output; these are the numbers for the dpi but I{\u8217\'92}m not sure if it{\u8217\'92}s the same for EyeDoctor.\par
+\par
+3. The {\u8220\'93}position of question condition number{\u8221\'94} and {\u8220\'93}question response{\u8221\'94}  - what is that? OH - in \softline
+eyedry, they are conditional upon {\u8220\'93}lookahead,{\u8221\'94} which is TRUE if you want to look ahead to the \softline
+next trial, assuming it is a question, and eliminate data when there is an error. Nobody{\u8217\'92}s ever \softline
+used it, and I doubt that you have this information in your eyedoctor output anyway, right? I{\u8217\'92}d \softline
+say, scrap these options. You could leave the code in but set lookahead and these values to zero. \softline
+We can always find a way to eliminate trials before errors if we want to.\par
+\par
+4. Why does  times only show up in the analysis parameters window when you choose first \softline
+fixation? What is it anyway? Oh - I think it is only supposed to show up for analysis 19, which \softline
+isn{\u8217\'92}t even listed in the descriptions in my .c file. \par
+\par
+5. Check {\u8220\'93}move trigger region left N characters{\u8221\'94} - conditional on no fixation? Oh- The window \softline
+for {\u8220\'93}how many characters can you move the trigger region to the left{\u8221\'94} should show up only for \softline
+analyses 9, 10, 14, and 16 (eyepoke, eyegaze, totalgaze, and spillover), if I understand what it is \softline
+doing.\par
+\par
+6. When I ran first fixation analysis, nothing showed up on the screen, but the analysis seems to \softline
+have completed correctly. It would be nice if you could write to the screen the matrix that comes \softline
+out on the .tr file labeled {\u8220\'93}AVERAGED OVER ITEMS AND SUBJECTS, BY CONDITIONS\par
+Means where each subject gets equal weight{\u8221\'94} and then have a button {\u8220\'93}do another analysis?{\u8221\'94} It \softline
+would be nice to have these continuing analyses write to the same .tr file (and the .tr file name \softline
+should appear in the files window for the next runthrough).\par
+\par
+7. Not necessary to write every fixation to .tr file - probably unwise, since it will discourage \softline
+people from looking at the .tr file.\ul0 \tab \ul0 \tab \ul0 \tab \ul0 \tab \ul0 \tab \ul0 \tab \ul0 \tab \par
+\par
+8. It doesn{\u8217\'92}t add a default extension (*.prm) to the parameter file - should it? Not necessarily, but \softline
+maybe it should if we automate saving the data file names.\par
+\par
+8a. It would be nice to have the .cnt and .lst files written to the parameter file too.\par
+\par
+9.As Adrian will have pointed out, the data output files should be integer ms, with no decimal \softline
+point.\par
+\par
+10. The .tr file output was in raw ms, no decimals, when I did a first fixation analysis not \softline
+contingent on regressions, but it came out with one decimal place when I did it contingent on \softline
+regressions. The first form is correct.\ul0 \tab \ul0 \tab \ul0 \tab \ul0 \tab \ul0 \tab \ul0 \tab \par
+11. I ran a bunch of analyses in DOS eyedry and started doing the parallel analyses in \softline
+WinEyedry. The output does look right (modulo the decimal place stuff). \par
+\par
+12. The number of fixations option does not seem to have the two options it should - number of \softline
+first pass fixations vs. total number of fixations in the region including re-reading.\par
+\par
+13. Sample size for analysis 12 should be a number to be typed in, not a choice of 10 vs 20 ms \softline
+(that may be a recent change in the code). It could usefully default to 10. \par
+\par
+14. In the spillover analysis, the options {\u8220\'93}permit forward moving saccades only{\u8221\'94} and {\u8220\'93}allow \softline
+regressions{\u8221\'94} are mutually exclusive. You could get by with just the first button, permit forward \softline
+moving saccades only.\par
+\par
+We talked about having a default data name for each analysis, with the user just typing in a \softline
+fragmentary base name for the analysis, and about having a window with a brief description \softline
+available for each analysis option. Here are sketches for the descriptions, each associated with a \softline
+default data name - which should be appended to the base name the user types in.\par
+\par
+1 = first fixation\par
+\tab option: raw or ms/ch\par
+\tab option: conditionalize on presence or absence of regression\par
+\tab **option: conditionalize on there being exactly one fixation in region\par
+\tab **option: conditionalize on there being more than one fixations in region\par
+\tab **option: second of two contiguous fixations in region\par
+\tab **option: conditionalize on prior fixation being between i and j characters\par
+\tab \tab before beginning of region\par
+\tab **option: report fixation immediately before entering region\par
+\par
+{\u8220\'93}The duration of the first (or second, or only) fixation in a region, or the immediately preceding \softline
+fixation, optionally conditional on the landing position of the prior fixation.{\u8221\'94}\par
+[base]ff[optionnumber].ixs, [base]ff[optionnumber].sub,[base]ff[optionnumber]s.txt, \softline
+[base]ff[optionnumber].itm, [base]ff[optionnumber]i.txt    - and then, if appropriate, add a r, m, \softline
+or d to the end of the name for raw, ms, or deviation scores  (E.g., if base is {\u8220\'93}broc3" and analysis \softline
+uses raw times the names would be broc3ff1r.ixs, broc3ff1r.sub, broc3ff1sr.txt. Etc.\par
+\tab (By option number, I just mean the option number that the user types in in response to the \softline
+subtype question- option 1, 2, 3, 4, 5, in this case in this case; we don{\u8217\'92}t have to keep everything \softline
+in the name, e.g., don{\u8217\'92}t code whether the analysis is conditionalized on regression or not. I won{\u8217\'92}t \softline
+bother with the extensions and the s or i appendage in the following lists - the same 5 patterns \softline
+should hold for all of the following)\par
+\par
+\par
+2 = first pass time\par
+\tab option: keep vs. discard trials with no appropriate fixations\par
+\tab option: raw, ms/ch, deviation times\par
+\tab option: conditionalize on presence or absence of regression\par
+\ul0 \tab **option: conditionalize on prior fixation being between i and j characters\par
+\tab \tab before beginning of region\par
+{\u8220\'93}The summed fixation duration in a region from first entering until first leaving, optionally \softline
+conditionalized on regression and on landing position of prior fixation{\u8221\'94}\par
+[base]fp[type].ixs (e.g. broc3fpr.ixs, or broc3fpri.txt)\par
+\par
+3 = total time\par
+\tab option: keep vs. discard trials with no appropriate fixations\par
+\tab option: raw, ms/ch, deviation times\par
+\tab option: conditionalize on presence or absence of regression\par
+\tab **option: conditionalize on prior fixation being between i and j characters\par
+\tab \tab before beginning of region\par
+{\u8220\'93}The sum of all fixation durations in a region from the start to the end of a trial, optionally \softline
+conditionalized on presence or absence of a regression and on landing position of prior fixation{\u8221\'94}\par
+[base]tt[type].ixs (e.g. broc3ttr.ixs, or broc3ttri.txt)\par
+\par
+\par
+4 = first pass regressions out (Percentage of trials where one or more\par
+\tab legal first pass fixations in region were followed by a legal\par
+\tab fixation to earlier point in the sentence.)\par
+{\u8220\'93}The percentage of trials with a legal first pass fixation in a region, where the last first pass \softline
+fixation was followed by a legal fixation to an earlier point in the sentence.{\u8221\'94}\par
+[base]ro.ixs (e.g. broc3ro.ixs)\par
+\par
+\par
+5 = regressions in (Percentage of trials where one or more legal fixations\par
+\tab in region were preceded by legal fixation in a later region of the sentence.");\par
+{\u8220\'93}The percentage of all trials in the experiment, where a legal fixation in a region was preceded by \softline
+a legal fixation in a later region.{\u8221\'94}\par
+[base]ri.ixs (e.g. broc3ri.ixs)\par
+\tab \tab \tab \par
+6 = probability of a first-pass fixation\par
+\tab **option: probability of there being exactly one fixation\par
+\tab **option: conditionalize on prior fixation being between i and j characters\par
+\tab \tab before beginning of region; reports pr(fix|prior fix OK) but does not\par
+\tab \tab count trials where the "prior fix" was the last fixation in the sentence\par
+\tab \tab i.e. it gives the p(fix|fix or skip)\par
+\tab **option: duration of fixation just before or just after skipping region\par
+\tab \tab or landing in region\par
+{\u8220\'93}The percentage of all trials on which there was a first-pass fixation in a region (optionally \softline
+exactly one fixation), optionally conditionalized on location of prior fixation; alternatively, \softline
+computes the duration of the fixation just before or just after skipping or landing in a region){\u8221\'94}\par
+names - for options 1 and 2, [base]pf[optionnumber].ixs; for options 3-6, \softline
+[base]df[optionnumber].ixs   (E.g., broc3pf1.ixs, broc3df6s.txt)\par
+\par
+7 = number of fixations\par
+\tab 1 = count fixations prior to leaving region\par
+\tab 2 = count all fixations in region\ul0 \tab \par
+{\u8220\'93}The number of fixations made in a region, either first pass or total{\u8221\'94}\par
+[base]nf[option].ixs (e.g. broc3nf2s.txt)\par
+\par
+\tab \tab \tab \tab \tab \tab \tab \tab \tab \par
+8 = second pass times\par
+\tab option: raw, ms/ch, deviation times\par
+\tab 1 = include only time in region after going past it\par
+\tab 2 = include all re-reading time after leaving region, left or right\par
+\tab 3 = include only time in region after leaving it to left, before going past\par
+\tab 4 = include only re-reading time in region after entering second specified region (Tim \softline
+Slattery)\par
+{\u8220\'93}The summed fixation duration in a region after having left it. Options: rereading time after \softline
+going past, or leaving either direction, or leaving to the left. Variant: only include time re-reading \softline
+region after the eyes fixate in some other specified region and then return.{\u8221\'94}\par
+[base]sp[option][r,m,d].ixs (e.g. broc3sp4di.txt)\par
+\par
+\par
+9 = eyepoke \par
+\tab option: raw or ms/ch\par
+\tab 1 = fixation durations\par
+\tab 2 = all saccade lengths\par
+\tab 3 = nonregressive saccades, before first regression\par
+\tab 4 = probability of a forward saccade\par
+\pard \fs24\tqr\tx9360
+{\u8220\'93}Various ways of looking at fixations beginning with the first fixation in some specified region. \softline
+It looks at the 3 fixations before this fixation and the 3 fixations after it, and reports each fixation \softline
+duration, each signed saccade length, each forward-going saccade until the first regression, and \softline
+the probability of a forward saccade.{\u8221\'94}\ul0 \tab \par
+\pard \fs24
+[base]ep[option][r,m][region number].ixs    (e.g. broc3ep1r4.sub)\par
+\par
+\par
+10 = eyegaze\par
+\tab option: raw or ms/ch\par
+{\u8220\'93}First pass or gaze time on a specified region, but augmented when there is no first pass fixation \softline
+in the region by moving the left boundary up to some specified number of characters to the left \softline
+and then the right boundary 1 character to the right.{\u8221\'94}\par
+[base]eg[r,m][region number].ixs   (Eg broc3egm5.ixs)\par
+\par
+11 = landing position\par
+\tab option 1: position of first fixation in a region\par
+\tab **option 2: position of the second fixation in a region\par
+\tab **option 3: launch site (position of previous saccade, charc back from start of region)\par
+{\u8220\'93}The mean landing position in each region, in characters, counting 0 as the first character in the 
+region, which is generally the space before the region start. Options: First vs. second fixation. \softline
+Alternatively, the launch site of the saccade into the region, in characters back from the start of \softline
+the region.{\u8221\'94}\par
+[base]lp[option].ixs    (E.g. broc3ip3.itm)\par
+\par
+\par
+12 = position as function of time\par
+\tab Report fixation positions relative to\par
+\tab \tab 0 = start of region\par
+\tab \tab 1 = first fixation in region\par
+\tab Cumulate or don't cumulate position (cumulate = no going back; Scheepers)\par
+\tab Sample size in msec 10 or 20 or whatever\par
+{\u8220\'93}The position, in characters from the start of some specified region or from the first fixation in \softline
+the region, every n (specifiable) ms for some specified number of ms. Option: absolute or \softline
+cumulative position (cumulative, ignore regressions).{\u8221\'94}\par
+[base]pft[0,1][ms]r[region number].ixs    (Where 0, 1 = start of region, first fixation, and ms is \softline
+the sample grain eg 10)    (E.g. broc3pft05r4.sub)\par
+\par
+\par
+13 = time from entering region to first going PAST it\par
+\tab option: keep vs. discard trials with no appropriate fixations\par
+\tab option: raw or ms/ch\par
+\tab 1 = All from first entering region to first going past\par
+\tab 2 = Time spent in region from first entering to first going past\par
+\tab 3 = Time spent outside of region after entering to first going past\par
+{\u8220\'93}Regression path duration. The cumulative fixation durations from first entering a region until \softline
+first going past the region to the right. Options: all time, times spent just in region, time spent just \softline
+outside region.{\u8221\'94}\par
+[base]gp[option].ixs   (Eg broc3rgp1.itm)\par
+\par
+\par
+14 = first fixation or saccade after LEAVING region (spillover)\par
+\tab option: eliminate the last fixation on a sentence\par
+\tab option: record fixation duration or saccade length of the first saccade\par
+\tab \tab out of each region\par
+\tab option: permit only forward-going saccades or allow regressions as well\par
+\tab option: raw or ms/ch\par
+{\u8220\'93}Reports properties of the first fixation or saccade after leaving a specified region. Options: \softline
+fixation duration or saccade length. Restrict to foward-moving saccades or (default) permit \softline
+regressions as well. Permit only a single fixation in the region or (default) permit multiple \softline
+fixations.{\u8221\'94} \par
+[base]next[option]r[region number].ixs   (Option: let{\u8217\'92}s makes something up, e.g., duration, \softline
+regression, mult fix = 1, duration, regression, single fix = 2, duration, forward, mult fix = 3, \softline
+duration, forward, single = 4,  saccade, regression, mult fix = 5, saccade, regression, single fix = \softline
+6, saccade, forward, mult fix = 7, saccade, forward, single = 8,      (Eg broc3next8r3.ixs)\par
+\ul0 \tab \ul0 \tab \ul0 \tab \ul0 \tab \ul0 \tab \par
+15 = saccade matrix (from region to region)\par
+\tab 1 = all saccades\par
+\tab 2 = only saccades not following regression (first pass saccades)\par
+{\u8220\'93}Writes an n x n table of the raw count of number of saccades starting from each region and \softline
+going to each region. Options: all saccades, or only first pass saccades.{\u8221\'94}\par
+\par
+This only writes a single file, as I recall, or perhaps one sub and one item file. Just leave the file \softline
+name(s) blank for this one, but gray out the ixs and the systat files.\par
+\par
+16 = total gaze\par
+\tab option: raw or ms/ch\par
+{\u8220\'93}The total timein  a specified region, but augmented when there is no fixation in the region by \softline
+moving the left boundary up to some specified number of characters to the left and then the right \softline
+boundary 1 character to the right.{\u8221\'94}\par
+[base]tg[r,m][region number].ixs   (Eg broc3egm5.ixs)\par
+\par
+\par
+\par
+\par
+\par
+17 = landing site matrix (word length by position) for Jane Ashby plus launch site vector (letters \softline
+before start of word, for the same person.\par
+{\u8220\'93}Write a matrix of frequencies of landing sites, separately for each word length. Specialized \softline
+function, added by request.{\u8221\'94}\par
+\par
+This writes out only a single file, the subjects file. Gray out the rest and let the user type in the \softline
+name.\par
+\par
+\par
+18 = inhibition of return analysis (report location of regressions and the following forward \softline
+saccades together with duration of preceding fixations)\par
+{\u8220\'93}A specialized measure that looks for regressions and reports their location, the duration of the \softline
+previous fixation, and the location of the following forward saccade. You can eliminate items \softline
+with too many regressions {\u8211\'96} items that were really confusing.{\u8221\'94}\par
+\par
+This writes out only a single file, the subjects file. Gray out the rest and let the user type in the \softline
+name.\par
+\par
+19 = vector of entering and leaving times\par
+{\u8220\'93}A specialized measure, intended for use in readaloud experiments, to allow fixations to be lined \softline
+up with voice. It gives a vector of when each region was first entered, and then first left, \softline
+referenced to start of trial (0s in both when never entered).\par
+\par
+This writes out only a single file, with each item separately. Gray out all but the ixs window and 
+let the user type in the name.\par
+}
