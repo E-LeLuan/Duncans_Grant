@@ -42,6 +42,9 @@ FA_filenames_corr <- read_csv('FA_filenames_corr.csv', col_names = FALSE)
 # modify the rep of each observation.
 #50 obs. 20, 20, 14  
 
+# No batch numbers
+FA_filenames_corr %>%
+  write_csv(path = 'FA_corr.csv', col_names = FALSE)
 
 # assign batch numbers
 batch_numbers_FA_corr <- c(rep("batch1", 20),
@@ -76,6 +79,11 @@ FA_filenames_error <- read_csv('FA_filenames_error.csv', col_names = FALSE)
 # modify the rep of each observation.
 #29 obs. 20, 11
 
+# No batch numbers
+FA_filenames_error %>%
+  select(X1) %>%
+  write_csv(path = 'FA_batch4_error.csv', col_names = FALSE)
+
 # assign batch numbers
 batch_numbers_FA_error <- c(rep("batch4", 20),
                       rep("batch5", 9))
@@ -94,3 +102,4 @@ FA_filenames_error %>%
 filter(batch_numbers_FA_error == "batch5") %>%
 select(X1) %>%
 write_csv(path = 'FA_batch5_error.csv', col_names = FALSE)
+
