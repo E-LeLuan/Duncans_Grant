@@ -13,8 +13,8 @@ library(see)
 set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 library(readr)
-TT_ED_batch_corr <- read_csv("Total_time/TT_ED/TT_ED_batch_corr.csv")
-TT_ED_batch_error <- read_csv("Total_time/TT_ED/TT_ED_batch_error.csv")
+TT_ED_batch_corr <- read_csv("Manual_tidy_analysis/Total_time/TT_ED/TT_ED_batch_corr.csv")
+TT_ED_batch_error <- read_csv("Manual_tidy_analysis/Total_time/TT_ED/TT_ED_batch_error.csv")
 
 #Rename the participant numbers in the batches back to their original participant numbers.
 TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 54] <-"84"
@@ -113,7 +113,7 @@ all_data <- rbind(TT_ED_batch_corr, TT_ED_batch_error)
 all_data$subj <- as.factor(all_data$subj)
 
 #Import Individual difference measures
-All_IDs <- read_csv("All_IDs.csv")
+All_IDs <- read_csv("Other_data_and_information/All_IDs.csv")
 #View(All_IDs)
 
 # Rename Participabt in ID_measures to subj to be the same as current data set

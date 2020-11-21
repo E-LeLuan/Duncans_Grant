@@ -13,8 +13,8 @@ library(see)
 set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 library(readr)
-RI_ED_batch_corr <- read_csv("Regressions_In/RI_ED/RI_ED_batch_corr.csv")
-RI_ED_batch_error <- read_csv("Regressions_In/RI_ED/RI_ED_batch_error.csv")
+RI_ED_batch_corr <- read_csv("Manual_tidy_analysis/Regressions_In/RI_ED/RI_ED_batch_corr.csv")
+RI_ED_batch_error <- read_csv("Manual_tidy_analysis/Regressions_In/RI_ED/RI_ED_batch_error.csv")
 #Rename the participant numbers in the batches back to their original participant numbers.
 RI_ED_batch_corr$subj[RI_ED_batch_corr$subj == 54] <-"84"
 RI_ED_batch_corr$subj[RI_ED_batch_corr$subj == 53] <-"83"
@@ -112,7 +112,7 @@ all_data <- rbind(RI_ED_batch_corr, RI_ED_batch_error)
 all_data$subj <- as.factor(all_data$subj)
 
 #Import Individual difference measures
-All_IDs <- read_csv("All_IDs.csv")
+All_IDs <- read_csv("Other_data_and_information/All_IDs.csv")
 #View(All_IDs)
 
 # Rename Participabt in ID_measures to subj to be the same as current data set
@@ -180,6 +180,26 @@ model_alldatacov_R4 <- glmer(R4 ~ cond + SRS_total_score_t + EQ + Total_reading_
 #(1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
 
 summary(model_alldatacov_R4)
+
+# Without the WRMT and including an interaction bwtween WRMT and coniditon
+model_alldatacov_R5_noWRMT <- glmer(R5 ~ cond + SRS_total_score_t + EQ + Total_RAN +
+                                      (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+
+#Condition is no longer significant 
+summary(model_alldatacov_R5_noWRMT)
+
+#by subject
+model_alldatacov_R5_WRMT_int_subj <- glmer(R5 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond:Total_reading_cluster +
+                                        (1 | subj) , data = all_data_join, family = "binomial")
+summary(model_alldatacov_R5_WRMT_int_subj)
+
+#by Item
+model_alldatacov_R5_WRMT_int_item <- glmer(R5 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond:Total_reading_cluster +
+                                        (1 | item) , data = all_data_join, family = "binomial")
+summary(model_alldatacov_R5_WRMT_int_item)
+
+
+
 #anova(model_alldatacov_R4_null, model_alldatacov_R4)
 check_model(model_alldatacov_R4)
 ranef(model_alldatacov_R4)

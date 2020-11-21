@@ -16,8 +16,8 @@ library(see)
 #import the data set batch 1
 #Load in the data sets
 library(readr)
-FPRO_ED_batch_corr <- read_csv("EyeDry Analysis/FPRO/FPRO_ED/FPRO_ED_batch_corr.csv")
-FPRO_ED_batch_error <- read_csv("EyeDry Analysis/FPRO/FPRO_ED/FPRO_ED_batch_error.csv")
+FPRO_ED_batch_corr <- read_csv("Manual_tidy_analysis/FPRO/FPRO_ED/FPRO_ED_batch_corr.csv")
+FPRO_ED_batch_error <- read_csv("Manual_tidy_analysis/FPRO/FPRO_ED/FPRO_ED_batch_error.csv")
 
 #Rename the participant numbers in the batches back to their original participant numbers.
 FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 54] <-"84"
@@ -116,7 +116,7 @@ all_data <- rbind(FPRO_ED_batch_corr, FPRO_ED_batch_error)
 all_data$subj <- as.factor(all_data$subj)
 
 #Import Individual difference measures
-All_IDs <- read_csv("All_IDs.csv")
+All_IDs <- read_csv("Other_data_and_information/All_IDs.csv")
 #View(All_IDs)
 
 # Rename Participabt in ID_measures to subj to be the same as current data set
@@ -125,7 +125,6 @@ All_IDs$subj <- as.factor(All_IDs$subj)
 
 # Add the ID's to the data frame
 all_data_join <- inner_join(all_data, All_IDs, by = "subj")
-view(all_data_join)
 
 # Assign condition labels, 1 = prediction facilitated, 2 = prediction unfacilitated
 #(this will make it easier to interpret)
@@ -247,6 +246,16 @@ model_alldatacov_R5_null <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cl
 summary(model_alldatacov_R5)
 anova(model_alldatacov_R5_null, model_alldatacov_R5)
 check_model(model_alldatacov_R5)
+
+#Without reading times included and including interaction
+model_alldatacov_R5_noWRMT <- glmer(R5 ~ cond + SRS_total_score_t + EQ + Total_RAN +
+                                      (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+
+summary(model_alldatacov_R5_noWRMT)
+
+model_alldatacov_R5_WRMT_int <- glmer(R5 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond:Total_reading_cluster +
+                                        (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+summary(model_alldatacov_R5_WRMT_int)
 
 # Error in anova.merMod(modelR5, model_alldatacov_R5): models were not all fitted to the same size of dataset
 #How to get around this?
