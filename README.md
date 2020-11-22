@@ -239,12 +239,4 @@ Repeat this process with any and all analysis you wish to undertake (e.g. first 
 
 I have created separate files for each analysis measure and moved the excel files into these folders. Then moved them to a new folder named FA_analysis ready for analysis. Follow the R scripts within each file to run the linear mixed models analysis on the data.
 
-
-
-
-
 *This README file was created by Duncan Bradley and Elizabeth Le-luan from the University of Manchester.
-
-
-
-
