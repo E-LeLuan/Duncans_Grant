@@ -13,110 +13,102 @@ library(see)
 
 # Analysis of First Pass data
 
-#import the data set batch 1
+#import the data sets
 #Load in the data sets
-library(readr)
-FPRO_ED_batch_corr <- read_csv("EyeDry Analysis/FPRO/FPRO_ED/FPRO_ED_batch_corr.csv")
-FPRO_ED_batch_error <- read_csv("EyeDry Analysis/FPRO/FPRO_ED/FPRO_ED_batch_error.csv")
-
+FPRO_FA_corr <- read_csv("FixAlign/FA_analysis/FPRO/FPRO_FA_corr.csv")
+FPRO_FA_error <- read_csv("FixAlign/FA_analysis/FPRO/FPRO_FA_error.csv")
 #Rename the participant numbers in the batches back to their original participant numbers.
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 54] <-"84"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 53] <-"83"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 52] <-"82"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 51] <-"81"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 50] <-"80"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 49] <-"79"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 48] <-"78"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 47] <-"77"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 46] <-"76"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 45] <-"75"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 44] <-"74"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 43] <-"73"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 42] <-"72"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 41] <-"71"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 40] <-"70"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 39] <-"69"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 38] <-"68"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 37] <-"67"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 36] <-"66"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 35] <-"64"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 34] <-"62"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 33] <-"60"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 32] <-"58"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 31] <-"56"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 30] <-"54"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 29] <-"52"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 28] <-"50"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 27] <-"48"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 26] <-"46"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 25] <-"44"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 24] <-"43"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 23] <-"42"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 22] <-"40"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 21] <-"39"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 20] <-"38"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 19] <-"36"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 18] <-"35"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 17] <-"34"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 16] <-"32"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 15] <-"30"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 14] <-"28"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 13] <-"26"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 12] <-"24"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 11] <-"22"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 10] <-"20"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 9] <-"18"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 8] <-"16"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 7] <-"14"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 6] <-"12"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 5] <-"10"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 4] <-"8"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 3] <-"6"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 2] <-"4"
-FPRO_ED_batch_corr$subj[FPRO_ED_batch_corr$subj == 1] <-"2"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 31] <-"65"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 30] <-"63"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 29] <-"61"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 28] <-"59"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 27] <-"57"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 26] <-"55"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 25] <-"53"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 24] <-"51"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 23] <-"49"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 22] <-"47"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 21] <-"45"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 20] <-"41"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 19] <-"37"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 18] <-"35"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 17] <-"33"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 16] <-"31"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 15] <-"29"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 14] <-"27"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 13] <-"25"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 12] <-"23"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 11] <-"21"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 10] <-"19"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 9] <-"17"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 8] <-"15"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 7] <-"13"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 6] <-"11"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 5] <-"9"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 4] <-"7"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 3] <-"5"
-FPRO_ED_batch_error$subj[FPRO_ED_batch_error$subj == 2] <-"3"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 50] <-"83"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 49] <-"82"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 48] <-"81"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 47] <-"80"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 46] <-"79"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 45] <-"78"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 44] <-"77"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 43] <-"76"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 42] <-"75"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 41] <-"74"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 40] <-"73"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 39] <-"72"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 38] <-"71"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 37] <-"70"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 36] <-"69"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 35] <-"68"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 34] <-"67"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 33] <-"66"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 32] <-"64"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 31] <-"62"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 30] <-"60"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 29] <-"58"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 28] <-"56"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 27] <-"54"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 26] <-"50"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 25] <-"48"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 24] <-"46"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 23] <-"44"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 22] <-"43"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 21] <-"42"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 20] <-"40"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 19] <-"39"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 18] <-"38"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 17] <-"36"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 16] <-"34"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 15] <-"32"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 14] <-"30"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 13] <-"28"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 12] <-"26"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 11] <-"22"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 10] <-"20"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 9] <-"18"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 8] <-"16"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 7] <-"14"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 6] <-"12"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 5] <-"10"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 4] <-"8"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 3] <-"6"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 2] <-"4"
+FPRO_FA_corr$subj[FPRO_FA_corr$subj == 1] <-"2"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 29] <-"65"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 28] <-"63"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 27] <-"61"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 26] <-"59"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 25] <-"57"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 24] <-"55"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 23] <-"53"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 22] <-"51"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 21] <-"49"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 20] <-"47"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 19] <-"45"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 18] <-"41"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 17] <-"37"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 16] <-"33"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 15] <-"31"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 14] <-"29"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 13] <-"25"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 12] <-"23"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 11] <-"21"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 10] <-"19"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 9] <-"17"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 8] <-"15"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 7] <-"13"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 6] <-"11"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 5] <-"9"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 4] <-"7"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 3] <-"5"
+FPRO_FA_error$subj[FPRO_FA_error$subj == 2] <-"3"
 
 #Check the subject numbers have been redefined correctly
-#View(FPRO_ED_batch_corr)
-#View(FPRO_ED_batch_error)
+#View(FPRO_FA_corr)
+#View(FPRO_FA_error)
 
 #Let's combine the data
-all_data <- rbind(FPRO_ED_batch_corr, FPRO_ED_batch_error)
+all_data <- rbind(FPRO_FA_corr, FPRO_FA_error)
 
 #make subj a factor
 all_data$subj <- as.factor(all_data$subj)
 
 #Import Individual difference measures
-All_IDs <- read_csv("All_IDs.csv")
+All_IDs <- read_csv("FixAlign/FA_analysis/All_IDs_FA.csv")
 #View(All_IDs)
 
 # Rename Participabt in ID_measures to subj to be the same as current data set
@@ -125,7 +117,7 @@ All_IDs$subj <- as.factor(All_IDs$subj)
 
 # Add the ID's to the data frame
 all_data_join <- inner_join(all_data, All_IDs, by = "subj")
-view(all_data_join)
+# view(all_data_join)
 
 # Assign condition labels, 1 = prediction facilitated, 2 = prediction unfacilitated
 #(this will make it easier to interpret)
@@ -157,9 +149,9 @@ all_data_join %>%
   geom_jitter(alpha = .2, width = .1) +
   guides(colour = FALSE)
 
-all_data_join %>% 
-  group_by(cond) %>%
-  summarise(mean(R4), sd(R4))
+#all_data_join %>% 
+#  group_by(cond) %>%
+#  summarise(mean(R4), sd(R4))
 
 all_data_join$R4 <- as.factor(all_data_join$R4)
 
@@ -182,18 +174,18 @@ all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 
 model_alldatacov_R4 <- glmer(R4 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                              (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+                              (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
 
 model_alldatacov_R4_null <- glmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                                   (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+                                   (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
 
 summary(model_alldatacov_R4)
 anova(model_alldatacov_R4_null, model_alldatacov_R4)
 check_model(model_alldatacov_R4)
 
 # Error in anova.merMod(modelR4, model_alldatacov_R4): models were not all fitted to the same size of dataset
-#How to get around this?
-anova(modelR4, model_alldatacov_R4)
+# How to get around this?
+# anova(modelR4, model_alldatacov_R4)
 
 ranef(model_alldatacov_R4)
 
@@ -209,12 +201,12 @@ all_data_join %>%
   stat_summary(fun.data = "mean_cl_boot", colour = "black") +
   guides(colour = FALSE)
 
-all_data_join %>% 
-  group_by(cond) %>%
-  summarise(mean(R5), sd(R5))
+#all_data_join %>% 
+#  group_by(cond) %>%
+#  summarise(mean(R5), sd(R5))
 
-library(psych)
-describeBy(all_data_join$R5, group=all_data_join$cond)
+#library(psych)
+#describeBy(all_data_join$R5, group=all_data_join$cond)
 
 all_data_join$R5 <- as.factor(all_data_join$R5)
 
@@ -239,10 +231,10 @@ all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 
 model_alldatacov_R5 <- glmer(R5 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                               (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+                               (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
 
 model_alldatacov_R5_null <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                                    (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+                                    (1 + cond | subj) +  (1 | item) , data = all_data_join, family = "binomial")
 
 summary(model_alldatacov_R5)
 anova(model_alldatacov_R5_null, model_alldatacov_R5)
@@ -250,7 +242,7 @@ check_model(model_alldatacov_R5)
 
 # Error in anova.merMod(modelR5, model_alldatacov_R5): models were not all fitted to the same size of dataset
 #How to get around this?
-anova(modelR5, model_alldatacov_R5)
+#anova(modelR5, model_alldatacov_R5)
 
 ranef(model_alldatacov_R5)
 
@@ -272,3 +264,4 @@ rcorr(WRMT, RAN)
 #rcorr(all_data_join$SRS2_total_score_t, all_data_join$EQ)
 #library(psych)
 #describeBy(all_data_join$R4, group=all_data_join$cond)
+

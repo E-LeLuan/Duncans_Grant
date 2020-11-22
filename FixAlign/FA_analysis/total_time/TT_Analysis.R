@@ -13,107 +13,100 @@ library(see)
 set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 library(readr)
-TT_ED_batch_corr <- read_csv("Total_time/TT_ED/TT_ED_batch_corr.csv")
-TT_ED_batch_error <- read_csv("Total_time/TT_ED/TT_ED_batch_error.csv")
-
+TT_FA_corr <- read_csv("FixAlign/FA_analysis/total_time/TT_FA_corr.csv")
+TT_FA_error <- read_csv("FixAlign/FA_analysis/total_time/TT_FA_error.csv")
 #Rename the participant numbers in the batches back to their original participant numbers.
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 54] <-"84"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 53] <-"83"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 52] <-"82"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 51] <-"81"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 50] <-"80"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 49] <-"79"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 48] <-"78"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 47] <-"77"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 46] <-"76"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 45] <-"75"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 44] <-"74"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 43] <-"73"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 42] <-"72"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 41] <-"71"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 40] <-"70"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 39] <-"69"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 38] <-"68"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 37] <-"67"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 36] <-"66"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 35] <-"64"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 34] <-"62"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 33] <-"60"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 32] <-"58"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 31] <-"56"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 30] <-"54"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 29] <-"52"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 28] <-"50"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 27] <-"48"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 26] <-"46"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 25] <-"44"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 24] <-"43"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 23] <-"42"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 22] <-"40"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 21] <-"39"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 20] <-"38"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 19] <-"36"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 18] <-"35"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 17] <-"34"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 16] <-"32"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 15] <-"30"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 14] <-"28"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 13] <-"26"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 12] <-"24"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 11] <-"22"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 10] <-"20"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 9] <-"18"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 8] <-"16"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 7] <-"14"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 6] <-"12"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 5] <-"10"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 4] <-"8"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 3] <-"6"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 2] <-"4"
-TT_ED_batch_corr$subj[TT_ED_batch_corr$subj == 1] <-"2"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 31] <-"65"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 30] <-"63"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 29] <-"61"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 28] <-"59"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 27] <-"57"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 26] <-"55"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 25] <-"53"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 24] <-"51"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 23] <-"49"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 22] <-"47"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 21] <-"45"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 20] <-"41"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 19] <-"37"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 18] <-"35"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 17] <-"33"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 16] <-"31"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 15] <-"29"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 14] <-"27"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 13] <-"25"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 12] <-"23"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 11] <-"21"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 10] <-"19"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 9] <-"17"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 8] <-"15"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 7] <-"13"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 6] <-"11"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 5] <-"9"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 4] <-"7"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 3] <-"5"
-TT_ED_batch_error$subj[TT_ED_batch_error$subj == 2] <-"3"
+TT_FA_corr$subj[TT_FA_corr$subj == 50] <-"83"
+TT_FA_corr$subj[TT_FA_corr$subj == 49] <-"82"
+TT_FA_corr$subj[TT_FA_corr$subj == 48] <-"81"
+TT_FA_corr$subj[TT_FA_corr$subj == 47] <-"80"
+TT_FA_corr$subj[TT_FA_corr$subj == 46] <-"79"
+TT_FA_corr$subj[TT_FA_corr$subj == 45] <-"78"
+TT_FA_corr$subj[TT_FA_corr$subj == 44] <-"77"
+TT_FA_corr$subj[TT_FA_corr$subj == 43] <-"76"
+TT_FA_corr$subj[TT_FA_corr$subj == 42] <-"75"
+TT_FA_corr$subj[TT_FA_corr$subj == 41] <-"74"
+TT_FA_corr$subj[TT_FA_corr$subj == 40] <-"73"
+TT_FA_corr$subj[TT_FA_corr$subj == 39] <-"72"
+TT_FA_corr$subj[TT_FA_corr$subj == 38] <-"71"
+TT_FA_corr$subj[TT_FA_corr$subj == 37] <-"70"
+TT_FA_corr$subj[TT_FA_corr$subj == 36] <-"69"
+TT_FA_corr$subj[TT_FA_corr$subj == 35] <-"68"
+TT_FA_corr$subj[TT_FA_corr$subj == 34] <-"67"
+TT_FA_corr$subj[TT_FA_corr$subj == 33] <-"66"
+TT_FA_corr$subj[TT_FA_corr$subj == 32] <-"64"
+TT_FA_corr$subj[TT_FA_corr$subj == 31] <-"62"
+TT_FA_corr$subj[TT_FA_corr$subj == 30] <-"60"
+TT_FA_corr$subj[TT_FA_corr$subj == 29] <-"58"
+TT_FA_corr$subj[TT_FA_corr$subj == 28] <-"56"
+TT_FA_corr$subj[TT_FA_corr$subj == 27] <-"54"
+TT_FA_corr$subj[TT_FA_corr$subj == 26] <-"50"
+TT_FA_corr$subj[TT_FA_corr$subj == 25] <-"48"
+TT_FA_corr$subj[TT_FA_corr$subj == 24] <-"46"
+TT_FA_corr$subj[TT_FA_corr$subj == 23] <-"44"
+TT_FA_corr$subj[TT_FA_corr$subj == 22] <-"43"
+TT_FA_corr$subj[TT_FA_corr$subj == 21] <-"42"
+TT_FA_corr$subj[TT_FA_corr$subj == 20] <-"40"
+TT_FA_corr$subj[TT_FA_corr$subj == 19] <-"39"
+TT_FA_corr$subj[TT_FA_corr$subj == 18] <-"38"
+TT_FA_corr$subj[TT_FA_corr$subj == 17] <-"36"
+TT_FA_corr$subj[TT_FA_corr$subj == 16] <-"34"
+TT_FA_corr$subj[TT_FA_corr$subj == 15] <-"32"
+TT_FA_corr$subj[TT_FA_corr$subj == 14] <-"30"
+TT_FA_corr$subj[TT_FA_corr$subj == 13] <-"28"
+TT_FA_corr$subj[TT_FA_corr$subj == 12] <-"26"
+TT_FA_corr$subj[TT_FA_corr$subj == 11] <-"22"
+TT_FA_corr$subj[TT_FA_corr$subj == 10] <-"20"
+TT_FA_corr$subj[TT_FA_corr$subj == 9] <-"18"
+TT_FA_corr$subj[TT_FA_corr$subj == 8] <-"16"
+TT_FA_corr$subj[TT_FA_corr$subj == 7] <-"14"
+TT_FA_corr$subj[TT_FA_corr$subj == 6] <-"12"
+TT_FA_corr$subj[TT_FA_corr$subj == 5] <-"10"
+TT_FA_corr$subj[TT_FA_corr$subj == 4] <-"8"
+TT_FA_corr$subj[TT_FA_corr$subj == 3] <-"6"
+TT_FA_corr$subj[TT_FA_corr$subj == 2] <-"4"
+TT_FA_corr$subj[TT_FA_corr$subj == 1] <-"2"
+TT_FA_error$subj[TT_FA_error$subj == 29] <-"65"
+TT_FA_error$subj[TT_FA_error$subj == 28] <-"63"
+TT_FA_error$subj[TT_FA_error$subj == 27] <-"61"
+TT_FA_error$subj[TT_FA_error$subj == 26] <-"59"
+TT_FA_error$subj[TT_FA_error$subj == 25] <-"57"
+TT_FA_error$subj[TT_FA_error$subj == 24] <-"55"
+TT_FA_error$subj[TT_FA_error$subj == 23] <-"53"
+TT_FA_error$subj[TT_FA_error$subj == 22] <-"51"
+TT_FA_error$subj[TT_FA_error$subj == 21] <-"49"
+TT_FA_error$subj[TT_FA_error$subj == 20] <-"47"
+TT_FA_error$subj[TT_FA_error$subj == 19] <-"45"
+TT_FA_error$subj[TT_FA_error$subj == 18] <-"41"
+TT_FA_error$subj[TT_FA_error$subj == 17] <-"37"
+TT_FA_error$subj[TT_FA_error$subj == 16] <-"33"
+TT_FA_error$subj[TT_FA_error$subj == 15] <-"31"
+TT_FA_error$subj[TT_FA_error$subj == 14] <-"29"
+TT_FA_error$subj[TT_FA_error$subj == 13] <-"25"
+TT_FA_error$subj[TT_FA_error$subj == 12] <-"23"
+TT_FA_error$subj[TT_FA_error$subj == 11] <-"21"
+TT_FA_error$subj[TT_FA_error$subj == 10] <-"19"
+TT_FA_error$subj[TT_FA_error$subj == 9] <-"17"
+TT_FA_error$subj[TT_FA_error$subj == 8] <-"15"
+TT_FA_error$subj[TT_FA_error$subj == 7] <-"13"
+TT_FA_error$subj[TT_FA_error$subj == 6] <-"11"
+TT_FA_error$subj[TT_FA_error$subj == 5] <-"9"
+TT_FA_error$subj[TT_FA_error$subj == 4] <-"7"
+TT_FA_error$subj[TT_FA_error$subj == 3] <-"5"
+TT_FA_error$subj[TT_FA_error$subj == 2] <-"3"
 
 #Check the subject numbers have been redefined correctly
-#View(TT_ED_batch_corr)
-#View(TT_ED_batch_error)
+#View(TT_FA_corr)
+#View(TT_FA_error)
 
 #Let's combine the data
-all_data <- rbind(TT_ED_batch_corr, TT_ED_batch_error)
+all_data <- rbind(TT_FA_corr, TT_FA_error)
 
 #make subj a factor
 all_data$subj <- as.factor(all_data$subj)
 
 #Import Individual difference measures
-All_IDs <- read_csv("All_IDs.csv")
+All_IDs <- read_csv("FixAlign/FA_analysis/All_IDs_FA.csv")
 #View(All_IDs)
 
 # Rename Participabt in ID_measures to subj to be the same as current data set
@@ -155,10 +148,9 @@ all_data_join %>%
 all_data_join %>% 
   group_by(cond) %>%
   summarise(mean(R4), sd(R4))
-
 # Model assuming normality of residuals maximal structure
 #model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
-modelR4 <- lmer(R4 ~ cond + (1 | subj) + (1 | item), all_data_join) 
+modelR4 <- lmer(R4 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
 summary(modelR4)
 
 #anova(modelR4, model.nullR4)
@@ -176,9 +168,8 @@ all_data_join$EQ <- scale(all_data_join$EQ)
 all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
 all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
-
 # Model including covariates
-model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 
 #model_alldatacov_R4_null <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
 #                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
@@ -187,8 +178,17 @@ summary(model_alldatacov_R4)
 
 #anova(model_alldatacov_R4_null, model_alldatacov_R4)
 check_model(model_alldatacov_R4)
-
 ranef(model_alldatacov_R4)
+
+# Remove the RAN with simplified model as fails to converge with item random effects. 
+# Our coniditon remains significant.
+model_alldatacov_R4_noRAN <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 + cond | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R4_noRAN)
+
+# Check the RAN/condition intercept. Full model with all effects back in.
+# No interaction. Suggesting RAN exerts an influence on reading overall but not on prediciton.
+model_alldatacov_R4_RAN_int <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R4_RAN_int)
 
 # summary of Results for region 4, the question.
 #After controlling for individual differences participants are significantly faster at reading facilitated conditions compared to un-facilitated conditions where they take an extra 73 milliseconds to complete their Total Time read through of the text. There is a 136 millisecond increase in reading times with each millisecond increase of the RAN. In other words, the slower your rapid naming times (indicative of poorer verbal fluency) the longer it takes you to integrate contextual information into a mental representation of the scenario encountered.  However, it is likely Total_RAN explains overall reading time differences, but not anything to do with the difference between our experimental conditions - otherwise we'd have seen an interaction effect.
@@ -235,10 +235,9 @@ all_data_join %>%
 all_data_join %>% 
   group_by(cond) %>%
   summarise(mean(R5), sd(R5))
-
 # Model assuming normality of residuals maximal structure
 #model.nullR5 <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
-modelR5 <- lmer(R5 ~ cond + (1 | subj) + (1 | item), all_data_join) 
+modelR5 <- lmer(R5 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
 summary(modelR5)
 
 #anova(modelR5, model.nullR5)
@@ -256,19 +255,24 @@ all_data_join$EQ <- scale(all_data_join$EQ)
 all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
 all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
-
 # Model including covariates
-model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 
 #model_alldatacov_R5_null <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
 #                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
 
 summary(model_alldatacov_R5)
-model_alldatacov_R5_noRAN <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+
+
+# Remove the RAN with simplified model. 
+# Our condition remains significant.
+model_alldatacov_R5_noRAN <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R5_noRAN)
 
-model_alldatacov_R5_RAN_int <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
-summary(model_alldatacov_R5_RAN_int)
+# Check the RAN/condition intercept. Full model with all effects back in.
+# No interaction. Suggesting RAN exerts an influence on reading overall but not on prediciton.
+model_alldatacov_R5_RAN_int <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R4_RAN_int)
 
 #anova(model_alldatacov_R5_null, model_alldatacov_R5)
 check_model(model_alldatacov_R5)
