@@ -10,6 +10,7 @@ library(tidyverse)
 library(buildmer)
 library(performance)
 library(see)
+library(sjPlot)
 #Set seed for random number generation
 set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
@@ -179,12 +180,22 @@ all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 # Model including covariates
 model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 
+
+# Getting our Summary of Mixed Models as a table using the sjPlot package.
+#Nakagawa S, Johnson P, Schielzeth H (2017) 
+#The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. 
+#J. R. Soc. Interface 14. doi: 10.1098/rsif.2017.0213
+tab_model(model_alldatacov_R4, p.val = "kr", show.df = TRUE)
+
+
 #model_alldatacov_R4_null <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
 #                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
 
 summary(model_alldatacov_R4)
 model_alldatacov_R4_noRAN <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4_noRAN)
+
+
 
 model_alldatacov_R4_RAN_int <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4_RAN_int)
