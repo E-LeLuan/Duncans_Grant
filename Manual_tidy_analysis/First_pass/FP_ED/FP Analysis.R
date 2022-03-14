@@ -153,6 +153,16 @@ all_data_join %>%
   stat_summary(fun.data = "mean_cl_boot", colour = "black") +
   guides(colour = FALSE)
 
+#boxplot
+all_data_join %>% 
+  ggplot(aes(x = cond, y = R4, colour = cond)) + ggtitle("First Pass for Critical Region: Question") +
+  labs(y = "Reading time in ms.", x = "Prediction") +
+  geom_boxplot()+  
+  geom_jitter(alpha = .2, width = .1) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
+  guides(colour = FALSE)
+
+
 #Descriptives
 all_data_join %>% 
   group_by(cond) %>%
@@ -168,7 +178,7 @@ summary(modelR4)
 check_model(modelR4)
 #qqnorm(residuals(modelR4))
 #qqline(residuals(modelR4))
-#descdist(all_data_join$R4)
+descdist(all_data_join$R4)
 #Let's include some co-variates! Region 4
 
 #Step 1: Scale the ID measures...
@@ -178,8 +188,13 @@ all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster
 all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 # Model including covariates
-model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R4)
 
+#Descriptives
+all_data_join %>% 
+  group_by(cond) %>%
+  summarise(mean(R4), sd(R4))
 
 # Getting our Summary of Mixed Models as a table using the sjPlot package.
 #Nakagawa S, Johnson P, Schielzeth H (2017) 
