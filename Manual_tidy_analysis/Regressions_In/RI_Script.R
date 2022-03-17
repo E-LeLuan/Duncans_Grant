@@ -177,9 +177,17 @@ all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 
 # Model including covariates
-model_alldatacov_R4 <- glmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+model_alldatacov_R4 <- glmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
 summary(model_alldatacov_R4)
 
+
+# Remove WRMT-III
+model_alldatacov_R4_noWRMT <- glmer(R4 ~ SRS_total_score_t + EQ + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+summary(model_alldatacov_R4_noWRMT)
+
+# Interaction
+model_alldatacov_R4_WRMT_int <- glmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_reading_cluster + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+summary(model_alldatacov_R4_WRMT_int)
 
 # GeRIing our Summary of Mixed Models as a table using the sjPlot package.
 #Nakagawa S, Johnson P, Schielzeth H (2017) 
@@ -229,15 +237,12 @@ all_data_join %>%
   stat_summary(fun.data = "mean_cl_boot", colour = "black") +
   guides(colour = FALSE)
 
-#Descriptives
-all_data_join %>% 
-  group_by(cond) %>%
-  summarise(mean(R5), sd(R5))
 
 # Model assuming normality of residuals maximal structure
 #model.nullR5 <- glmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
-modelR5 <- glmer(R5 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
+modelR5 <- glmer(R5 ~ cond + (1 | subj) + (1 + cond | item), all_data_join, family = "binomial") 
 summary(modelR5)
+
 
 #anova(modelR5, model.nullR5)
 
@@ -255,7 +260,7 @@ check_model(modelR5)
 #all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 #all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 # Model including covariates
-model_alldatacov_R5 <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+model_alldatacov_R5 <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
 
 #model_alldatacov_R5_null <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
 #                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
@@ -268,12 +273,12 @@ ranef(model_alldatacov_R5)
 
 
 # Remove WRMT-III
-model_alldatacov_R5_noWRMT <- glmer(R5 ~ SRS_total_score_t + EQ + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
-summary(model_alldatacov_R5_noWRMT)
+#model_alldatacov_R5_noWRMT <- glmer(R5 ~ SRS_total_score_t + EQ + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
+#summary(model_alldatacov_R5_noWRMT)
 
 # Interaction
-model_alldatacov_R5_WRMT_int <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_reading_cluster + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
-summary(model_alldatacov_R5_WRMT_int)
+#model_alldatacov_R5_WRMT_int <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_reading_cluster + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+#summary(model_alldatacov_R5_WRMT_int)
 
 
 #Let's have a look at region 3
@@ -294,7 +299,7 @@ all_data_join %>%
 
 # Model assuming normality of residuals maximal structure
 #model.nullR5 <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
-modelR3 <- glmer(R3 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
+modelR3 <- glmer(R3 ~ cond + (1 | subj) + (1 + cond | item), all_data_join, family = "binomial") 
 summary(modelR3)
 
 #anova(modelR5, model.nullR5)
@@ -314,7 +319,7 @@ check_model(modelR3)
 #all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 
 # Model including covariates
-model_alldatacov_R3 <- glmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 | item) , data = all_data_join, family = "binomial")
+model_alldatacov_R3 <- glmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
 
 #model_alldatacov_R3_null <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
 #                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
