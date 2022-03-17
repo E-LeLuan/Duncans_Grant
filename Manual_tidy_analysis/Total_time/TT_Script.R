@@ -284,8 +284,17 @@ summary(model_alldatacov_R5)
 
 #anova(model_alldatacov_R5_null, model_alldatacov_R5)
 check_model(model_alldatacov_R5)
-
 ranef(model_alldatacov_R5)
+
+
+# Remove RAN
+model_alldatacov_R5_noRAN <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R5_noRAN)
+
+# Interaction
+model_alldatacov_R5_RAN_int <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R5_RAN_int)
+
 
 #Let's have a look at region 3
 
@@ -329,7 +338,7 @@ descdist(all_data_join$R3)
 #all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 #all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 # Model including covariates
-model_alldatacov_R3 <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+model_alldatacov_R3 <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 
 #model_alldatacov_R3_null <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
 #                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
@@ -337,6 +346,6 @@ model_alldatacov_R3 <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster 
 summary(model_alldatacov_R3)
 
 #anova(model_alldatacov_R3_null, model_alldatacov_R3)
-check_model(model_alldatacov_R3)
+#check_model(model_alldatacov_R3)
 
 ranef(model_alldatacov_R3)
