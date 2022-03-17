@@ -16,8 +16,8 @@ library(sjPlot)
 set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 library(readr)
-RI_ED_batch_corr <- read_csv("Manual_tidy_analysis/RI/RI_ED/RI_ED_batch_corr.csv")
-RI_ED_batch_error <- read_csv("Manual_tidy_analysis/RI/RI_ED/RI_ED_batch_error.csv")
+RI_ED_batch_corr <- read_csv("Manual_tidy_analysis/Regressions_In/RI_ED/RI_ED_batch_corr.csv")
+RI_ED_batch_error <- read_csv("Manual_tidy_analysis/Regressions_In/RI_ED/RI_ED_batch_error.csv")
 
 #Rename the participant numbers in the batches back to their original participant numbers.
 RI_ED_batch_corr$subj[RI_ED_batch_corr$subj == 54] <-"84"
