@@ -200,7 +200,7 @@ all_data_join %>%
 #Nakagawa S, Johnson P, Schielzeth H (2017) 
 #The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. 
 #J. R. Soc. Interface 14. doi: 10.1098/rsif.2017.0213
-tab_model(model_alldatacov_R4, p.val = "kr", show.df = TRUE)
+#tab_model(model_alldatacov_R4, p.val = "kr", show.df = TRUE)
 
 
 #model_alldatacov_R4_null <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
@@ -303,3 +303,56 @@ check_model(model_alldatacov_R5)
 
 ranef(model_alldatacov_R5)
 
+#Let's have a look at region 3
+
+#set condition as a factor
+all_data_join$cond <- as.factor(all_data_join$cond)
+# Throw away zeroes
+all_data_join <- all_data_join %>% filter(R3 != 0)
+
+#Visualisation
+all_data_join %>% 
+  ggplot(aes(x = cond, y = R3, colour = cond)) + ggtitle("Regression Path for Prediction") +
+  labs(y = "Reading time in ms.", x = "Prediction") +
+  geom_violin() +
+  geom_jitter(alpha = .2, width = .1) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
+  guides(colour = FALSE)
+
+#Descriptives
+all_data_join %>% 
+  group_by(cond) %>%
+  summarise(mean(R3), sd(R3))
+
+# Model assuming normality of residuals maximal structure
+#model.nullR5 <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
+modelR3 <- lmer(R3 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
+summary(modelR3)
+
+#anova(modelR5, model.nullR5)
+
+#All the data for this model looks pretty normal.
+check_model(modelR3)
+#qqnorm(residuals(modelR3))
+#qqline(residuals(modelR3))
+descdist(all_data_join$R3)
+#Let's include some co-variates! region 3
+
+#Step 1: Scale the ID measures...
+#all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
+#all_data_join$EQ <- scale(all_data_join$EQ)
+#all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
+#all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
+#all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+# Model including covariates
+model_alldatacov_R3 <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+
+#model_alldatacov_R3_null <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
+#                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
+
+summary(model_alldatacov_R3)
+
+#anova(model_alldatacov_R3_null, model_alldatacov_R3)
+check_model(model_alldatacov_R3)
+
+ranef(model_alldatacov_R3)
