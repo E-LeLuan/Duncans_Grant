@@ -137,13 +137,6 @@ all_data_join$cond <- as.factor(all_data_join$cond)
 # Throw away zeroes
 all_data_join <- all_data_join %>% filter(R4 != 0)
 
-#Let's have a look at region 4
-
-#set condition as a factor
-all_data_join$cond <- as.factor(all_data_join$cond)
-# Throw away zeroes
-all_data_join <- all_data_join %>% filter(R4 != 0)
-
 #Visualisation
 all_data_join %>% 
   ggplot(aes(x = cond, y = R4, colour = cond)) + ggtitle("First Pass for Critical Region: Question") +
@@ -152,6 +145,7 @@ all_data_join %>%
   geom_jitter(alpha = .2, width = .1) +
   stat_summary(fun.data = "mean_cl_boot", colour = "black") +
   guides(colour = FALSE)
+ 
 
 #boxplot
 all_data_join %>% 
