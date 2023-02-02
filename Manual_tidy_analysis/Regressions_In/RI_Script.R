@@ -204,8 +204,9 @@ check_model(model_alldatacov_R4)
 ranef(model_alldatacov_R4)
 
 # summary of Results for region 4, the question.
-#After controlling for individual differences participants are significantly faster at reading facilitated conditions compared to un-facilitated conditions where they take an extra 73 milliseconds to complete their RI read through of the text. There is a 136 millisecond increase in reading times with each millisecond increase of the RAN. In other words, the slower your rapid naming times (indicative of poorer verbal fluency) the longer it takes you to integrate contextual information into a mental representation of the scenario encountered.  However, it is likely Total_RAN explains overall reading time differences, but not anything to do with the difference between our experimental conditions - otherwise we'd have seen an interaction effect.
-#Regardless of whether the individual predictors are present/absent, the effect of our condition is preRIy much the same - suggesting to me that the variance explained by our experimental manipulation doesn't overlap with the variance explained by our individual difference measures. 
+# summary of Results for region 4, the question.
+#After controlling for individual differences participants regress in, significantly more during unfacilitated conditions compared to facilitated conditions where they regress 0.30064 times more (express as a percentage). There is a 0.34150 increase in regressions in with each increase of the WRMT-III score. In other words, the better your reading ability the longer it takes you to integrate contextual information into a mental representation of the scenario encountered. This may be because we are trying to process information more fully. However, it is likely WRMT-III explains overall reading time differences, but not anything to do with the difference between our experimental conditions - otherwise we'd have seen an interaction effect.
+#Regardless of whether the individual predictors are present/absent, the effect of our condition is pretty much the same - suggesting to me that the variance explained by our experimental manipulation doesn't overlap with the variance explained by our individual difference measures.
 
 library(Hmisc)
 #Measuring Correlations
@@ -260,10 +261,6 @@ check_model(modelR5)
 #all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 # Model including covariates
 model_alldatacov_R5 <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
-
-#model_alldatacov_R5_null <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
-#                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
-
 summary(model_alldatacov_R5)
 
 #anova(model_alldatacov_R5_null, model_alldatacov_R5)
@@ -275,7 +272,7 @@ ranef(model_alldatacov_R5)
 #model_alldatacov_R5_noWRMT <- glmer(R5 ~ SRS_total_score_t + EQ + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
 #summary(model_alldatacov_R5_noWRMT)
 
-# Interaction
+#Interaction
 #model_alldatacov_R5_WRMT_int <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_reading_cluster + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
 #summary(model_alldatacov_R5_WRMT_int)
 
@@ -318,11 +315,7 @@ check_model(modelR3)
 #all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 
 # Model including covariates
-model_alldatacov_R3 <- glmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
-
-#model_alldatacov_R3_null <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
-#                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
-
+model_alldatacov_R3 <- glmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
 summary(model_alldatacov_R3)
 
 #anova(model_alldatacov_R3_null, model_alldatacov_R3)
