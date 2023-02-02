@@ -156,12 +156,12 @@ all_data_join %>%
 all_data_join$R4 <- as.factor(all_data_join$R4)
 
 # Just eye tracking
-modelR4 <- glmer(R4 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
+modelR4 <- glmer(R4 ~ cond + (1 + cond | subj) + (1 | item), all_data_join, family = "binomial") 
 summary(modelR4)
 
-modelR4.null <- glmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
-
+modelR4.null <- glmer(R4 ~ (1 + cond | subj) + (1 | item), all_data_join, family = "binomial") 
 anova(modelR4, modelR4.null)
+
 check_model(modelR4)
 
 #Let's include some covariates! Region 4
@@ -175,12 +175,8 @@ all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 
 model_alldatacov_R4 <- glmer(R4 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
                               (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
-
-model_alldatacov_R4_null <- glmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                                   (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
-
 summary(model_alldatacov_R4)
-anova(model_alldatacov_R4_null, model_alldatacov_R4)
+
 check_model(model_alldatacov_R4)
 
 # Error in anova.merMod(modelR4, model_alldatacov_R4): models were not all fitted to the same size of dataset
@@ -210,10 +206,10 @@ all_data_join %>%
 
 all_data_join$R5 <- as.factor(all_data_join$R5)
 
-modelR5 <- glmer(R5 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
+modelR5 <- glmer(R5 ~ cond + (1 | subj) + (1 + cond | item), all_data_join, family = "binomial") 
 summary(modelR5)
 
-modelR5.null <- glmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
+modelR5.null <- glmer(R5 ~ (1 | subj) + (1 + cond | item), all_data_join, family = "binomial") 
 
 anova(modelR5, modelR5.null)
 
@@ -231,13 +227,9 @@ all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 
 model_alldatacov_R5 <- glmer(R5 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                               (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
-
-model_alldatacov_R5_null <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
-                                    (1 + cond | subj) +  (1 | item) , data = all_data_join, family = "binomial")
-
+                               (1 | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
 summary(model_alldatacov_R5)
-anova(model_alldatacov_R5_null, model_alldatacov_R5)
+
 check_model(model_alldatacov_R5)
 
 # Error in anova.merMod(modelR5, model_alldatacov_R5): models were not all fitted to the same size of dataset
@@ -265,3 +257,56 @@ rcorr(WRMT, RAN)
 #library(psych)
 #describeBy(all_data_join$R4, group=all_data_join$cond)
 
+
+#What does region 3 "the reply" look like?
+
+all_data_join$R3[all_data_join$R3 == 1] <-"100"
+
+# Visualise
+all_data_join %>% 
+  ggplot(aes(x = cond, y = R3, colour = cond)) + ggtitle("Regression In for Post-Critical Region: Reply") +
+  labs(y = "Regression", x = "Prediction") +
+  geom_jitter(alpha = .2, width = .1) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
+  guides(colour = FALSE)
+
+#all_data_join %>% 
+#  group_by(cond) %>%
+#  summarise(mean(R3), sd(R3))
+
+#library(psych)
+#describeBy(all_data_join$R3, group=all_data_join$cond)
+
+all_data_join$R3 <- as.factor(all_data_join$R3)
+
+modelR3 <- glmer(R3 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
+summary(modelR3)
+
+modelR3.null <- glmer(R3 ~ (1 + cond | subj) + (1 + cond | item), all_data_join, family = "binomial") 
+
+anova(modelR3, modelR3.null)
+
+check_model(modelR3)
+qqnorm(residuals(model))
+qqline(residuals(model))
+
+#Let's include some covariates! Region 3
+
+#Step 1: Scale the ID measures...
+#all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
+#all_data_join$EQ <- scale(all_data_join$EQ)
+#all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
+#all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
+#all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+
+model_alldatacov_R3 <- glmer(R3 ~ cond + SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN +
+                               (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
+summary(model_alldatacov_R3)
+
+check_model(model_alldatacov_R3)
+
+# Error in anova.merMod(modelR3, model_alldatacov_R3): models were not all fitted to the same size of dataset
+#How to get around this?
+#anova(modelR3, model_alldatacov_R3)
+
+ranef(model_alldatacov_R3)
