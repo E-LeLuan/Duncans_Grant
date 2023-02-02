@@ -150,11 +150,10 @@ all_data_join %>%
   summarise(mean(R4), sd(R4))
 
 # Model assuming normality of residuals maximal structure
-#model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
-modelR4 <- lmer(R4 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
+modelR4 <- lmer(R4 ~ cond + (1 + cond | subj) + (1 | item), all_data_join) 
 summary(modelR4)
-
-#anova(modelR4, model.nullR4)
+model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 | item), all_data_join) 
+anova(modelR4, model.nullR4)
 
 #All the data for this model looks pretty normal.
 check_model(modelR4)
@@ -170,7 +169,7 @@ all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster
 all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 # Model including covariates
-model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 
 #model_alldatacov_R4_null <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
 #                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
@@ -226,11 +225,10 @@ all_data_join %>%
   group_by(cond) %>%
   summarise(mean(R5), sd(R5))
 # Model assuming normality of residuals maximal structure
-#model.nullR5 <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
 modelR5 <- lmer(R5 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
 summary(modelR5)
-
-#anova(modelR5, model.nullR5)
+model.nullR5 <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
+anova(modelR5, model.nullR5)
 
 #All the data for this model looks pretty normal.
 check_model(modelR5)
@@ -240,21 +238,73 @@ check_model(modelR5)
 #Let's include some co-variates! region 5
 
 #Step 1: Scale the ID measures...
-all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
-all_data_join$EQ <- scale(all_data_join$EQ)
-all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
-all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
-all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+#all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
+#all_data_join$EQ <- scale(all_data_join$EQ)
+#all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
+#all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
+#all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 
 # Model including covariates
 model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
-
-#model_alldatacov_R5_null <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
-#                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
-
 summary(model_alldatacov_R5)
+
 
 #anova(model_alldatacov_R5_null, model_alldatacov_R5)
 check_model(model_alldatacov_R5)
 
 ranef(model_alldatacov_R5)
+
+#Let's have a look at Region 3
+
+#set condition as a factor
+all_data_join$cond <- as.factor(all_data_join$cond)
+# Throw away zeroes
+all_data_join <- all_data_join %>% filter(R3 != 0)
+
+#Let's have a look at Region 3
+
+#set condition as a factor
+all_data_join$cond <- as.factor(all_data_join$cond)
+# Throw away zeroes
+all_data_join <- all_data_join %>% filter(R3 != 0)
+
+#Visualisation
+all_data_join %>% 
+  ggplot(aes(x = cond, y = R3, colour = cond)) + ggtitle("Regression Path for Post-Critical Region: Reply") +
+  labs(y = "Reading time in ms.", x = "Prediction") +
+  geom_violin() +
+  geom_jitter(alpha = .2, width = .1) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
+  guides(colour = FALSE)
+
+#Descriptives
+all_data_join %>% 
+  group_by(cond) %>%
+  summarise(mean(R3), sd(R3))
+# Model assuming normality of residuals maximal structure
+modelR3 <- lmer(R3 ~ cond + (1 | subj) + (1 + cond | item), all_data_join) 
+summary(modelR3)
+model.nullR3 <- lmer(R3 ~ (1 | subj) + (1 + cond | item), all_data_join) 
+anova(modelR3, model.nullR3)
+
+#All the data for this model looks pretty normal.
+check_model(modelR3)
+#qqnorm(residuals(modelR3))
+#qqline(residuals(modelR3))
+#descdist(all_data_join$R3)
+#Let's include some co-variates! Region 3
+
+#Step 1: Scale the ID measures...
+#all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
+#all_data_join$EQ <- scale(all_data_join$EQ)
+#all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
+#all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
+#all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+
+# Model including covariates
+model_alldatacov_R3 <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R3)
+
+check_model(model_alldatacov_R3)
+
+ranef(model_alldatacov_R3)
