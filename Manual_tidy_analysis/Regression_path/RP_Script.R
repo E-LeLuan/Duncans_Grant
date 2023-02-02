@@ -171,8 +171,8 @@ all_data_join %>%
 #model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
 modelR4 <- lmer(R4 ~ cond + (1 | subj) + (1 + cond | item), all_data_join) 
 summary(modelR4)
-
-#anova(modelR4, model.nullR4)
+model.nullR4 <- lmer(R4 ~ (1 | subj) + (1 + cond | item), all_data_join) 
+anova(modelR4, model.nullR4)
 
 #All the data for this model looks pretty normal.
 check_model(modelR4)
@@ -187,14 +187,10 @@ all_data_join$EQ <- scale(all_data_join$EQ)
 all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
 all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+
 # Model including covariates
 model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4)
-
-#Descriptives
-all_data_join %>% 
-  group_by(cond) %>%
-  summarise(mean(R4), sd(R4))
 
 # Getting our Summary of Mixed Models as a table using the sjPlot package.
 #Nakagawa S, Johnson P, Schielzeth H (2017) 
@@ -215,21 +211,20 @@ check_model(model_alldatacov_R4)
 ranef(model_alldatacov_R4)
 
 # summary of Results for region 4, the question.
-#After controlling for individual differences participants are significantly faster at reading facilitated conditions compared to un-facilitated conditions where they take an extra 73 milliseconds to complete their Regression Path read through of the text. There is a 136 millisecond increase in reading times with each millisecond increase of the RAN. In other words, the slower your rapid naming times (indicative of poorer verbal fluency) the longer it takes you to integrate contextual information into a mental representation of the scenario encountered.  However, it is likely Total_RAN explains overall reading time differences, but not anything to do with the difference between our experimental conditions - otherwise we'd have seen an interaction effect.
-#Regardless of whether the individual predictors are present/absent, the effect of our condition is pretty much the same - suggesting to me that the variance explained by our experimental manipulation doesn't overlap with the variance explained by our individual difference measures. 
+# No sig. diff. b/w conditions on the measure regression path. RAN "approaching" sig.
 
 library(Hmisc)
 #Measuring Correlations
-EQscore <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(EQ)) %>% pull(mean)
-SRS2 <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(SRS_total_score_t)) %>% pull(mean)
-WRMT <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(Total_reading_cluster)) %>% pull(mean)
-RAN <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(Total_RAN)) %>% pull(mean)
-rcorr(EQscore, SRS2)
-rcorr(EQscore, WRMT)
-rcorr(EQscore, RAN)
-rcorr(SRS2, WRMT)
-rcorr(SRS2, RAN)
-rcorr(WRMT, RAN)
+#EQscore <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(EQ)) %>% pull(mean)
+#SRS2 <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(SRS_total_score_t)) %>% pull(mean)
+#WRMT <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(Total_reading_cluster)) %>% pull(mean)
+#RAN <- all_data_join %>% group_by(subj) %>% summarise(mean = mean(Total_RAN)) %>% pull(mean)
+#rcorr(EQscore, SRS2)
+#rcorr(EQscore, WRMT)
+#rcorr(EQscore, RAN)
+#rcorr(SRS2, WRMT)
+#rcorr(SRS2, RAN)
+#rcorr(WRMT, RAN)
 
 
 #Let's have a look at region 5
@@ -254,11 +249,10 @@ all_data_join %>%
   summarise(mean(R5), sd(R5))
 
 # Model assuming normality of residuals maximal structure
-#model.nullR5 <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
 modelR5 <- lmer(R5 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
 summary(modelR5)
-
-#anova(modelR5, model.nullR5)
+model.nullR5 <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
+anova(modelR5, model.nullR5)
 
 #All the data for this model looks pretty normal.
 check_model(modelR5)
@@ -274,11 +268,7 @@ descdist(all_data_join$R5)
 #all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 #all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 # Model including covariates
-model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
-
-#model_alldatacov_R5_null <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
-#                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
-
+model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R5)
 
 #anova(model_alldatacov_R5_null, model_alldatacov_R5)
@@ -308,11 +298,11 @@ all_data_join %>%
   summarise(mean(R3), sd(R3))
 
 # Model assuming normality of residuals maximal structure
-#model.nullR5 <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
 modelR3 <- lmer(R3 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
 summary(modelR3)
-
-#anova(modelR5, model.nullR5)
+#Null model fails to converge
+#model.nullR3 <- lmer(R3 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
+#anova(modelR3, model.nullR3)
 
 #All the data for this model looks pretty normal.
 check_model(modelR3)
@@ -329,11 +319,9 @@ descdist(all_data_join$R3)
 #all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 # Model including covariates
 model_alldatacov_R3 <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
-
-#model_alldatacov_R3_null <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
-#                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
-
 summary(model_alldatacov_R3)
+
+# No sig. diff. b/w conditions on the measure regression path. RAN "approaching" sig.
 
 #anova(model_alldatacov_R3_null, model_alldatacov_R3)
 check_model(model_alldatacov_R3)

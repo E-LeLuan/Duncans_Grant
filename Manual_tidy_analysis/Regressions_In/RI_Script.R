@@ -164,7 +164,7 @@ all_data_join %>%
 #model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
 modelR4 <- glmer(R4 ~ cond + (1 | subj) + (1 + cond | item), all_data_join, family = "binomial") 
 summary(modelR4)
-
+#model.nullR4 <- lmer(R4 ~ (1 | subj) + (1 + cond | item), all_data_join) 
 #anova(modelR4, model.nullR4)
 
 #Let's include some co-variates! Region 4
@@ -179,7 +179,6 @@ all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 # Model including covariates
 model_alldatacov_R4 <- glmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
 summary(model_alldatacov_R4)
-
 
 # Remove WRMT-III
 model_alldatacov_R4_noWRMT <- glmer(R4 ~ SRS_total_score_t + EQ + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
