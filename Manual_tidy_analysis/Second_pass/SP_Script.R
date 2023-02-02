@@ -4,7 +4,6 @@ library(lme4)
 library(lmerTest)
 library(emmeans)
 library(stats)
-library(brms)
 library(fitdistrplus)
 library(tidyverse)
 library(buildmer)
@@ -152,7 +151,9 @@ all_data$subj <- as.factor(all_data$subj)
 
 
 #Import Individual difference measures
-ID_Measures <- read_csv("ID Measures.csv")
+#Import Individual difference measures
+ID_Measures <- read_csv("Other_data_and_information/All_IDs.csv")
+#View(All_IDs)
 #View(ID_Measures)
 
 # Rename Participabt in ID_measures to subj to be the same as current data set
@@ -257,14 +258,35 @@ all_data_join %>%
 # Model assuming normality of residuals - singular fit error with more complex models
 model.null <- lmer(R4 ~ (1 | subj) + (1 | item), all_data_join) 
 # NO MODEL WILL CONVERGE FOR R4 Second Pass reading times
-
 #anova(model, model.null)
 #check_model(model)
-
 #qqnorm(residuals(model))
 #qqline(residuals(model))
-
 #descdist(all_data_join$R4)
+
+#so lets try removing outliers
+library(ggstatsplot)
+#You can cite this package as:
+#  Patil, I. (2021). Visualizations with statistical details: The 'ggstatsplot' approach.
+#Journal of Open Source Software, 6(61), 3167, doi:10.21105/joss.03167
+
+#ggbetweenstats(all_data_join, condition_number, RT2ms, outlier.tagging = TRUE)
+Q <- quantile(all_data_join$R4, probs=c(.25, .75), na.rm = FALSE)
+#view(Q)
+iqr <- IQR(all_data_join$R4)
+up <-  Q[2]+2.0*iqr # Upper Range  
+low<- Q[1]-2.0*iqr # Lo
+eliminated<- subset(all_data_join, all_data_join$R4 > (Q[1] - 2.0*iqr) & all_data_join$R4 < (Q[2]+2.0*iqr))
+ggbetweenstats(eliminated, cond, R4, outlier.tagging = TRUE) 
+
+eliminated %>% 
+  group_by(cond) %>%
+  summarise(mean(R4), sd(R4))
+
+model.null <- lmer(R4 ~ (1 | subj) + (1 | item), eliminated) 
+model <- lmer(R4 ~ cond + (1 | subj) + (1 | item), eliminated) 
+anova(model, model.null)
+summary(model)
 
 #What does region 5 "the reply" look like?
 
