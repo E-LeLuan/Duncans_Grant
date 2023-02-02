@@ -148,12 +148,12 @@ all_data_join %>%
 all_data_join %>% 
   group_by(cond) %>%
   summarise(mean(R4), sd(R4))
-# Model assuming normality of residuals maximal structure
-#model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
-modelR4 <- lmer(R4 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
-summary(modelR4)
 
-#anova(modelR4, model.nullR4)
+# Model assuming normality of residuals maximal structure
+modelR4 <- lmer(R4 ~ cond + (1 | subj) + (1 + cond | item), all_data_join) 
+summary(modelR4)
+model.nullR4 <- lmer(R4 ~ (1 | subj) + (1 + cond | item), all_data_join) 
+anova(modelR4, model.nullR4)
 
 #All the data for this model looks pretty normal.
 check_model(modelR4)
@@ -168,8 +168,9 @@ all_data_join$EQ <- scale(all_data_join$EQ)
 all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
 all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+
 # Model including covariates
-model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 
 #model_alldatacov_R4_null <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
 #                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
@@ -180,19 +181,18 @@ summary(model_alldatacov_R4)
 check_model(model_alldatacov_R4)
 ranef(model_alldatacov_R4)
 
-# Remove the RAN with simplified model as fails to converge with item random effects. 
-# Our coniditon remains significant.
-model_alldatacov_R4_noRAN <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 + cond | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
+# Remove the RAN . 
+# Our condition remains significant.
+model_alldatacov_R4_noRAN <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4_noRAN)
 
 # Check the RAN/condition intercept. Full model with all effects back in.
-# No interaction. Suggesting RAN exerts an influence on reading overall but not on prediciton.
-model_alldatacov_R4_RAN_int <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+# No interaction. Suggesting RAN exerts an influence on reading overall but not on prediction.
+model_alldatacov_R4_RAN_int <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4_RAN_int)
 
-# summary of Results for region 4, the question.
-#After controlling for individual differences participants are significantly faster at reading facilitated conditions compared to un-facilitated conditions where they take an extra 73 milliseconds to complete their Total Time read through of the text. There is a 136 millisecond increase in reading times with each millisecond increase of the RAN. In other words, the slower your rapid naming times (indicative of poorer verbal fluency) the longer it takes you to integrate contextual information into a mental representation of the scenario encountered.  However, it is likely Total_RAN explains overall reading time differences, but not anything to do with the difference between our experimental conditions - otherwise we'd have seen an interaction effect.
-#Regardless of whether the individual predictors are present/absent, the effect of our condition is pretty much the same - suggesting to me that the variance explained by our experimental manipulation doesn't overlap with the variance explained by our individual difference measures. 
+#summary of results R4
+# Unfacilitated conditions are read 99.58 ms slower than facilitated conditions. RAN exerts an influence on overall reading but not prediction.
 
 library(Hmisc)
 #Measuring Correlations
@@ -235,11 +235,11 @@ all_data_join %>%
 all_data_join %>% 
   group_by(cond) %>%
   summarise(mean(R5), sd(R5))
+
 # Model assuming normality of residuals maximal structure
 #model.nullR5 <- lmer(R5 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
-modelR5 <- lmer(R5 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
+modelR5 <- lmer(R5 ~ cond + (1 | subj) + (1 + cond | item), all_data_join) 
 summary(modelR5)
-
 #anova(modelR5, model.nullR5)
 
 #All the data for this model looks pretty normal.
@@ -250,28 +250,25 @@ check_model(modelR5)
 #Let's include some co-variates! region 5
 
 #Step 1: Scale the ID measures...
-all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
-all_data_join$EQ <- scale(all_data_join$EQ)
-all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
-all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
-all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+#all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
+#all_data_join$EQ <- scale(all_data_join$EQ)
+#all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
+#all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
+#all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 # Model including covariates
-model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
-
+model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 #model_alldatacov_R5_null <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
 #                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
-
 summary(model_alldatacov_R5)
-
 
 # Remove the RAN with simplified model. 
 # Our condition remains significant.
-model_alldatacov_R5_noRAN <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+model_alldatacov_R5_noRAN <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R5_noRAN)
 
 # Check the RAN/condition intercept. Full model with all effects back in.
 # No interaction. Suggesting RAN exerts an influence on reading overall but not on prediciton.
-model_alldatacov_R5_RAN_int <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+model_alldatacov_R5_RAN_int <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4_RAN_int)
 
 #anova(model_alldatacov_R5_null, model_alldatacov_R5)
@@ -279,3 +276,50 @@ check_model(model_alldatacov_R5)
 
 ranef(model_alldatacov_R5)
 
+#Let's have a look at Region 3
+
+#set condition as a factor
+all_data_join$cond <- as.factor(all_data_join$cond)
+# Throw away zeroes
+all_data_join <- all_data_join %>% filter(R3 != 0)
+
+#Visualisation
+all_data_join %>% 
+  ggplot(aes(x = cond, y = R3, colour = cond)) + ggtitle("Total Time for Post-Critical Region: Manipulation") +
+  labs(y = "Reading time in ms.", x = "Prediction") +
+  geom_violin() +
+  geom_jitter(alpha = .2, width = .1) +
+  stat_summary(fun.data = "mean_cl_boot", colour = "black") +
+  guides(colour = FALSE)
+
+#Descriptives
+all_data_join %>% 
+  group_by(cond) %>%
+  summarise(mean(R3), sd(R3))
+
+# Model assuming normality of residuals maximal structure
+modelR3 <- lmer(R3 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
+summary(modelR3)
+model.nullR3 <- lmer(R3 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
+anova(modelR3, model.nullR3)
+
+#All the data for this model looks pretty normal.
+check_model(modelR3)
+#qqnorm(residuals(modelR3))
+#qqline(residuals(modelR3))
+#descdist(all_data_join$R3)
+#Let's include some co-variates! Region 3
+
+#Step 1: Scale the ID measures...
+#all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
+#all_data_join$EQ <- scale(all_data_join$EQ)
+#all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
+#all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
+#all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+# Model including covariates
+model_alldatacov_R3 <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+#model_alldatacov_R3_null <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
+#                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
+summary(model_alldatacov_R3)
+
+ranef(model_alldatacov_R3)
