@@ -161,6 +161,18 @@ all_data_join %>%
 all_data_join %>% 
   group_by(cond) %>%
   summarise(mean(R4), sd(R4))
+
+#Sum_Table <- all_data_join%>%
+ # group_by(cond) %>%
+  #summarise (mean(R4), (R4)) 
+
+#Sum_Table$sd(R4) <- as.factor(Sum_Table$sd(R4))
+
+#Sum_Table <- Sum_Table %>% mutate ( = "sd(R4)"/sqrt(83))
+
+#view(Sum_Table)
+
+
 # Model assuming normality of residuals maximal structure
 modelR4 <- lmer(R4 ~ cond + (1 + cond | subj) + (1 + cond | item), all_data_join) 
 summary(modelR4)
