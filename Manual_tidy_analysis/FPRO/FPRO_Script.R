@@ -180,6 +180,8 @@ all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 model_alldatacov_R4 <- glmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
 summary(model_alldatacov_R4)
 
+SE1 = emmeans(model_alldatacov_R4, specs = 'cond')
+summary(SE1)
 
 # GeFPROing our Summary of Mixed Models as a table using the sjPlot package.
 #Nakagawa S, Johnson P, Schielzeth H (2017) 
@@ -253,6 +255,9 @@ check_model(modelR5)
 model_alldatacov_R5 <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
 summary(model_alldatacov_R5)
 
+SE1 = emmeans(model_alldatacov_R5, specs = 'cond')
+summary(SE1)
+
 #anova(model_alldatacov_R5_null, model_alldatacov_R5)
 check_model(model_alldatacov_R5)
 ranef(model_alldatacov_R5)
@@ -306,6 +311,9 @@ check_model(modelR3)
 # Model including covariates
 model_alldatacov_R3 <- glmer(R3 ~ cond+ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + (1 + cond | subj) +  (1 | item) , data = all_data_join, family = "binomial")
 summary(model_alldatacov_R3)
+
+SE1 = emmeans(model_alldatacov_R3, specs = 'cond')
+summary(SE1)
 
 #anova(model_alldatacov_R3_null, model_alldatacov_R3)
 #check_model(model_alldatacov_R3)

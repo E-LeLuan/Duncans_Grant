@@ -192,6 +192,9 @@ all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4)
 
+SE1 = emmeans(model_alldatacov_R4, specs = 'cond')
+summary(SE1)
+
 # Getting our Summary of Mixed Models as a table using the sjPlot package.
 #Nakagawa S, Johnson P, Schielzeth H (2017) 
 #The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. 
@@ -271,6 +274,9 @@ descdist(all_data_join$R5)
 model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R5)
 
+SE1 = emmeans(model_alldatacov_R5, specs = 'cond')
+summary(SE1)
+
 #anova(model_alldatacov_R5_null, model_alldatacov_R5)
 check_model(model_alldatacov_R5)
 
@@ -320,6 +326,9 @@ descdist(all_data_join$R3)
 # Model including covariates
 model_alldatacov_R3 <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R3)
+
+SE1 = emmeans(model_alldatacov_R3, specs = 'cond')
+summary(SE1)
 
 # No sig. diff. b/w conditions on the measure regression path. RAN "approaching" sig.
 

@@ -190,6 +190,8 @@ all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4)
 
+SE1 = emmeans(model_alldatacov_R4, specs = 'cond')
+summary(SE1)
 
 # Getting our Summary of Mixed Models as a table using the sjPlot package.
 #Nakagawa S, Johnson P, Schielzeth H (2017) 
@@ -270,6 +272,9 @@ descdist(all_data_join$R5)
 model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R5)
 
+SE1 = emmeans(model_alldatacov_R5, specs = 'cond')
+summary(SE1)
+
 check_model(model_alldatacov_R5)
 ranef(model_alldatacov_R5)
 
@@ -326,6 +331,9 @@ descdist(all_data_join$R3)
 #all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 # Model including covariates
 model_alldatacov_R3 <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+
+SE1 = emmeans(model_alldatacov_R3, specs = 'cond')
+summary(SE1)
 
 #model_alldatacov_R3_null <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + #Total_RAN +
 #                               (1 + cond | subj) +  (1 + cond | item) , data = #all_data_join, REML = TRUE)
