@@ -179,6 +179,10 @@ summary(modelR4)
 model.nullR4 <- lmer(R4 ~ (1 + cond | subj) + (1 + cond | item), all_data_join) 
 anova(modelR4, model.nullR4)
 
+SE1 = emmeans(modelR4, specs = 'cond')
+summary(SE1)
+
+
 #All the data for this model looks pretty normal.
 check_model(modelR4)
 #qqnorm(residuals(modelR4))
@@ -193,15 +197,24 @@ all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster
 all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
 all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 
+library(pbkrtest)
 # Model including covariates
 model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4)
+
+SE1 = emmeans(model_alldatacov_R4, specs = 'cond')
+summary(SE1)
 
 # Getting our Summary of Mixed Models as a table using the sjPlot package.
 #Nakagawa S, Johnson P, Schielzeth H (2017) 
 #The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. 
 #J. R. Soc. Interface 14. doi: 10.1098/rsif.2017.0213
-#tab_model(model_alldatacov_R4, p.val = "kr", show.df = TRUE)
+library(sjPlot)
+tab_model(model_alldatacov_R4, p.val = "kr", show.df = TRUE)
+
+# try something 
+model_alldatacov_R4 <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
+summary(model_alldatacov_R4)
 
 model_alldatacov_R4_noRAN <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4_noRAN)
@@ -285,6 +298,9 @@ check_model(modelR5)
 model_alldatacov_R5 <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R5)
 
+SE1 = emmeans(model_alldatacov_R5, specs = 'cond')
+summary(SE1)
+
 # No RAN
 model_alldatacov_R5_noRAN <- lmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + cond + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R5_noRAN)
@@ -342,6 +358,9 @@ descdist(all_data_join$R3)
 # Model including covariates
 model_alldatacov_R3 <- lmer(R3 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 + cond | subj) +  (1 + cond | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R3)
+
+SE1 = emmeans(model_alldatacov_R3, specs = 'cond')
+summary(SE1)
 
 #anova(model_alldatacov_R3_null, model_alldatacov_R3)
 check_model(model_alldatacov_R3)
