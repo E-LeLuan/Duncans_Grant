@@ -282,6 +282,23 @@ check_model(model_alldatacov_R5)
 
 ranef(model_alldatacov_R5)
 
+myplot3 <- ggboxplot(
+  all_data_join, x = "cond", y = "R5",
+  fill = "cond", palette = "jco", legend = "none",
+  ggtheme = theme_pubr(border = TRUE)) + 
+  labs(title = "Post-Critical Reply Region: Regression Path", y = "Reading time in Milliseconds", x = "Prediction")
+myplot3
+#Raincloud plot
+all_data_join %>% 
+  ggplot(aes(x = cond, y = R5, colour = cond)) + ggtitle("Post-Critical Reply Region: Regression Path") +
+  #add violins from ggdist package
+  stat_halfeye(adjust = .5, width = .5, .width = 0, justification = -.3, point_colour = NA) + 
+  geom_boxplot(width = 0.35, outlier.color = "NA", justification = -0.35) +
+  scale_fill_fivethirtyeight() + 
+  labs(y = "Reading time in Milliseconds", x = "Prediction") + 
+  coord_flip()
+
+
 #Let's have a look at region 3
 
 #set condition as a factor

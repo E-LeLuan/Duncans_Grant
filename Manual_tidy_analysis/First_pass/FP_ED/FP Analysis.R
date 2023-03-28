@@ -222,6 +222,27 @@ summary(model_alldatacov_R4_noRAN)
 model_alldatacov_R4_RAN_int <- lmer(R4 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + cond:Total_RAN + (1 | subj) +  (1 | item) , data = all_data_join, REML = TRUE)
 summary(model_alldatacov_R4_RAN_int)
 
+library(ggpubr)
+library(ggstatsplot)
+library(ggdist)
+library(ggthemes)
+# Boxplot just Reading information
+myplot3 <- ggboxplot(
+  all_data_join, x = "cond", y = "R4",
+  fill = "cond", palette = "jco", legend = "none",
+  ggtheme = theme_pubr(border = TRUE)) + 
+  labs(title = "Critical Question Region: First Pass", y = "Reading time in Milliseconds", x = "Prediction")
+myplot3
+#Raincloud plot
+all_data_join %>% 
+  ggplot(aes(x = cond, y = R4, colour = cond)) + ggtitle("Critical Question Region: First Pass") +
+  #add violins from ggdist package
+  stat_halfeye(adjust = .5, width = .5, .width = 0, justification = -.3, point_colour = NA) + 
+  geom_boxplot(width = 0.35, outlier.color = "NA", justification = -0.35) +
+  scale_fill_fivethirtyeight() + 
+  labs(y = "Reading time in Milliseconds", x = "Prediction") + 
+  coord_flip()
+
 #anova(model_alldatacov_R4_null, model_alldatacov_R4)
 check_model(model_alldatacov_R4)
 
@@ -313,6 +334,22 @@ summary(model_alldatacov_R5_RAN_int)
 check_model(model_alldatacov_R5)
 
 ranef(model_alldatacov_R5)
+
+myplot3 <- ggboxplot(
+  all_data_join, x = "cond", y = "R5",
+  fill = "cond", palette = "jco", legend = "none",
+  ggtheme = theme_pubr(border = TRUE)) + 
+  labs(title = "Post-Critical Reply Region: First Pass", y = "Reading time in Milliseconds", x = "Prediction")
+myplot3
+#Raincloud plot
+all_data_join %>% 
+  ggplot(aes(x = cond, y = R5, colour = cond)) + ggtitle("Post-Critical Reply Region: First Pass") +
+  #add violins from ggdist package
+  stat_halfeye(adjust = .5, width = .5, .width = 0, justification = -.3, point_colour = NA) + 
+  geom_boxplot(width = 0.35, outlier.color = "NA", justification = -0.35) +
+  scale_fill_fivethirtyeight() + 
+  labs(y = "Reading time in Milliseconds", x = "Prediction") + 
+  coord_flip()
 
 #Let's have a look at region 3
 
