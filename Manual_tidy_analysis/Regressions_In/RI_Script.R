@@ -183,6 +183,8 @@ summary(model_alldatacov_R4)
 SE1 = emmeans(model_alldatacov_R4, specs = 'cond')
 summary(SE1)
 
+
+
 # Remove WRMT-III
 model_alldatacov_R4_noWRMT <- glmer(R4 ~ SRS_total_score_t + EQ + Total_RAN + cond + (1 | subj) +  (1 | item) , data = all_data_join, family = "binomial")
 summary(model_alldatacov_R4_noWRMT)
@@ -257,11 +259,11 @@ check_model(modelR5)
 #Let's include some co-variates! region 5
 
 #Step 1: Scale the ID measures...
-#all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
-#all_data_join$EQ <- scale(all_data_join$EQ)
-#all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
-#all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
-#all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
+all_data_join$SRS_total_score_t <- scale(all_data_join$SRS_total_score_t)
+all_data_join$EQ <- scale(all_data_join$EQ)
+all_data_join$Total_reading_cluster <- scale(all_data_join$Total_reading_cluster)
+all_data_join$Total_RAN <- scale(all_data_join$Total_RAN)
+all_data_join$"WI _RPI" <- scale(all_data_join$"WI _RPI")
 # Model including covariates
 model_alldatacov_R5 <- glmer(R5 ~ SRS_total_score_t + EQ + Total_reading_cluster + Total_RAN + cond + (1 | subj) +  (1 + cond | item) , data = all_data_join, family = "binomial")
 summary(model_alldatacov_R5)
